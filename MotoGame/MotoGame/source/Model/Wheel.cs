@@ -9,33 +9,34 @@ namespace MotoGame.source.Model
 {
     public class Wheel
     {
-        public Point Position
-        {
+        public Vector2 Position {
             get
             {
-                return position.ToPoint();
+                return position;
             }
+
         }
 
-        private Vector2 velocity;
         private Vector2 position;
+        private Vector2 velocity;
 
         public Wheel(Point position)
         {
             this.position = position.ToVector2();
+            velocity = new Vector2(0, 0);
         }
 
         public void Update(float dTime)
         {
-            ApplyGravity(dTime);
+            ApplyGravity();
 
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
         }
         
-        private void ApplyGravity(float dTime)
+        private void ApplyGravity()
         {
-            velocity.Y += 9.81f * dTime;
+            velocity.Y += 9.81f;
         }
     }
 }

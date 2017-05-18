@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MotoGame.Model;
+using MotoGame.source.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,25 @@ namespace MotoGame.View
     {
         private World world;
         private Texture2D lineTexture;
+        private Texture2D wheelTexture;
 
-        public WorldRenderer(World world, GraphicsDevice gd)
+        public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel)
         {
             this.world = world;
+
             lineTexture = new Texture2D(gd, 1, 1);
             lineTexture.SetData<Color>(new Color[] { Color.Black });
+
+            wheelTexture = wheel;
         }
 
-        public void RenderWorld(SpriteBatch sb)
+        public void Render(SpriteBatch sb)
+        {
+            RenderWorld(sb);
+            RenderBike(sb);
+        }
+
+        private void RenderWorld(SpriteBatch sb)
         {
             sb.Begin();
             List<Point> points = world.Points;
@@ -30,6 +41,19 @@ namespace MotoGame.View
                 DrawLine(sb, points[i], points[i+1]);
             }
             sb.End();
+        }
+
+        private void RenderBike(SpriteBatch sb)
+        {
+            sb.Begin();
+            DrawWheel(sb, world.test);
+            sb.End();
+        }
+
+        private void DrawWheel(SpriteBatch sb, Wheel wheel)
+        {
+            sb.Draw(wheelTexture, wheel.Position, Color.White);
+            //sb.Draw(wheelTexture, new Rectangle(wheel.Position.ToPoint(), new Point(16, 16)), Color.White);
         }
 
        private void DrawLine(SpriteBatch sb, Point start, Point end)

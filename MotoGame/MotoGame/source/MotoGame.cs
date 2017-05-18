@@ -49,7 +49,7 @@ namespace MotoGame
             // TODO: use this.Content to load your game content here
 
             world = new World();
-            worldRenderer = new WorldRenderer(world, GraphicsDevice);
+            worldRenderer = new WorldRenderer(world, GraphicsDevice, Content.Load<Texture2D>("data/wheel1"));
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace MotoGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            world.Update(gameTime.ElapsedGameTime.Seconds);
 
             base.Update(gameTime);
         }
@@ -84,7 +84,7 @@ namespace MotoGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            worldRenderer.RenderWorld(spriteBatch);
+            worldRenderer.Render(spriteBatch);
 
             base.Draw(gameTime);
         }
