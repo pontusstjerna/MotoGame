@@ -46,8 +46,13 @@ namespace MotoGame.View
         private void RenderBike(SpriteBatch sb)
         {
             sb.Begin();
-            DrawWheel(sb, world.test);
+            DrawBike(sb, world.Bike);
             sb.End();
+        }
+
+        private void DrawBike(SpriteBatch sb, Bike bike)
+        {
+            DrawWheel(sb, bike.rearWheel);
         }
 
         private void DrawWheel(SpriteBatch sb, Wheel wheel)

@@ -17,6 +17,8 @@ namespace MotoGame.source.Model
 
         }
 
+        public float radius = 4;
+
         private Vector2 position;
         private Vector2 velocity;
 
@@ -30,8 +32,20 @@ namespace MotoGame.source.Model
         {
             ApplyGravity();
 
+            dTime /= 1000;
+
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
+        }
+
+        public void SetVX(float vx)
+        {
+            velocity.X = vx;
+        }
+
+        public void SetVY(float vy)
+        {
+            velocity.Y = vy;
         }
         
         private void ApplyGravity()
