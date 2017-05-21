@@ -35,20 +35,72 @@ namespace MotoGame.Model
 
         public void Update(float dTime)
         {
-
+            Collide(dTime);
             Bike.Update(dTime);
         }
 
         private void Collide(float dTime)
         {
-            for(int i = 0; i < points.Count() + 1; i++)
+            for(int i = 0; i < points.Count() - 1; i++)
             {
                 if(GetIntersection(Bike.rearWheel, points[i], points[i + 1]))
                 {
                     //On ground
+                    Bike.rearWheel.SetVY(0);
                     return;
                 }
             }
+        }
+
+        private void Bounce(Wheel wheel, Point a, Point b)
+        {
+            Vector2 lineSegment = new Vector2(b.X - a.X, b.Y - a.Y);
+            
+            //To get this, take the orthogonal vector of the line segment
+            Vector2 collisionVector = new Vector2(-lineSegment.Y, lineSegment.X);
+
+            Vector2 wheelDir;
+
+            /*
+             * TODO:: PUT THIS METHOD IN THE WHEEL CLASS INSTEAD
+            */
+
+            /*
+             * var collisionVector = new Vector2D(ball2.x - ball1.x, ball2.y - ball1.y);
+                    var orthoCollisionVector = new Vector2D(-collisionVector.y, collisionVector.x);
+
+                    var colDir = collisionVector.unitVector();
+                    var unaffectDir = orthoCollisionVector.unitVector();
+
+                    var ball1Dir = new Vector2D(ball1.vx, ball1.vy);
+                    var ball2Dir = new Vector2D(ball2.vx, ball2.vy);
+
+                    var u1 = dot(ball1Dir,colDir);
+                    var u2 = dot(ball2Dir,colDir);
+
+                    var unaffected1 = unaffectDir.getScalar(dot(ball1Dir, unaffectDir));
+                    var unaffected2 = unaffectDir.getScalar(dot(ball2Dir, unaffectDir));
+
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.play();
+                    
+                    var m1 = ball1.mass;
+                    var m2 = ball2.mass;
+                    var I = m1*u1 + m2*u2;
+                    var R = -(u2-u1);
+                    
+
+            var v2 = (I + m1 * R) / (m1 + m2);
+            var v1 = v2 - R;
+
+            ball1.vx = (colDir.x * v1 + unaffected1.x) * (1 - friction);
+            ball1.vy = (colDir.y * v1 + unaffected1.y) * (1 - friction);
+            ball2.vx = (colDir.x * v2 + unaffected2.x) * (1 - friction);
+            ball2.vy = (colDir.y * v2 + unaffected2.y) * (1 - friction);
+
+            p("ballsTotVel before: " + (ball1Dir.length + ball2Dir.length) + " After: " + (new Vector2D(ball1.vx, ball1.vy).length + new Vector2D(ball2.vx, ball2.vy).length));
+            * */
         }
 
         private bool GetIntersection(Wheel wheel, Point a, Point b)
@@ -58,7 +110,7 @@ namespace MotoGame.Model
             float p0_x = wheel.Position.X;
             float p0_y = wheel.Position.Y;
             float p1_x = wheel.Position.X + wheel.radius;
-            float p1_y = wheel.Position.X + wheel.radius;
+            float p1_y = wheel.Position.Y + wheel.radius;
             float p2_x = a.X;
             float p2_y = a.Y;
             float p3_x = b.X;
@@ -75,30 +127,4 @@ namespace MotoGame.Model
         }
         
     }
-
-    /*
-     * private Point2D.Double getIntersection(Vector2D a, Vector2D b, Point2D.Double aStart, Point2D.Double bStart) {
-        //Algorithm from http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect
-
-        double p0_x = aStart.getX();
-        double p0_y = aStart.getY();
-        double p1_x = aStart.getX() + a.getX();
-        double p1_y = aStart.getY() + a.getY();
-        double p2_x = bStart.getX();
-        double p2_y = bStart.getY();
-        double p3_x = bStart.getX() + b.getX();
-        double p3_y = bStart.getY() + b.getY();
-
-        double s1_x = p1_x - p0_x;
-        double s2_x = p3_x - p2_x;
-        double s1_y = p1_y - p0_y;
-        double s2_y = p3_y - p2_y;
-
-        double s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
-        double t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
-
-        if (s >= 0 && s <= 1 && t >= 0 && t <= 1) {
-            return new Point2D.Double(p0_x + (t * s1_x), p0_y + (t * s1_y));
-        } else return null;
-    }*/
 }

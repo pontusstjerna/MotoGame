@@ -14,10 +14,10 @@ namespace MotoGame.source.Model
             {
                 return position;
             }
-
         }
 
         public float radius = 4;
+        public float friction { get; private set; } = 0.1f;
 
         private Vector2 position;
         private Vector2 velocity;
@@ -30,12 +30,12 @@ namespace MotoGame.source.Model
 
         public void Update(float dTime)
         {
-            ApplyGravity();
-
             dTime /= 1000;
 
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
+
+            ApplyGravity();
         }
 
         public void SetVX(float vx)
