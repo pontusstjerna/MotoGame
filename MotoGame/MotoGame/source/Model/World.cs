@@ -22,6 +22,7 @@ namespace MotoGame.Model
             points.Add(new Point(100, 200));
             points.Add(new Point(500, 300));
             points.Add(new Point(600, 300));
+            points.Add(new Point(800, 100));
 
             Segments = new List<SlopeSegment>();
             for (int i = 0; i < points.Count() - 1; i++)
@@ -39,17 +40,34 @@ namespace MotoGame.Model
 
         private void UpdateWheel(float dTime, Wheel wheel)
         {
+            Vector2? closestIntersect = null;
+            SlopeSegment closestSegment = null;
             foreach(SlopeSegment segment in Segments)
             {
                 Vector2? intersection = segment.GetIntersection(Bike.rearWheel);
                 if (intersection.HasValue)
                 {
-                    wheel.Update(dTime, segment, intersection.GetValueOrDefault());
+                    if (closestIntersect.HasValue)
+                    {
+                        if(closestIntersect.GetValueOrDefault())
+                    }
+                    closestIntersect = intersection;
+                    closestSegment = segment;
+
+                    
                     return;
                 }
             }
 
-            wheel.Update(dTime, false);
+            if(closestIntersect.HasValue)
+                wheel.Update(dTime, closestSegment, closestIntersect.GetValueOrDefault());
+            else
+                wheel.Update(dTime, false);
+        }
+
+        private void GetDistance(Vector2 a, Vector2 b)
+        {
+            return Math.Sqrt();
         }
     }
 }

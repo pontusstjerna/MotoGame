@@ -26,17 +26,22 @@ namespace MotoGame.source.Model
             return slope;
         }
 
+        public Vector2 GetNormal()
+        {
+            Vector2 slope = GetSlope();
+            return new Vector2(slope.Y, -slope.X);
+        }
+
         public Vector2? GetIntersection(Wheel wheel)
         {
-
-            Vector2 wheelDir = wheel.Velocity;
-            wheelDir.Normalize();
+            Vector2 normal = GetNormal();
+            Vector2 slope = GetSlope();
 
             //A vector is wheel, b is slope
             float p0_x = wheel.Position.X;
             float p0_y = wheel.Position.Y;
-            float p1_x = wheel.Position.X + wheelDir.X * wheel.Radius;
-            float p1_y = wheel.Position.Y + wheelDir.Y * wheel.Radius;
+            float p1_x = wheel.Position.X - normal.X * wheel.Radius;
+            float p1_y = wheel.Position.Y - normal.Y * wheel.Radius;
             float p2_x = Start.X;
             float p2_y = Start.Y;
             float p3_x = End.X;

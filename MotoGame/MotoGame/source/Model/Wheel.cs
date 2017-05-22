@@ -40,8 +40,9 @@ namespace MotoGame.source.Model
         {
             Vector2 slope = currentSegment.GetSlope();
 
-            velocity.X *= slope.X;
-            velocity.Y *= slope.Y;
+            //Redirect
+            velocity.X = slope.X*velocity.Length();
+            velocity.Y = slope.Y*velocity.Length();
 
             Update(dTime, true);
 
