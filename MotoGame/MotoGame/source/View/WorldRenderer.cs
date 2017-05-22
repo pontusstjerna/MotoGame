@@ -35,10 +35,9 @@ namespace MotoGame.View
         private void RenderWorld(SpriteBatch sb)
         {
             sb.Begin();
-            List<Point> points = world.Points;
-            for(int i = 0; i < points.Count() - 1; i++)
+            foreach(SlopeSegment segment in world.Segments)
             {
-                DrawLine(sb, points[i], points[i+1]);
+                DrawLine(sb, segment.Start, segment.End);
             }
             sb.End();
         }

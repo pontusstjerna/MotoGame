@@ -19,7 +19,7 @@ namespace MotoGame.source.Model
 
         public void Update(float dTime)
         {
-            rearWheel.Update(dTime);
+            //rearWheel.Update(dTime);
             //frontWheel.Update(dTime);
         }
     }

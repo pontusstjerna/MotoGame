@@ -26,7 +26,6 @@ namespace MotoGame.source.Model
 
         public float Radius = 8;
         public float Bounciness { get; private set; } = 0.1f;
-        public bool OnGround { get; set; } = false;
 
         private Vector2 position;
         private Vector2 velocity;
@@ -37,25 +36,35 @@ namespace MotoGame.source.Model
             velocity = new Vector2(0, 0);
         }
 
-        public void Update(float dTime)
+        public void Update(float dTime, SlopeSegment currentSegment, Vector2 intersection)
+        {
+            Vector2 slope = currentSegment.GetSlope();
+
+            velocity.X *= slope.X;
+            velocity.Y *= slope.Y;
+
+            Update(dTime, true);
+
+            //ApplyGravity(slope);
+        }
+
+        public void Update(float dTime, bool onGround)
         {
             dTime /= 1000;
 
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
 
-            if(!OnGround)
-                ApplyGravity();
+            if (!onGround) ApplyGravity(new Vector2(0, 1));
         }
 
-        public void SetOnGround(Vector2 groundBelow)
+        private void ApplyGravity(Vector2 direction)
         {
-            velocity.Y = 0;
-            position.Y = groundBelow.Y - Radius;
-            OnGround = true;
+            velocity.X += 9.81f * direction.X;
+            velocity.Y += 9.81f * direction.Y;
         }
 
-        public void Bounce(Point a, Point b, Vector2 groundBelow)
+        private void Bounce(Point a, Point b, Vector2 groundBelow)
         {
             Vector2 lineSegment = new Vector2(b.X - a.X, b.Y - a.Y);
 
@@ -100,11 +109,6 @@ namespace MotoGame.source.Model
 
             p("ballsTotVel before: " + (ball1Dir.length + ball2Dir.length) + " After: " + (new Vector2D(ball1.vx, ball1.vy).length + new Vector2D(ball2.vx, ball2.vy).length));
             * */
-        }
-
-        private void ApplyGravity()
-        {
-            velocity.Y += 9.81f;
         }
     }
 }
