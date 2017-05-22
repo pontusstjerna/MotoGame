@@ -22,6 +22,10 @@ namespace MotoGame
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 500;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -82,7 +86,7 @@ namespace MotoGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightSkyBlue);
 
             worldRenderer.Render(spriteBatch);
 

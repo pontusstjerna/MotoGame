@@ -16,19 +16,13 @@ namespace MotoGame.source.Model
             }
         }
 
-        public Vector2 Velocity
-        {
-            get
-            {
-                return velocity;
-            }
-        }
-
-        public float Radius = 8;
+        public int Radius = 8;
         public float Bounciness { get; private set; } = 0.1f;
+        public float Rotation { get; private set; }
 
         private Vector2 position;
         private Vector2 velocity;
+        private float angularVelocity;
 
         public Wheel(Point position)
         {
@@ -39,31 +33,43 @@ namespace MotoGame.source.Model
         public void Update(float dTime, SlopeSegment currentSegment)
         {
             Vector2? maybeIntersection = currentSegment.GetIntersection(this);
-            
+
+            ApplyGravity();
+
             if (maybeIntersection.HasValue)
             {
-                Vector2 slope = currentSegment.GetSlope();
-                Vector2 normalForce = currentSegment.GetNormal();
-                //Redirect
-                velocity.X += normalForce.X * velocity.Length();
-                velocity.Y += normalForce.Y * velocity.Length();
-            }
-            else
-            {
-                ApplyGravity(new Vector2(0, 1));
+                Vector2 slopeNormal = currentSegment.GetNormal();
+                float normalForceLength = GetDotProduct(velocity, slopeNormal)*1.1f;
+                
+                Vector2 normalForce = new Vector2(
+                    -slopeNormal.X * normalForceLength,
+                    -slopeNormal.Y * normalForceLength);
+
+                //Add normal force!
+                velocity += normalForce;
+
+                ApplyAngularVelocity(currentSegment.GetSlope());
             }
             
             dTime /= 1000;
 
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
-            
+
+            Rotation += angularVelocity * dTime;
+            if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
+            if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
         }
 
-        private void ApplyGravity(Vector2 direction)
+        private void ApplyAngularVelocity(Vector2 slope)
         {
-            velocity.X += 9.81f * direction.X;
-            velocity.Y += 9.81f * direction.Y;
+            float tangentialAcceleration = GetDotProduct(velocity, slope);
+            angularVelocity = tangentialAcceleration / Radius;
+        }
+
+        private void ApplyGravity()
+        {
+            velocity.Y += 9.81f;
         }
 
         private void Bounce(Point a, Point b, Vector2 groundBelow)
@@ -111,6 +117,11 @@ namespace MotoGame.source.Model
 
             p("ballsTotVel before: " + (ball1Dir.length + ball2Dir.length) + " After: " + (new Vector2D(ball1.vx, ball1.vy).length + new Vector2D(ball2.vx, ball2.vy).length));
             * */
+        }
+
+        private float GetDotProduct(Vector2 a, Vector2 b)
+        {
+            return a.X * b.X + a.Y * b.Y;
         }
     }
 }
