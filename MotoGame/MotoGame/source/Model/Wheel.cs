@@ -36,27 +36,28 @@ namespace MotoGame.source.Model
             velocity = new Vector2(0, 0);
         }
 
-        public void Update(float dTime, SlopeSegment currentSegment, Vector2 intersection)
+        public void Update(float dTime, SlopeSegment currentSegment)
         {
-            Vector2 slope = currentSegment.GetSlope();
-
-            //Redirect
-            velocity.X = slope.X*velocity.Length();
-            velocity.Y = slope.Y*velocity.Length();
-
-            Update(dTime, true);
-
-            //ApplyGravity(slope);
-        }
-
-        public void Update(float dTime, bool onGround)
-        {
+            Vector2? maybeIntersection = currentSegment.GetIntersection(this);
+            
+            if (maybeIntersection.HasValue)
+            {
+                Vector2 slope = currentSegment.GetSlope();
+                Vector2 normalForce = currentSegment.GetNormal();
+                //Redirect
+                velocity.X += normalForce.X * velocity.Length();
+                velocity.Y += normalForce.Y * velocity.Length();
+            }
+            else
+            {
+                ApplyGravity(new Vector2(0, 1));
+            }
+            
             dTime /= 1000;
 
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
-
-            if (!onGround) ApplyGravity(new Vector2(0, 1));
+            
         }
 
         private void ApplyGravity(Vector2 direction)

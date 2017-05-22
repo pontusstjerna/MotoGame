@@ -19,10 +19,10 @@ namespace MotoGame.Model
             List<Point> points = new List<Point>();
             points.Add(new Point(10, 100));
             points.Add(new Point(50, 100));
-            points.Add(new Point(100, 200));
-            points.Add(new Point(500, 300));
-            points.Add(new Point(600, 300));
-            points.Add(new Point(800, 100));
+            points.Add(new Point(100, 120));
+            points.Add(new Point(500, 150));
+            points.Add(new Point(600, 100));
+            points.Add(new Point(800, 30));
 
             Segments = new List<SlopeSegment>();
             for (int i = 0; i < points.Count() - 1; i++)
@@ -40,34 +40,17 @@ namespace MotoGame.Model
 
         private void UpdateWheel(float dTime, Wheel wheel)
         {
-            Vector2? closestIntersect = null;
-            SlopeSegment closestSegment = null;
-            foreach(SlopeSegment segment in Segments)
-            {
-                Vector2? intersection = segment.GetIntersection(Bike.rearWheel);
-                if (intersection.HasValue)
-                {
-                    if (closestIntersect.HasValue)
-                    {
-                        if(closestIntersect.GetValueOrDefault())
-                    }
-                    closestIntersect = intersection;
-                    closestSegment = segment;
-
-                    
-                    return;
-                }
-            }
-
-            if(closestIntersect.HasValue)
-                wheel.Update(dTime, closestSegment, closestIntersect.GetValueOrDefault());
-            else
-                wheel.Update(dTime, false);
+            wheel.Update(dTime, GetCurrentSegment(wheel));
         }
 
-        private void GetDistance(Vector2 a, Vector2 b)
+        private SlopeSegment GetCurrentSegment(Wheel wheel)
         {
-            return Math.Sqrt();
+            return Segments.Where(x => x.Start.X <= wheel.Position.X && x.End.X > wheel.Position.X).FirstOrDefault();
+        }
+
+        private double GetDistance(Vector2 a, Vector2 b)
+        {
+            return Math.Sqrt(Math.Pow(b.X - a.X,2) + Math.Pow(b.Y - a.Y,2));
         }
     }
 }

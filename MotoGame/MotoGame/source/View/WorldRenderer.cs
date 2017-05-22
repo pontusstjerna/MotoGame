@@ -56,7 +56,9 @@ namespace MotoGame.View
 
         private void DrawWheel(SpriteBatch sb, Wheel wheel)
         {
-            sb.Draw(wheelTexture, wheel.Position, Color.White);
+            sb.Draw(wheelTexture, 
+                new Vector2(wheel.Position.X - wheel.Radius, wheel.Position.Y - wheel.Radius)
+                , Color.White);
             //sb.Draw(wheelTexture, new Rectangle(wheel.Position.ToPoint(), new Point(16, 16)), Color.White);
         }
 
