@@ -20,9 +20,12 @@ namespace MotoGame.source.Model
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
+        private const float MAX_SPEED = 0.1f;
+
         private Vector2 position;
         private Vector2 velocity;
         private float angularVelocity;
+        private float acceleration;
 
         public Wheel(Point position)
         {
@@ -48,6 +51,7 @@ namespace MotoGame.source.Model
                 //Add normal force!
                 velocity += normalForce;
 
+                ApplyAcceleration(currentSegment.GetSlope());
                 ApplyAngularVelocity(currentSegment.GetSlope());
             }
             
@@ -61,10 +65,30 @@ namespace MotoGame.source.Model
             if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
         }
 
+        public void Accelerate(float dTime)
+        {
+            if(acceleration < MAX_SPEED)
+                acceleration += dTime/1000;
+        }
+
+        public void Brake(float dTime)
+        {
+            if(velocity.X > 0)
+                acceleration -= dTime / 1000;
+        }
+
+        private void ApplyAcceleration(Vector2 slope)
+        {
+            float tangetialAcceleration = acceleration*Radius;
+
+            velocity.X += slope.X * tangetialAcceleration;
+            velocity.Y += slope.Y * tangetialAcceleration;
+        }
+
         private void ApplyAngularVelocity(Vector2 slope)
         {
             float tangentialAcceleration = GetDotProduct(velocity, slope);
-            angularVelocity = tangentialAcceleration / Radius;
+            angularVelocity = (tangentialAcceleration / Radius) + acceleration;
         }
 
         private void ApplyGravity()
