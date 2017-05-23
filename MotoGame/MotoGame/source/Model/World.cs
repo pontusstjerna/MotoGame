@@ -12,14 +12,16 @@ namespace MotoGame.Model
     {
         public List<SlopeSegment> Segments { get; private set; }
 
-        public Bike Bike { get; private set; } 
+        public Bike Bike { get; private set; }
+
+        private List<Point> points;
 
         public World()
         {
-            List<Point> points = new List<Point>();
+            points = new List<Point>();
             points.Add(new Point(10, 100));
             points.Add(new Point(400, 110));
-            points.Add(new Point(800, 100));
+            points.Add(new Point(800, 111));
 
             Segments = new List<SlopeSegment>();
             for (int i = 0; i < points.Count() - 1; i++)
@@ -30,6 +32,11 @@ namespace MotoGame.Model
 
         public void Update(float dTime)
         {
+            if(Bike.rearWheel.Position.X > Segments[Segments.Count - 2].Start.X)
+            {
+                GenerateSlopeSegment();
+            }
+
             UpdateWheel(dTime, Bike.rearWheel);
             //Bike.Update(dTime);
 
@@ -45,9 +52,10 @@ namespace MotoGame.Model
             return Segments.Where(seg => seg.Start.X <= wheel.Position.X && seg.End.X > wheel.Position.X).FirstOrDefault();
         }
 
-        private double GetDistance(Vector2 a, Vector2 b)
+        private void GenerateSlopeSegment()
         {
-            return Math.Sqrt(Math.Pow(b.X - a.X,2) + Math.Pow(b.Y - a.Y,2));
+            points.Add(new Point(points.Last().X + 500, 400));
+            Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
     }
 }

@@ -16,6 +16,8 @@ namespace MotoGame.View
         private Texture2D lineTexture;
         private Texture2D wheelTexture;
 
+        private int width, height;
+
         public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel)
         {
             this.world = world;
@@ -24,6 +26,9 @@ namespace MotoGame.View
             lineTexture.SetData<Color>(new Color[] { Color.Black });
 
             wheelTexture = wheel;
+
+            width = gd.Viewport.Width;
+            height = gd.Viewport.Height;
         }
 
         public void Render(SpriteBatch sb)
@@ -37,7 +42,7 @@ namespace MotoGame.View
             sb.Begin();
             foreach(SlopeSegment segment in world.Segments)
             {
-                DrawLine(sb, segment.Start, segment.End);
+                DrawLine(sb, segment.Start, segment.End, world.Bike.rearWheel);
             }
             sb.End();
         }
@@ -56,25 +61,9 @@ namespace MotoGame.View
 
         private void DrawWheel(SpriteBatch sb, Wheel wheel)
         {
-            /*sb.Draw(wheelTexture, 
-                new Vector2(wheel.Position.X - wheel.Radius, wheel.Position.Y - wheel.Radius)
-                , Color.White);
-                */
-            //sb.Draw(
-            //    wheelTexture,
-            //    new Rectangle(
-            //        (int)wheel.Position.X - wheel.Radius,
-            //        (int)wheel.Position.Y - wheel.Radius, 16, 16),
-            //    null,
-            //    Color.White,
-            //    wheel.Rotation,
-            //    new Vector2(wheel.Radius, wheel.Radius),
-            //    SpriteEffects.None,
-            //    0);
-
             sb.Draw(
                 wheelTexture,
-                wheel.Position,
+                new Vector2(width/2, wheel.Position.Y),
                 null,
                 Color.White,
                 wheel.Rotation,
@@ -82,16 +71,18 @@ namespace MotoGame.View
                 1,
                 SpriteEffects.None,
                 0);
-            //sb.Draw(wheelTexture, new Rectangle(wheel.Position.ToPoint(), new Point(16, 16)), Color.White);
         }
 
-       private void DrawLine(SpriteBatch sb, Point start, Point end)
+       private void DrawLine(SpriteBatch sb, Point start, Point end, Wheel player)
         {
             Vector2 edge = end.ToVector2() - start.ToVector2();
             float angle = (float)Math.Atan2(edge.Y, edge.X);
 
             sb.Draw(lineTexture,
-                new Rectangle(start.X, start.Y, (int)edge.Length(), 1),
+                new Rectangle(
+                    start.X - player.Position.ToPoint().X + width/2, 
+                    start.Y, 
+                    (int)edge.Length(), 1),
                 null, Color.Black, angle, new Vector2(0, 0), SpriteEffects.None, 0);
         }
     }
