@@ -20,12 +20,15 @@ namespace MotoGame.source.Model
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
-        private const float MAX_SPEED = 0.1f;
+        private const int MAX_SPEED = 10;
+        private const int MAX_FRICTION = 1;
 
         private Vector2 position;
         private Vector2 velocity;
         private float angularVelocity;
         private float acceleration;
+        private Vector2 thrust;
+        private float friction = 0;
 
         public Wheel(Point position)
         {
@@ -38,6 +41,7 @@ namespace MotoGame.source.Model
             Vector2? maybeIntersection = currentSegment.GetIntersection(this);
 
             ApplyGravity();
+            thrust = new Vector2(0, 0);
 
             if (maybeIntersection.HasValue)
             {
@@ -57,9 +61,15 @@ namespace MotoGame.source.Model
             
             dTime /= 1000;
 
+            velocity.X *= (1 - friction);
+            velocity.Y *= (1 - friction);
+
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
-
+            
+            position.X += thrust.X * dTime;
+            position.Y += thrust.Y * dTime;
+            
             Rotation += angularVelocity * dTime;
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
             if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
@@ -73,22 +83,24 @@ namespace MotoGame.source.Model
 
         public void Brake(float dTime)
         {
-            if(velocity.X > 0)
-                acceleration -= dTime / 1000;
+            if (friction < MAX_FRICTION)
+                friction += dTime;
+            else
+                friction = MAX_FRICTION;
         }
 
         private void ApplyAcceleration(Vector2 slope)
         {
             float tangetialAcceleration = acceleration*Radius;
 
-            velocity.X += slope.X * tangetialAcceleration;
-            velocity.Y += slope.Y * tangetialAcceleration;
+            thrust.X = slope.X * tangetialAcceleration;
+            thrust.Y = slope.Y * tangetialAcceleration;
         }
 
         private void ApplyAngularVelocity(Vector2 slope)
         {
             float tangentialAcceleration = GetDotProduct(velocity, slope);
-            angularVelocity = (tangentialAcceleration / Radius) + acceleration;
+            angularVelocity = (tangentialAcceleration / Radius);
         }
 
         private void ApplyGravity()
