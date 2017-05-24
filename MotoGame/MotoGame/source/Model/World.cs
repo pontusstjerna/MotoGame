@@ -15,6 +15,7 @@ namespace MotoGame.Model
         public Bike Bike { get; private set; }
 
         private List<Point> points;
+        private Random random;
 
         public World()
         {
@@ -28,6 +29,8 @@ namespace MotoGame.Model
                 Segments.Add(new SlopeSegment(points[i], points[i + 1]));
 
             Bike = new Bike(new Point(75,50));
+
+            random = new Random();
         }
 
         public void Update(float dTime)
@@ -54,7 +57,7 @@ namespace MotoGame.Model
 
         private void GenerateSlopeSegment()
         {
-            points.Add(new Point(points.Last().X + 500, 400));
+            points.Add(new Point(points.Last().X + 500, random.Next(425) + 25));
             Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
     }

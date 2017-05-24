@@ -20,15 +20,17 @@ namespace MotoGame.source.Model
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
-        private const int MAX_SPEED = 10;
+        private const int MAX_SPEED = 100;
         private const int MAX_FRICTION = 1;
+        private const float MIN_FRICTION = 0.01f;
 
         private Vector2 position;
         private Vector2 velocity;
         private float angularVelocity;
         private float acceleration;
-        private Vector2 thrust;
         private float friction = 0;
+
+        private bool isAccelerating;
 
         public Wheel(Point position)
         {
@@ -41,8 +43,8 @@ namespace MotoGame.source.Model
             Vector2? maybeIntersection = currentSegment.GetIntersection(this);
 
             ApplyGravity();
-            thrust = new Vector2(0, 0);
 
+            //On ground
             if (maybeIntersection.HasValue)
             {
                 Vector2 slopeNormal = currentSegment.GetNormal();
@@ -55,20 +57,19 @@ namespace MotoGame.source.Model
                 //Add normal force!
                 velocity += normalForce;
 
-                ApplyAcceleration(currentSegment.GetSlope());
+                if (isAccelerating)
+                    ApplyAcceleration(currentSegment.GetSlope(), dTime);
+               
                 ApplyAngularVelocity(currentSegment.GetSlope());
+
+                velocity.X *= (1 - friction * dTime * 4);
+                velocity.Y *= (1 - friction * dTime * 4);
             }
             
             dTime /= 1000;
 
-            velocity.X *= (1 - friction);
-            velocity.Y *= (1 - friction);
-
             position.X += velocity.X * dTime;
             position.Y += velocity.Y * dTime;
-            
-            position.X += thrust.X * dTime;
-            position.Y += thrust.Y * dTime;
             
             Rotation += angularVelocity * dTime;
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
@@ -77,6 +78,7 @@ namespace MotoGame.source.Model
 
         public void Accelerate(float dTime)
         {
+            isAccelerating = true;
             if(acceleration < MAX_SPEED)
                 acceleration += dTime/1000;
         }
@@ -89,12 +91,25 @@ namespace MotoGame.source.Model
                 friction = MAX_FRICTION;
         }
 
-        private void ApplyAcceleration(Vector2 slope)
+        public void StopAcceleration()
+        {
+            isAccelerating = false;
+        }
+
+        public void ReleaseBrake()
+        {
+            friction = MIN_FRICTION;
+        }
+
+        private void ApplyAcceleration(Vector2 slope, float dTime)
         {
             float tangetialAcceleration = acceleration*Radius;
 
-            thrust.X = slope.X * tangetialAcceleration;
-            thrust.Y = slope.Y * tangetialAcceleration;
+            if(GetDotProduct(velocity, slope) < MAX_SPEED / dTime)
+            {
+                velocity.X = slope.X * tangetialAcceleration;
+                velocity.Y = slope.Y * tangetialAcceleration;
+            }
         }
 
         private void ApplyAngularVelocity(Vector2 slope)
