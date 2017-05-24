@@ -57,7 +57,7 @@ namespace MotoGame.Model
 
         private void GenerateSlopeSegment()
         {
-            points.Add(new Point(points.Last().X + 500, random.Next(425) + 25));
+            points.Add(new Point(points.Last().X + 500, random.Next(425) + 325));
             Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
     }

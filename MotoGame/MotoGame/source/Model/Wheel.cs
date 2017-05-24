@@ -16,6 +16,14 @@ namespace MotoGame.source.Model
             }
         }
 
+        public Vector2 Velocity
+        {
+            get
+            {
+                return velocity;
+            }
+        }
+
         public int Radius = 8;
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
@@ -46,7 +54,7 @@ namespace MotoGame.source.Model
 
             //On ground
             if (maybeIntersection.HasValue)
-                ApplyGroundPhysics(dTime, currentSegment);
+                ApplyGroundPhysics(dTime, currentSegment, maybeIntersection.GetValueOrDefault());
             
             dTime /= 1000;
 
@@ -91,24 +99,27 @@ namespace MotoGame.source.Model
             velocity.Y -= COF * tangentialVelocity.Y;
         }
 
-        private void ApplyGroundPhysics(float dTime, SlopeSegment currentSegment)
+        private void ApplyGroundPhysics(float dTime, SlopeSegment currentSegment, Vector2 intersection)
         {
             Vector2 slopeNormal = currentSegment.GetNormal();
-            float normalForceLength = GetDotProduct(velocity, slopeNormal) * 1.1f;
+            Vector2 slope = currentSegment.GetSlope();
+            float normalForceLength = GetDotProduct(velocity, slopeNormal);
 
             Vector2 normalForce = new Vector2(
                 -slopeNormal.X * normalForceLength,
                 -slopeNormal.Y * normalForceLength);
 
+            //Adjust wheel to be exactly on the line
+            AdjustWheelToLine(slopeNormal, intersection);
+
             //Add normal force!
             velocity += normalForce;
 
             if (isAccelerating)
-                ApplyAcceleration(currentSegment.GetSlope(), dTime);
+                ApplyAcceleration(slope, dTime);
 
-            ApplyFriction(currentSegment.GetSlope(), normalForceLength, dTime);
-
-            ApplyAngularVelocity(currentSegment.GetSlope());
+            ApplyFriction(slope, normalForceLength, dTime);
+            ApplyAngularVelocity(slope);
         }
 
         private void ApplyAcceleration(Vector2 slope, float dTime)
@@ -130,9 +141,20 @@ namespace MotoGame.source.Model
             velocity.Y += 9.81f;
         }
 
+        private void AdjustWheelToLine(Vector2 normal, Vector2 intersection)
+        {
+            position.X = intersection.X + normal.X * Radius;
+            position.Y = intersection.Y + normal.Y * Radius;
+        }
+
         private float GetDotProduct(Vector2 a, Vector2 b)
         {
             return a.X * b.X + a.Y * b.Y;
+        }
+
+        private double GetDistance(Vector2 a, Vector2 b)
+        {
+            return Math.Sqrt((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y));
         }
     }
 }

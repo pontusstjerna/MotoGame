@@ -38,8 +38,8 @@ namespace MotoGame.source.Model
             Vector2 slope = GetSlope();
 
             //A vector is wheel, b is slope
-            float p0_x = wheel.Position.X;
-            float p0_y = wheel.Position.Y;
+            float p0_x = wheel.Position.X + normal.X * wheel.Radius;
+            float p0_y = wheel.Position.Y + normal.Y * wheel.Radius;
             float p1_x = wheel.Position.X - normal.X * wheel.Radius;
             float p1_y = wheel.Position.Y - normal.Y * wheel.Radius;
             float p2_x = Start.X;
