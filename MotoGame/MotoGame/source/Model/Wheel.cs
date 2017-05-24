@@ -22,7 +22,7 @@ namespace MotoGame.source.Model
 
         private const int MAX_SPEED = 10;
         private const int MAX_FRICTION = 1;
-        private const float MIN_FRICTION = 0.5f;
+        private const float MIN_FRICTION = 0.001f;
 
         private Vector2 position;
         private Vector2 velocity;
@@ -61,13 +61,13 @@ namespace MotoGame.source.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            acceleration = dTime/400;
+            acceleration = dTime/10;
         }
 
         public void Brake(float dTime)
         {
             if (COF < MAX_FRICTION)
-                COF += dTime;
+                COF = 0.1f;
             else
                 COF = MAX_FRICTION;
         }
@@ -85,12 +85,10 @@ namespace MotoGame.source.Model
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
         {
             float currentVelocity = GetDotProduct(slope, velocity);
-            Vector2 frictionVector = new Vector2(
-                -slope.X * normalForce * COF,
-                -slope.Y * normalForce * COF);
+            Vector2 tangentialVelocity = new Vector2(slope.X * currentVelocity, slope.Y * currentVelocity);
 
-            if(currentVelocity + normalForce*COF > 0)
-                velocity += frictionVector;
+            velocity.X -= COF * tangentialVelocity.X;
+            velocity.Y -= COF * tangentialVelocity.Y;
         }
 
         private void ApplyGroundPhysics(float dTime, SlopeSegment currentSegment)
@@ -108,7 +106,7 @@ namespace MotoGame.source.Model
             if (isAccelerating)
                 ApplyAcceleration(currentSegment.GetSlope(), dTime);
 
-           // ApplyFriction(currentSegment.GetSlope(), normalForceLength, dTime);
+            ApplyFriction(currentSegment.GetSlope(), normalForceLength, dTime);
 
             ApplyAngularVelocity(currentSegment.GetSlope());
         }
