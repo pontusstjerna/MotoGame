@@ -53,7 +53,7 @@ namespace MotoGame
             // TODO: use this.Content to load your game content here
 
             world = new World();
-            worldRenderer = new WorldRenderer(world, GraphicsDevice, Content.Load<Texture2D>("data/wheel2"), Content.Load<Texture2D>("data/bike_complete1"));
+            worldRenderer = new WorldRenderer(world, GraphicsDevice, Content.Load<Texture2D>("data/wheel3"), Content.Load<Texture2D>("data/bike_complete2"));
         }
 
         /// <summary>

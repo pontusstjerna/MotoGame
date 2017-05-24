@@ -19,18 +19,20 @@ namespace MotoGame.source.Model
             }
         }
 
+        public Vector2 CenterOfGravity = new Vector2(19, 13);
+        public Vector2 RearWheelOffset { get; private set; } = new Vector2(-17, 12);
+
         private Vector2 position;
 
         public Bike(Point startPos)
         {
             position = startPos.ToVector2();
-            rearWheel = new Wheel(startPos);
+            rearWheel = new Wheel(startPos + RearWheelOffset.ToPoint());
         }
 
         public void Update(float dTime)
         {
-            //rearWheel.Update(dTime);
-            //frontWheel.Update(dTime);
+            position = rearWheel.Position - RearWheelOffset;
         }
     }
 }

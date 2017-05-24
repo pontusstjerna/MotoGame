@@ -44,7 +44,7 @@ namespace MotoGame.View
             sb.Begin();
             foreach(SlopeSegment segment in world.Segments)
             {
-                DrawLine(sb, segment.Start, segment.End, world.Bike.rearWheel);
+                DrawLine(sb, segment.Start, segment.End, world.Bike);
             }
             sb.End();
         }
@@ -58,15 +58,26 @@ namespace MotoGame.View
 
         private void DrawBike(SpriteBatch sb, Bike bike)
         {
-            sb.Draw(bikeTexture, world.Bike.Position, Color.White);
-            DrawWheel(sb, bike.rearWheel);
+            Vector2 bikeRenderPos = new Vector2(width / 2, bike.Position.Y);
+
+            sb.Draw(
+                bikeTexture,
+                bikeRenderPos,
+                null,
+                Color.White,
+                0,
+                bike.CenterOfGravity,
+                1,
+                SpriteEffects.None,
+                0);
+            DrawWheel(sb, bike.rearWheel, bikeRenderPos, bike.RearWheelOffset);
         }
 
-        private void DrawWheel(SpriteBatch sb, Wheel wheel)
+        private void DrawWheel(SpriteBatch sb, Wheel wheel, Vector2 bikeRenderPos, Vector2 offset)
         {
             sb.Draw(
                 wheelTexture,
-                new Vector2(width/2, wheel.Position.Y),
+                bikeRenderPos + offset,
                 null,
                 Color.White,
                 wheel.Rotation,
@@ -76,7 +87,7 @@ namespace MotoGame.View
                 0);
         }
 
-       private void DrawLine(SpriteBatch sb, Point start, Point end, Wheel player)
+       private void DrawLine(SpriteBatch sb, Point start, Point end, Bike player)
         {
             Vector2 edge = end.ToVector2() - start.ToVector2();
             float angle = (float)Math.Atan2(edge.Y, edge.X);

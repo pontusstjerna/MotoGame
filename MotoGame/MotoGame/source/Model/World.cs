@@ -41,7 +41,7 @@ namespace MotoGame.Model
             }
 
             UpdateWheel(dTime, Bike.rearWheel);
-            //Bike.Update(dTime);
+            Bike.Update(dTime);
 
         }
 
