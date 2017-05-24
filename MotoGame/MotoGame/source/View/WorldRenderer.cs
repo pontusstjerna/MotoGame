@@ -15,10 +15,11 @@ namespace MotoGame.View
         private World world;
         private Texture2D lineTexture;
         private Texture2D wheelTexture;
+        private Texture2D bikeTexture;
 
         private int width, height;
 
-        public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel)
+        public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel, Texture2D bike)
         {
             this.world = world;
 
@@ -26,6 +27,7 @@ namespace MotoGame.View
             lineTexture.SetData<Color>(new Color[] { Color.Black });
 
             wheelTexture = wheel;
+            bikeTexture = bike;
 
             width = gd.Viewport.Width;
             height = gd.Viewport.Height;
@@ -56,6 +58,7 @@ namespace MotoGame.View
 
         private void DrawBike(SpriteBatch sb, Bike bike)
         {
+            sb.Draw(bikeTexture, world.Bike.Position, Color.White);
             DrawWheel(sb, bike.rearWheel);
         }
 

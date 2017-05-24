@@ -11,9 +11,19 @@ namespace MotoGame.source.Model
     {
         public Wheel rearWheel { get; private set; }
         public Wheel frontWheel { get; private set; }
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+        }
+
+        private Vector2 position;
 
         public Bike(Point startPos)
         {
+            position = startPos.ToVector2();
             rearWheel = new Wheel(startPos);
         }
 

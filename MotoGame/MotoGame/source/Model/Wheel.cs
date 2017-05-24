@@ -24,7 +24,7 @@ namespace MotoGame.source.Model
             }
         }
 
-        public int Radius = 8;
+        public int Radius = 19;
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
