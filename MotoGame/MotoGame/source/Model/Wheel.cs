@@ -90,6 +90,11 @@ namespace MotoGame.source.Model
             COF = MIN_FRICTION;
         }
 
+        public void AddStaticForce(Vector2 force)
+        {
+            velocity += force;
+        }
+
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
         {
             float currentVelocity = GetDotProduct(slope, velocity);
