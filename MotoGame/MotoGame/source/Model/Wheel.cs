@@ -20,15 +20,15 @@ namespace MotoGame.source.Model
         public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
-        private const int MAX_SPEED = 100;
+        private const int MAX_SPEED = 10;
         private const int MAX_FRICTION = 1;
-        private const float MIN_FRICTION = 0.01f;
+        private const float MIN_FRICTION = 0.5f;
 
         private Vector2 position;
         private Vector2 velocity;
         private float angularVelocity;
         private float acceleration;
-        private float friction = 0;
+        private float COF = MIN_FRICTION;
 
         private bool isAccelerating;
 
@@ -46,25 +46,7 @@ namespace MotoGame.source.Model
 
             //On ground
             if (maybeIntersection.HasValue)
-            {
-                Vector2 slopeNormal = currentSegment.GetNormal();
-                float normalForceLength = GetDotProduct(velocity, slopeNormal)*1.1f;
-                
-                Vector2 normalForce = new Vector2(
-                    -slopeNormal.X * normalForceLength,
-                    -slopeNormal.Y * normalForceLength);
-
-                //Add normal force!
-                velocity += normalForce;
-
-                if (isAccelerating)
-                    ApplyAcceleration(currentSegment.GetSlope(), dTime);
-               
-                ApplyAngularVelocity(currentSegment.GetSlope());
-
-                velocity.X *= (1 - friction * dTime * 4);
-                velocity.Y *= (1 - friction * dTime * 4);
-            }
+                ApplyGroundPhysics(dTime, currentSegment);
             
             dTime /= 1000;
 
@@ -79,16 +61,15 @@ namespace MotoGame.source.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            if(acceleration < MAX_SPEED)
-                acceleration += dTime/1000;
+            acceleration = dTime/400;
         }
 
         public void Brake(float dTime)
         {
-            if (friction < MAX_FRICTION)
-                friction += dTime;
+            if (COF < MAX_FRICTION)
+                COF += dTime;
             else
-                friction = MAX_FRICTION;
+                COF = MAX_FRICTION;
         }
 
         public void StopAcceleration()
@@ -98,18 +79,46 @@ namespace MotoGame.source.Model
 
         public void ReleaseBrake()
         {
-            friction = MIN_FRICTION;
+            COF = MIN_FRICTION;
+        }
+
+        private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
+        {
+            float currentVelocity = GetDotProduct(slope, velocity);
+            Vector2 frictionVector = new Vector2(
+                -slope.X * normalForce * COF,
+                -slope.Y * normalForce * COF);
+
+            if(currentVelocity + normalForce*COF > 0)
+                velocity += frictionVector;
+        }
+
+        private void ApplyGroundPhysics(float dTime, SlopeSegment currentSegment)
+        {
+            Vector2 slopeNormal = currentSegment.GetNormal();
+            float normalForceLength = GetDotProduct(velocity, slopeNormal) * 1.1f;
+
+            Vector2 normalForce = new Vector2(
+                -slopeNormal.X * normalForceLength,
+                -slopeNormal.Y * normalForceLength);
+
+            //Add normal force!
+            velocity += normalForce;
+
+            if (isAccelerating)
+                ApplyAcceleration(currentSegment.GetSlope(), dTime);
+
+           // ApplyFriction(currentSegment.GetSlope(), normalForceLength, dTime);
+
+            ApplyAngularVelocity(currentSegment.GetSlope());
         }
 
         private void ApplyAcceleration(Vector2 slope, float dTime)
         {
             float tangetialAcceleration = acceleration*Radius;
 
-            if(GetDotProduct(velocity, slope) < MAX_SPEED / dTime)
-            {
-                velocity.X = slope.X * tangetialAcceleration;
-                velocity.Y = slope.Y * tangetialAcceleration;
-            }
+            velocity.X += slope.X * tangetialAcceleration;
+            velocity.Y += slope.Y * tangetialAcceleration;
         }
 
         private void ApplyAngularVelocity(Vector2 slope)
@@ -121,53 +130,6 @@ namespace MotoGame.source.Model
         private void ApplyGravity()
         {
             velocity.Y += 9.81f;
-        }
-
-        private void Bounce(Point a, Point b, Vector2 groundBelow)
-        {
-            Vector2 lineSegment = new Vector2(b.X - a.X, b.Y - a.Y);
-
-            //To get this, take the orthogonal vector of the line segment
-            Vector2 collisionVector = new Vector2(-lineSegment.Y, lineSegment.X);
-
-            Vector2 wheelDir;
-
-            /*
-             * var collisionVector = new Vector2D(ball2.x - ball1.x, ball2.y - ball1.y);
-                    var orthoCollisionVector = new Vector2D(-collisionVector.y, collisionVector.x);
-
-                    var colDir = collisionVector.unitVector();
-                    var unaffectDir = orthoCollisionVector.unitVector();
-
-                    var ball1Dir = new Vector2D(ball1.vx, ball1.vy);
-                    var ball2Dir = new Vector2D(ball2.vx, ball2.vy);
-
-                    var u1 = dot(ball1Dir,colDir);
-                    var u2 = dot(ball2Dir,colDir);
-
-                    var unaffected1 = unaffectDir.getScalar(dot(ball1Dir, unaffectDir));
-                    var unaffected2 = unaffectDir.getScalar(dot(ball2Dir, unaffectDir));
-
-                    audio.pause();
-                    audio.currentTime = 0;
-                    audio.play();
-                    
-                    var m1 = ball1.mass;
-                    var m2 = ball2.mass;
-                    var I = m1*u1 + m2*u2;
-                    var R = -(u2-u1);
-                    
-
-            var v2 = (I + m1 * R) / (m1 + m2);
-            var v1 = v2 - R;
-
-            ball1.vx = (colDir.x * v1 + unaffected1.x) * (1 - friction);
-            ball1.vy = (colDir.y * v1 + unaffected1.y) * (1 - friction);
-            ball2.vx = (colDir.x * v2 + unaffected2.x) * (1 - friction);
-            ball2.vy = (colDir.y * v2 + unaffected2.y) * (1 - friction);
-
-            p("ballsTotVel before: " + (ball1Dir.length + ball2Dir.length) + " After: " + (new Vector2D(ball1.vx, ball1.vy).length + new Vector2D(ball2.vx, ball2.vy).length));
-            * */
         }
 
         private float GetDotProduct(Vector2 a, Vector2 b)
