@@ -58,8 +58,8 @@ namespace MotoGame.source.Model
             
             dTime /= 1000;
 
-            position.X += velocity.X * dTime;
-            position.Y += velocity.Y * dTime;
+           // position.X += velocity.X * dTime;
+           // position.Y += velocity.Y * dTime;
             
             Rotation += angularVelocity * dTime;
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
@@ -90,9 +90,9 @@ namespace MotoGame.source.Model
             COF = MIN_FRICTION;
         }
 
-        public void AddStaticForce(Vector2 force)
+        public void SetPosition(Vector2 position)
         {
-            velocity += force;
+            this.position = position;
         }
 
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
@@ -146,10 +146,9 @@ namespace MotoGame.source.Model
             velocity.Y += 9.81f;
         }
 
-        private void AdjustWheelToLine(Vector2 normal, Vector2 intersection)
+        private Vector2 AdjustWheelToLine(Vector2 normal, Vector2 intersection)
         {
-            position.X = intersection.X + normal.X * Radius;
-            position.Y = intersection.Y + normal.Y * Radius;
+            return new Vector2(intersection.X + normal.X * Radius, intersection.Y + normal.Y * Radius);
         }
 
         private float GetDotProduct(Vector2 a, Vector2 b)

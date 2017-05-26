@@ -38,7 +38,21 @@ namespace MotoGame.source.Model
 
         public void Update(float dTime)
         {
-            position = rearWheel.Position - RearWheelOffset;
+            dTime /= 1000;
+
+            velocity = rearWheel.Velocity + frontWheel.Velocity;
+
+            position += velocity * dTime;
+
+            //Vector2 wheelDiff = frontWheel.Velocity * dTime - rearWheel.Velocity * dTime;
+            //Rotation = (float)Math.Atan2(wheelDiff.Y, wheelDiff.X);
+
+            Rotation = 0;
+
+            rearWheel.SetPosition(position + GetWheelOffset(RearWheelOffset));
+            frontWheel.SetPosition(position + GetWheelOffset(FrontWheelOffset));
+
+            /*position = rearWheel.Position - RearWheelOffset;
             rearToFront = new Vector2(rearToFront.Length() * (float)Math.Cos(Rotation), rearToFront.Length() * (float)Math.Sin(Rotation));
 
             
@@ -58,7 +72,7 @@ namespace MotoGame.source.Model
 
             Vector2 frontNorm = (rearToFront - currentOffset);
             frontWheel.AddStaticForce(frontNorm);
-
+            */
             //BIG TODO:
             /*
              * Move the position += x from wheels so that they cannot change their position on their own.
@@ -66,6 +80,13 @@ namespace MotoGame.source.Model
              * Then in turn, when the bike changes its position, the wheels will follow at their 
              * locked locations.
              */
+        }
+
+        private Vector2 GetWheelOffset(Vector2 staticOffset)
+        {
+            return new Vector2(
+                staticOffset.X * (float)Math.Cos(Rotation) + staticOffset.Y * (float)Math.Sin(Rotation),
+                -staticOffset.X * (float)Math.Sin(Rotation) + staticOffset.Y * (float)Math.Cos(Rotation));
         }
     }
 }
