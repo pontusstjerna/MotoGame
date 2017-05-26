@@ -39,15 +39,25 @@ namespace MotoGame.source.Model
         public void Update(float dTime)
         {
             position = rearWheel.Position - RearWheelOffset;
+            rearToFront = new Vector2(rearToFront.Length() * (float)Math.Cos(Rotation), rearToFront.Length() * (float)Math.Sin(Rotation));
 
-            //Vector2 currentOffset = frontWheel.Position - rearWheel.Position;
+            
             //Vector2 normalForce = (rearToFront - currentOffset)*1000;
 
-            Vector2 currentOffset = frontWheel.Position - Position;
-            Vector2 normalForce = (FrontWheelOffset - currentOffset) * 10;
+            Vector2 actualRearToFront = frontWheel.Position - rearWheel.Position;
+            Rotation = (float)Math.Atan2(actualRearToFront.Y, actualRearToFront.X);
 
-            frontWheel.AddStaticForce(normalForce);
-            Rotation = (float)Math.Atan2(rearToFront.Y, rearToFront.X);
+            //Vector2 currentOffset = frontWheel.Position - Position;
+            //Vector2 normalForce = (FrontWheelOffset - currentOffset) * 10;
+
+            Vector2 currentOffset = frontWheel.Position - rearWheel.Position;
+
+            //Inverted because other wheel
+            Vector2 rearNorm = (currentOffset - rearToFront);
+            rearWheel.AddStaticForce(rearNorm);
+
+            Vector2 frontNorm = (rearToFront - currentOffset);
+            frontWheel.AddStaticForce(frontNorm);
         }
     }
 }

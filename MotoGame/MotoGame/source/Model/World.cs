@@ -39,10 +39,10 @@ namespace MotoGame.Model
             {
                 GenerateSlopeSegment();
             }
-
-            UpdateWheel(dTime, Bike.rearWheel);
             Bike.Update(dTime);
+            UpdateWheel(dTime, Bike.rearWheel);
             UpdateWheel(dTime, Bike.frontWheel);
+            
 
         }
 
