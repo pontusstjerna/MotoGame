@@ -16,18 +16,20 @@ namespace MotoGame.View
         private Texture2D lineTexture;
         private Texture2D wheelTexture;
         private Texture2D bikeTexture;
+        private SpriteFont mainFont;
 
         private int width, height;
 
-        public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel, Texture2D bike)
+        public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel, Texture2D bike, SpriteFont mainFont)
         {
             this.world = world;
 
             lineTexture = new Texture2D(gd, 1, 1);
-            lineTexture.SetData<Color>(new Color[] { Color.Black });
+            lineTexture.SetData<Color>(new Color[] { Color.DarkOrange });
 
             wheelTexture = wheel;
             bikeTexture = bike;
+            this.mainFont = mainFont;
 
             width = gd.Viewport.Width;
             height = gd.Viewport.Height;
@@ -37,6 +39,7 @@ namespace MotoGame.View
         {
             RenderWorld(sb);
             RenderBike(sb);
+            RenderScore(sb);
         }
 
         private void RenderWorld(SpriteBatch sb)
@@ -53,6 +56,16 @@ namespace MotoGame.View
         {
             sb.Begin();
             DrawBike(sb, world.Bike);
+            sb.End();
+        }
+
+        private void RenderScore(SpriteBatch sb)
+        {
+            sb.Begin();
+            DrawRect(sb, 10, 10, 140, 30);
+            int score = (int)world.Bike.Position.X / 100;
+            string scoreWithZeros = (1000000 + score).ToString().Substring(1);
+            sb.DrawString(mainFont, "Score: " + scoreWithZeros, new Vector2(15, 15), Color.Black);
             sb.End();
         }
 
@@ -89,7 +102,7 @@ namespace MotoGame.View
         }
 
        private void DrawLine(SpriteBatch sb, Point start, Point end, Bike player)
-        {
+       {
             Vector2 edge = end.ToVector2() - start.ToVector2();
             float angle = (float)Math.Atan2(edge.Y, edge.X);
 
@@ -97,8 +110,13 @@ namespace MotoGame.View
                 new Rectangle(
                     start.X - player.Position.ToPoint().X + width/2, 
                     start.Y, 
-                    (int)edge.Length(), 1),
-                null, Color.Black, angle, new Vector2(0, 0), SpriteEffects.None, 0);
-        }
+                    (int)edge.Length(), 3),
+                null, Color.DarkOrange, angle, new Vector2(0, 0), SpriteEffects.None, 0);
+       }
+
+       private void DrawRect(SpriteBatch sb, int x, int y, int width, int height)
+       {
+            sb.Draw(lineTexture, new Rectangle(x, y, width, height), null, Color.DarkOrange);
+       }
     }
 }
