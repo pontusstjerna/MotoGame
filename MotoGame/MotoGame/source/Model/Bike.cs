@@ -58,6 +58,14 @@ namespace MotoGame.source.Model
 
             Vector2 frontNorm = (rearToFront - currentOffset);
             frontWheel.AddStaticForce(frontNorm);
+
+            //BIG TODO:
+            /*
+             * Move the position += x from wheels so that they cannot change their position on their own.
+             * They should instead affect the velocity of the whole bike and affect its rotation etc.
+             * Then in turn, when the bike changes its position, the wheels will follow at their 
+             * locked locations.
+             */
         }
     }
 }
