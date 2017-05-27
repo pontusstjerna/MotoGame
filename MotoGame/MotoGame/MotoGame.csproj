@@ -50,6 +50,7 @@
     <Compile Include="source\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="source\Util\AdvancedVector2.cs" />
+    <Compile Include="source\Util\MathVector.cs" />
     <Compile Include="source\View\WorldRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

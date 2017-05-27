@@ -11,13 +11,7 @@ namespace MotoGame.source.Model
     {
         public Wheel RearWheel { get; private set; }
         public Wheel FrontWheel { get; private set; }
-        public Vector2 Position
-        {
-            get
-            {
-                return position;
-            }
-        }
+        public Vector2 Position { get { return position; } }
         public float Rotation { get; private set; } = 0;
 
         public Vector2 CenterOfGravity = new Vector2(19, 13);
@@ -49,11 +43,6 @@ namespace MotoGame.source.Model
             Rotation = (float)Math.Atan2(delta.Y, delta.X);
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
             if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
-        }
-
-        private float GetDotProduct(Vector2 a, Vector2 b)
-        {
-            return a.X * b.X + a.Y * b.Y;
         }
     }
 }
