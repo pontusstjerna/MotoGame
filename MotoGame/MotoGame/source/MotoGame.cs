@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MotoGame.Model;
+using MotoGame.source.Controller;
 using MotoGame.View;
 using System;
 
@@ -17,6 +18,7 @@ namespace MotoGame
 
         private World world;
         private WorldRenderer worldRenderer;
+        private PlayerController playerController;
         
         public MotoGame()
         {
@@ -58,6 +60,7 @@ namespace MotoGame
                 Content.Load<Texture2D>("data/wheel4"), 
                 Content.Load<Texture2D>("data/bike_complete2"),
                 Content.Load<SpriteFont>("data/Main"));
+            playerController = new PlayerController(world);
         }
 
         /// <summary>
@@ -79,17 +82,8 @@ namespace MotoGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                world.Bike.RearWheel.Accelerate(gameTime.ElapsedGameTime.Milliseconds);
-            else if (Keyboard.GetState().IsKeyUp(Keys.Up))
-                world.Bike.RearWheel.StopAcceleration();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                world.Bike.RearWheel.Brake(gameTime.ElapsedGameTime.Milliseconds);
-            else if (Keyboard.GetState().IsKeyUp(Keys.Down))
-                world.Bike.RearWheel.ReleaseBrake();
-
-            world.Update(gameTime.ElapsedGameTime.Milliseconds);
+            playerController.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            world.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Update(gameTime);
         }
@@ -102,7 +96,7 @@ namespace MotoGame
         {
             GraphicsDevice.Clear(new Color(16,16,16));
 
-            worldRenderer.Render(spriteBatch);
+            worldRenderer.Render(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Draw(gameTime);
         }

@@ -20,8 +20,9 @@ namespace MotoGame.source.Model
         public int Radius = 8;
         public float Rotation { get; private set; }
         public const float GRAVITY = 5f;
+        public bool OnGround { get; private set; }
 
-        private const int MAX_SPEED = 100; //This does not have any unit :(
+        private const int MAX_SPEED = 100; //This does now have a unit :D It's pixels per second
         private const float MAX_FRICTION = 0.2f;
         private const float MIN_FRICTION = 0.001f;
 
@@ -45,11 +46,10 @@ namespace MotoGame.source.Model
 
             ApplyGravity();
 
-            //On ground
-            if (maybeIntersection.HasValue)
-                ApplyGroundPhysics(dTime, currentSegment, maybeIntersection.GetValueOrDefault());
+            OnGround = maybeIntersection.HasValue;
             
-            dTime /= 1000;
+            if (OnGround)
+                ApplyGroundPhysics(dTime, currentSegment, maybeIntersection.GetValueOrDefault());
 
             position += velocity * dTime;
             
@@ -61,7 +61,7 @@ namespace MotoGame.source.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            acceleration = dTime*MAX_SPEED/1000;
+            acceleration = dTime*MAX_SPEED;
         }
 
         public void Brake(float dTime)

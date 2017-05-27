@@ -35,11 +35,12 @@ namespace MotoGame.View
             height = gd.Viewport.Height;
         }
 
-        public void Render(SpriteBatch sb)
+        public void Render(SpriteBatch sb, float dTime)
         {
             RenderWorld(sb);
             RenderBike(sb);
             RenderScore(sb);
+            ShowFps(sb, dTime);
         }
 
         private void RenderWorld(SpriteBatch sb)
@@ -68,7 +69,7 @@ namespace MotoGame.View
             sb.DrawString(mainFont, "Score: " + scoreWithZeros, new Vector2(15, 15), Color.Black);
             sb.End();
         }
-
+       
         private void DrawBike(SpriteBatch sb, Bike bike)
         {
             Vector2 bikeRenderPos = new Vector2(width / 2, bike.Position.Y);
@@ -118,5 +119,12 @@ namespace MotoGame.View
        {
             sb.Draw(lineTexture, new Rectangle(x, y, width, height), null, Color.DarkOrange);
        }
+
+       private void ShowFps(SpriteBatch sb, float dTime)
+        {
+            sb.Begin();
+            sb.DrawString(mainFont, "FPS: " + (int)Math.Round(1000/(dTime*1000), 0), new Vector2(15, 50), Color.White);
+            sb.End();
+        }
     }
 }

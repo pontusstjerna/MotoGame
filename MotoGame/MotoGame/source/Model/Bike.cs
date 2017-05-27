@@ -17,6 +17,7 @@ namespace MotoGame.source.Model
         public Vector2 CenterOfGravity = new Vector2(19, 13);
         public Vector2 RearWheelOffset { get; private set; } = new Vector2(-17, 12);
         public Vector2 FrontWheelOffset { get; private set; } = new Vector2(20, 11);
+        public Vector2 BodyPosition { get; } = new Vector2(19,13);
 
         private Vector2 position;
 
@@ -37,8 +38,8 @@ namespace MotoGame.source.Model
             Vector2 delta = FrontWheel.Position - RearWheel.Position;
             float deltaLength = delta.Length();
             float diff = (deltaLength - restLength) / deltaLength;
-            RearWheel.SetPosition(RearWheel.Position + delta * 0.5f * diff, dTime);
-            FrontWheel.SetPosition(FrontWheel.Position - delta * 0.5f * diff, dTime);
+            RearWheel.SetPosition(RearWheel.Position + delta * 0.5f * diff, dTime*1000);
+            FrontWheel.SetPosition(FrontWheel.Position - delta * 0.5f * diff, dTime*1000);
 
             Rotation = (float)Math.Atan2(delta.Y, delta.X);
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;

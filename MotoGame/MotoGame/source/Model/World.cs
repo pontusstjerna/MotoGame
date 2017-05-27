@@ -14,6 +14,7 @@ namespace MotoGame.Model
 
         public Bike Bike { get; private set; }
 
+        private Point startPosition = new Point(75, 50);
         private List<Point> points;
         private Random random;
 
@@ -28,7 +29,7 @@ namespace MotoGame.Model
             for (int i = 0; i < points.Count() - 1; i++)
                 Segments.Add(new SlopeSegment(points[i], points[i + 1]));
 
-            Bike = new Bike(new Point(75,50));
+            Bike = new Bike(startPosition);
 
             random = new Random();
         }
@@ -39,19 +40,35 @@ namespace MotoGame.Model
             {
                 GenerateSlopeSegment();
             }
+
             UpdateWheel(dTime, Bike.RearWheel);
             UpdateWheel(dTime, Bike.FrontWheel);
             Bike.Update(dTime);
+
+            CheckDeath();
+        }
+
+        public void Reset()
+        {
+            Bike = new Bike(startPosition);
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)
         {
-            wheel.Update(dTime, GetCurrentSegment(wheel));
+            wheel.Update(dTime, GetCurrentSegment(wheel.Position));
         }
 
-        private SlopeSegment GetCurrentSegment(Wheel wheel)
+        private SlopeSegment GetCurrentSegment(Vector2 position)
         {
-            return Segments.Where(seg => seg.Start.X <= wheel.Position.X && seg.End.X > wheel.Position.X).FirstOrDefault();
+            return Segments.Where(seg => seg.Start.X <= position.X && seg.End.X > position.X).FirstOrDefault();
+        }
+
+        private void CheckDeath()
+        {
+            if (Bike.RearWheel.OnGround && Bike.FrontWheel.OnGround && Bike.FrontWheel.Position.X <= Bike.RearWheel.Position.X)
+            {
+                Reset();
+            }
         }
 
         private void GenerateSlopeSegment()
