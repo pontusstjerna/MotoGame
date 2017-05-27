@@ -16,20 +16,11 @@ namespace MotoGame.source.Model
             }
         }
 
-        public Vector2 Velocity
-        {
-            get
-            {
-                return velocity;
-            }
-        }
-
         public int Radius = 8;
-        public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
 
-        private const int MAX_SPEED = 10;
-        private const int MAX_FRICTION = 1;
+        private const int MAX_SPEED = 100; //This does not have any unit :(
+        private const float MAX_FRICTION = 0.2f;
         private const float MIN_FRICTION = 0.001f;
 
         private Vector2 position;
@@ -58,8 +49,7 @@ namespace MotoGame.source.Model
             
             dTime /= 1000;
 
-            position.X += velocity.X * dTime;
-            position.Y += velocity.Y * dTime;
+            position += velocity * dTime;
             
             Rotation += angularVelocity * dTime;
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
@@ -69,15 +59,12 @@ namespace MotoGame.source.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            acceleration = dTime/10;
+            acceleration = dTime*MAX_SPEED/10000;
         }
 
         public void Brake(float dTime)
         {
-            if (COF < MAX_FRICTION)
-                COF = 0.1f;
-            else
-                COF = MAX_FRICTION;
+            COF = MAX_FRICTION;
         }
 
         public void StopAcceleration()

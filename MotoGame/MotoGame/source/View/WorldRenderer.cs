@@ -83,8 +83,8 @@ namespace MotoGame.View
                 1,
                 SpriteEffects.None,
                 0);
-            DrawWheel(sb, bike.rearWheel, bike.Position);
-            DrawWheel(sb, bike.frontWheel, bike.Position);
+            DrawWheel(sb, bike.RearWheel, bike.Position);
+            DrawWheel(sb, bike.FrontWheel, bike.Position);
         }
 
         private void DrawWheel(SpriteBatch sb, Wheel wheel, Vector2 bike)
