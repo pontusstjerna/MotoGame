@@ -39,9 +39,9 @@ namespace MotoGame.Model
             {
                 GenerateSlopeSegment();
             }
-            Bike.Update(dTime);
             UpdateWheel(dTime, Bike.rearWheel);
             UpdateWheel(dTime, Bike.frontWheel);
+            Bike.Update(dTime);
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)

@@ -44,8 +44,8 @@ namespace MotoGame.source.Model
             Vector2 delta = frontWheel.Position - rearWheel.Position;
             float deltaLength = delta.Length();
             float diff = (deltaLength - restLength) / deltaLength;
-            rearWheel.SetPosition(rearWheel.Position + delta * 0.5f * diff);
-            frontWheel.SetPosition(frontWheel.Position - delta * 0.5f * diff);
+            rearWheel.SetPosition(rearWheel.Position + delta * 0.5f * diff, dTime);
+            frontWheel.SetPosition(frontWheel.Position - delta * 0.5f * diff, dTime);
 
             Rotation = (float)Math.Atan2(delta.Y, delta.X);
         }

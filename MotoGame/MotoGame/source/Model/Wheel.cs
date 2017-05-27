@@ -90,8 +90,15 @@ namespace MotoGame.source.Model
             COF = MIN_FRICTION;
         }
 
-        public void SetPosition(Vector2 position)
+        public void SetPosition(Vector2 position, float dTime)
         {
+            //Add the velocity required to move to this new position
+            //s = vt
+            //v = s/t
+
+            Vector2 s = position - this.position;
+            velocity += s * dTime;
+
             this.position = position;
         }
 
