@@ -27,7 +27,7 @@ namespace MotoGame.source.Model
         private Vector2 position;
         private Vector2 velocity;
 
-        private Vector2 rearToFront = new Vector2(35, -1);
+        private Vector2 rearToFront = new Vector2(37, -1);
 
         public Bike(Point startPos)
         {
@@ -39,33 +39,18 @@ namespace MotoGame.source.Model
         public void Update(float dTime)
         {
             position = rearWheel.Position - RearWheelOffset;
-            rearToFront = new Vector2(rearToFront.Length() * (float)Math.Cos(Rotation), rearToFront.Length() * (float)Math.Sin(Rotation));
 
-            
-            //Vector2 normalForce = (rearToFront - currentOffset)*1000;
+            float restLength = rearToFront.Length();
+            Vector2 delta = frontWheel.Position - rearWheel.Position;
+            float deltaLength = (float)Math.Sqrt(GetDotProduct(delta, delta));
+            float diff = (deltaLength - restLength) / deltaLength;
+            rearWheel.SetPosition(rearWheel.Position + delta * 0.5f * diff);
+            frontWheel.SetPosition(frontWheel.Position - delta * 0.5f * diff);
+        }
 
-            Vector2 actualRearToFront = frontWheel.Position - rearWheel.Position;
-            Rotation = (float)Math.Atan2(actualRearToFront.Y, actualRearToFront.X);
-
-            //Vector2 currentOffset = frontWheel.Position - Position;
-            //Vector2 normalForce = (FrontWheelOffset - currentOffset) * 10;
-
-            Vector2 currentOffset = frontWheel.Position - rearWheel.Position;
-
-            //Inverted because other wheel
-            Vector2 rearNorm = (currentOffset - rearToFront);
-            rearWheel.AddStaticForce(rearNorm);
-
-            Vector2 frontNorm = (rearToFront - currentOffset);
-            frontWheel.AddStaticForce(frontNorm);
-
-            //BIG TODO:
-            /*
-             * Move the position += x from wheels so that they cannot change their position on their own.
-             * They should instead affect the velocity of the whole bike and affect its rotation etc.
-             * Then in turn, when the bike changes its position, the wheels will follow at their 
-             * locked locations.
-             */
+        private float GetDotProduct(Vector2 a, Vector2 b)
+        {
+            return a.X * b.X + a.Y * b.Y;
         }
     }
 }

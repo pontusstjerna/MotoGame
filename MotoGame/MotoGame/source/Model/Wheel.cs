@@ -90,9 +90,9 @@ namespace MotoGame.source.Model
             COF = MIN_FRICTION;
         }
 
-        public void AddStaticForce(Vector2 force)
+        public void SetPosition(Vector2 position)
         {
-            velocity += force;
+            this.position = position;
         }
 
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
