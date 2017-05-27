@@ -75,19 +75,19 @@ namespace MotoGame.View
 
             sb.Draw(
                 bikeTexture,
-                bikeRenderPos,
+                bikeRenderPos + bike.RearWheelOffset,
                 null,
                 Color.White,
                 bike.Rotation,
-                bike.CenterOfGravity,
+                new Vector2(3,24),
                 1,
                 SpriteEffects.None,
                 0);
-            DrawWheel(sb, bike.rearWheel, bike.Position, bike.RearWheelOffset);
-            DrawWheel(sb, bike.frontWheel, bike.Position, bike.FrontWheelOffset);
+            DrawWheel(sb, bike.RearWheel, bike.Position);
+            DrawWheel(sb, bike.FrontWheel, bike.Position);
         }
 
-        private void DrawWheel(SpriteBatch sb, Wheel wheel, Vector2 bike, Vector2 offset)
+        private void DrawWheel(SpriteBatch sb, Wheel wheel, Vector2 bike)
         {
             sb.Draw(
                 wheelTexture,

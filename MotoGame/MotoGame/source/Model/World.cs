@@ -35,15 +35,13 @@ namespace MotoGame.Model
 
         public void Update(float dTime)
         {
-            if(Bike.rearWheel.Position.X > Segments[Segments.Count - 2].Start.X)
+            if(Bike.RearWheel.Position.X > Segments[Segments.Count - 2].Start.X)
             {
                 GenerateSlopeSegment();
             }
+            UpdateWheel(dTime, Bike.RearWheel);
+            UpdateWheel(dTime, Bike.FrontWheel);
             Bike.Update(dTime);
-            UpdateWheel(dTime, Bike.rearWheel);
-            UpdateWheel(dTime, Bike.frontWheel);
-            
-
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)

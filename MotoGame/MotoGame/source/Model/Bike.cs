@@ -9,15 +9,9 @@ namespace MotoGame.source.Model
 {
     public class Bike
     {
-        public Wheel rearWheel { get; private set; }
-        public Wheel frontWheel { get; private set; }
-        public Vector2 Position
-        {
-            get
-            {
-                return position;
-            }
-        }
+        public Wheel RearWheel { get; private set; }
+        public Wheel FrontWheel { get; private set; }
+        public Vector2 Position { get { return position; } }
         public float Rotation { get; private set; } = 0;
 
         public Vector2 CenterOfGravity = new Vector2(19, 13);
@@ -25,47 +19,30 @@ namespace MotoGame.source.Model
         public Vector2 FrontWheelOffset { get; private set; } = new Vector2(20, 11);
 
         private Vector2 position;
-        private Vector2 velocity;
 
-        private Vector2 rearToFront = new Vector2(35, -1);
+        private Vector2 rearToFront = new Vector2(37, -1);
 
         public Bike(Point startPos)
         {
             position = startPos.ToVector2();
-            rearWheel = new Wheel(startPos + RearWheelOffset.ToPoint());
-            frontWheel = new Wheel(startPos + FrontWheelOffset.ToPoint());
+            RearWheel = new Wheel(startPos + RearWheelOffset.ToPoint());
+            FrontWheel = new Wheel(startPos + FrontWheelOffset.ToPoint());
         }
 
         public void Update(float dTime)
         {
-            position = rearWheel.Position - RearWheelOffset;
-            rearToFront = new Vector2(rearToFront.Length() * (float)Math.Cos(Rotation), rearToFront.Length() * (float)Math.Sin(Rotation));
+            position = RearWheel.Position - RearWheelOffset;
 
-            
-            //Vector2 normalForce = (rearToFront - currentOffset)*1000;
+            float restLength = rearToFront.Length();
+            Vector2 delta = FrontWheel.Position - RearWheel.Position;
+            float deltaLength = delta.Length();
+            float diff = (deltaLength - restLength) / deltaLength;
+            RearWheel.SetPosition(RearWheel.Position + delta * 0.5f * diff, dTime);
+            FrontWheel.SetPosition(FrontWheel.Position - delta * 0.5f * diff, dTime);
 
-            Vector2 actualRearToFront = frontWheel.Position - rearWheel.Position;
-            Rotation = (float)Math.Atan2(actualRearToFront.Y, actualRearToFront.X);
-
-            //Vector2 currentOffset = frontWheel.Position - Position;
-            //Vector2 normalForce = (FrontWheelOffset - currentOffset) * 10;
-
-            Vector2 currentOffset = frontWheel.Position - rearWheel.Position;
-
-            //Inverted because other wheel
-            Vector2 rearNorm = (currentOffset - rearToFront);
-            rearWheel.AddStaticForce(rearNorm);
-
-            Vector2 frontNorm = (rearToFront - currentOffset);
-            frontWheel.AddStaticForce(frontNorm);
-
-            //BIG TODO:
-            /*
-             * Move the position += x from wheels so that they cannot change their position on their own.
-             * They should instead affect the velocity of the whole bike and affect its rotation etc.
-             * Then in turn, when the bike changes its position, the wheels will follow at their 
-             * locked locations.
-             */
+            Rotation = (float)Math.Atan2(delta.Y, delta.X);
+            if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
+            if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
         }
     }
 }

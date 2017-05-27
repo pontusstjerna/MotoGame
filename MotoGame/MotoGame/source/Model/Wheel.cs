@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MotoGame.source.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +17,12 @@ namespace MotoGame.source.Model
             }
         }
 
-        public Vector2 Velocity
-        {
-            get
-            {
-                return velocity;
-            }
-        }
-
         public int Radius = 8;
-        public float Bounciness { get; private set; } = 0.1f;
         public float Rotation { get; private set; }
+        public const float GRAVITY = 5f;
 
-        private const int MAX_SPEED = 10;
-        private const int MAX_FRICTION = 1;
+        private const int MAX_SPEED = 100; //This does not have any unit :(
+        private const float MAX_FRICTION = 0.2f;
         private const float MIN_FRICTION = 0.001f;
 
         private Vector2 position;
@@ -58,8 +51,7 @@ namespace MotoGame.source.Model
             
             dTime /= 1000;
 
-            position.X += velocity.X * dTime;
-            position.Y += velocity.Y * dTime;
+            position += velocity * dTime;
             
             Rotation += angularVelocity * dTime;
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
@@ -69,15 +61,12 @@ namespace MotoGame.source.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            acceleration = dTime/10;
+            acceleration = dTime*MAX_SPEED/1000;
         }
 
         public void Brake(float dTime)
         {
-            if (COF < MAX_FRICTION)
-                COF = 0.1f;
-            else
-                COF = MAX_FRICTION;
+            COF = MAX_FRICTION;
         }
 
         public void StopAcceleration()
@@ -90,14 +79,21 @@ namespace MotoGame.source.Model
             COF = MIN_FRICTION;
         }
 
-        public void AddStaticForce(Vector2 force)
+        public void SetPosition(Vector2 position, float dTime)
         {
-            velocity += force;
+            //Add the velocity required to move to this new position
+            //s = vt
+            //v = s/t
+
+            Vector2 s = position - this.position;
+            velocity += s * dTime;
+
+            this.position = position;
         }
 
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
         {
-            float currentVelocity = GetDotProduct(slope, velocity);
+            float currentVelocity = MathVector.Dot(slope, velocity);
             Vector2 tangentialVelocity = new Vector2(slope.X * currentVelocity, slope.Y * currentVelocity);
 
             velocity.X -= COF * tangentialVelocity.X;
@@ -108,7 +104,7 @@ namespace MotoGame.source.Model
         {
             Vector2 slopeNormal = currentSegment.GetNormal();
             Vector2 slope = currentSegment.GetSlope();
-            float normalForceLength = GetDotProduct(velocity, slopeNormal);
+            float normalForceLength = MathVector.Dot(velocity, slopeNormal);
 
             Vector2 normalForce = new Vector2(
                 -slopeNormal.X * normalForceLength,
@@ -137,29 +133,18 @@ namespace MotoGame.source.Model
 
         private void ApplyAngularVelocity(Vector2 slope)
         {
-            float tangentialAcceleration = GetDotProduct(velocity, slope);
+            float tangentialAcceleration = MathVector.Dot(velocity, slope);
             angularVelocity = (tangentialAcceleration / Radius);
         }
 
         private void ApplyGravity()
         {
-            velocity.Y += 9.81f;
+            velocity.Y += GRAVITY;
         }
 
         private void AdjustWheelToLine(Vector2 normal, Vector2 intersection)
         {
-            position.X = intersection.X + normal.X * Radius;
-            position.Y = intersection.Y + normal.Y * Radius;
-        }
-
-        private float GetDotProduct(Vector2 a, Vector2 b)
-        {
-            return a.X * b.X + a.Y * b.Y;
-        }
-
-        private double GetDistance(Vector2 a, Vector2 b)
-        {
-            return Math.Sqrt((b.X - a.X) * (b.X - a.X) + (b.Y - a.Y) * (b.Y - a.Y));
+            position = intersection + normal * Radius;
         }
     }
 }

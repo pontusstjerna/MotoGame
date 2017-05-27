@@ -80,14 +80,14 @@ namespace MotoGame
                 Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                world.Bike.rearWheel.Accelerate(gameTime.ElapsedGameTime.Milliseconds);
+                world.Bike.RearWheel.Accelerate(gameTime.ElapsedGameTime.Milliseconds);
             else if (Keyboard.GetState().IsKeyUp(Keys.Up))
-                world.Bike.rearWheel.StopAcceleration();
+                world.Bike.RearWheel.StopAcceleration();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                world.Bike.rearWheel.Brake(gameTime.ElapsedGameTime.Milliseconds);
+                world.Bike.RearWheel.Brake(gameTime.ElapsedGameTime.Milliseconds);
             else if (Keyboard.GetState().IsKeyUp(Keys.Down))
-                world.Bike.rearWheel.ReleaseBrake();
+                world.Bike.RearWheel.ReleaseBrake();
 
             world.Update(gameTime.ElapsedGameTime.Milliseconds);
 
