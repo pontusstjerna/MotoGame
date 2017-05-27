@@ -11,18 +11,23 @@ namespace MotoGame.source.Controller
     public class PlayerController
     {
         private World world;
+        private SoundController soundController;
 
         private bool willReset = false;
 
-        public PlayerController(World world)
+        public PlayerController(World world, SoundController soundController)
         {
             this.world = world;
+            this.soundController = soundController;
         }
 
         public void Update(float dTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
                 world.Bike.RearWheel.Accelerate(dTime);
+                soundController.Accelerate();
+            }
             else if (Keyboard.GetState().IsKeyUp(Keys.Up))
                 world.Bike.RearWheel.StopAcceleration();
 

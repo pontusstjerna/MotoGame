@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MotoGame.Model;
 using MotoGame.source.Controller;
 using MotoGame.View;
 using System;
+using System.Collections.Generic;
 
 namespace MotoGame
 {
@@ -19,6 +21,7 @@ namespace MotoGame
         private World world;
         private WorldRenderer worldRenderer;
         private PlayerController playerController;
+        private SoundController soundController;
         
         public MotoGame()
         {
@@ -60,7 +63,15 @@ namespace MotoGame
                 Content.Load<Texture2D>("data/wheel4"), 
                 Content.Load<Texture2D>("data/bike_complete2"),
                 Content.Load<SpriteFont>("data/Main"));
-            playerController = new PlayerController(world);
+            
+            soundController = new SoundController(new Dictionary<string, SoundEffect> {
+                { "idle",Content.Load<SoundEffect>("data/sounds/idle") },
+                { "acceleration", Content.Load<SoundEffect>("data/sounds/acceleration") },
+                { "constant", Content.Load<SoundEffect>("data/sounds/constant") },
+                { "deacceleration", Content.Load<SoundEffect>("data/sounds/deacceleration")}
+            });
+
+            playerController = new PlayerController(world, soundController);
         }
 
         /// <summary>

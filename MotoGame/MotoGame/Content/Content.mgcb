@@ -92,3 +92,27 @@
 /processorParam:TextureFormat=Color
 /build:data/wheel4.png
 
+#begin data/sounds/acceleration.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/acceleration.wma
+
+#begin data/sounds/constant.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/constant.wma
+
+#begin data/sounds/deacceleration.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/deacceleration.wma
+
+#begin data/sounds/idle.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/idle.wma
+

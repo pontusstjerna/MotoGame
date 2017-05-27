@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="source\Controller\PlayerController.cs" />
+    <Compile Include="source\Controller\SoundController.cs" />
     <Compile Include="source\Model\Bike.cs" />
     <Compile Include="source\Model\SlopeSegment.cs" />
     <Compile Include="source\Model\Wheel.cs" />
