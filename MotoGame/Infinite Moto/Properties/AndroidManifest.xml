@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Infinite_Moto.Infinite_Moto" android:versionCode="1" android:versionName="1.0">
+	<uses-sdk />
+	<application android:label="Infinite Moto" android:icon="@drawable/Icon"></application>
+</manifest>
