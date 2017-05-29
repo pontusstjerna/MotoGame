@@ -1,9 +1,9 @@
 
 #----------------------------- Global Properties ----------------------------#
 
-/outputDir:bin/$(Platform)
-/intermediateDir:obj/$(Platform)
-/platform:DesktopGL
+/outputDir:bin
+/intermediateDir:obj
+/platform:Windows
 /config:
 /profile:Reach
 /compress:False
@@ -13,7 +13,31 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin data/wheel1.png
+#begin ..\..\Model\Content\data\sounds\acceleration.wma
+/importer:WmaImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:..\..\Model\Content\data\sounds\acceleration.wma
+
+#begin ..\..\Model\Content\data\sounds\constant.wma
+/importer:WmaImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:..\..\Model\Content\data\sounds\constant.wma
+
+#begin ..\..\Model\Content\data\sounds\deacceleration.wma
+/importer:WmaImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:..\..\Model\Content\data\sounds\deacceleration.wma
+
+#begin ..\..\Model\Content\data\sounds\idle.wma
+/importer:WmaImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:..\..\Model\Content\data\sounds\idle.wma
+
+#begin ..\..\Model\Content\data\bike1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,9 +47,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:data/wheel1.png
+/build:..\..\Model\Content\data\bike1.png
 
-#begin data/wheel2.png
+#begin ..\..\Model\Content\data\bike_complete1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,9 +59,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:data/wheel2.png
+/build:..\..\Model\Content\data\bike_complete1.png
 
-#begin data/bike_complete1.png
+#begin ..\..\Model\Content\data\bike_complete2.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -47,9 +71,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:data/bike_complete1.png
+/build:..\..\Model\Content\data\bike_complete2.png
 
-#begin data/bike_complete2.png
+#begin ..\..\Model\Content\data\damper_rear.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -59,28 +83,16 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:data/bike_complete2.png
+/build:..\..\Model\Content\data\damper_rear.png
 
-#begin data/wheel3.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:data/wheel3.png
-
-#begin data/Main.spritefont
+#begin ..\..\Model\Content\data\Main.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:data/Main.spritefont
+/build:..\..\Model\Content\data\Main.spritefont
 
-#begin data/wheel4.png
+#begin ..\..\Model\Content\data\wheel1.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -90,29 +102,41 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:data/wheel4.png
+/build:..\..\Model\Content\data\wheel1.png
 
-#begin data/sounds/acceleration.wma
-/importer:WmaImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:data/sounds/acceleration.wma
+#begin ..\..\Model\Content\data\wheel2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:..\..\Model\Content\data\wheel2.png
 
-#begin data/sounds/constant.wma
-/importer:WmaImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:data/sounds/constant.wma
+#begin ..\..\Model\Content\data\wheel3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:..\..\Model\Content\data\wheel3.png
 
-#begin data/sounds/deacceleration.wma
-/importer:WmaImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:data/sounds/deacceleration.wma
-
-#begin data/sounds/idle.wma
-/importer:WmaImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:data/sounds/idle.wma
+#begin ..\..\Model\Content\data\wheel4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:..\..\Model\Content\data\wheel4.png
 

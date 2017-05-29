@@ -63,6 +63,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\Content.mgcb" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -80,9 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Styles.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

@@ -120,7 +120,7 @@ namespace InfiniteMoto.View
 
        private void DrawRect(SpriteBatch sb, int x, int y, int width, int height)
        {
-            sb.Draw(lineTexture, new Rectangle(x, y, width, height), null, Color.DarkOrange);
+            sb.Draw(lineTexture, new Rectangle(x, y, width, height), null, Color.White);
        }
 
        private void ShowFps(SpriteBatch sb, float dTime)
