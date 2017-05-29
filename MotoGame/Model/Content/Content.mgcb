@@ -3,7 +3,7 @@
 
 /outputDir:bin
 /intermediateDir:obj
-/platform:DesktopGL
+/platform:Android
 /config:
 /profile:Reach
 /compress:False
@@ -12,4 +12,131 @@
 
 
 #---------------------------------- Content ---------------------------------#
+
+#begin data/sounds/acceleration.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/acceleration.wma
+
+#begin data/sounds/constant.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/constant.wma
+
+#begin data/sounds/deacceleration.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/deacceleration.wma
+
+#begin data/sounds/idle.wma
+/importer:WmaImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:data/sounds/idle.wma
+
+#begin data/bike1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/bike1.png
+
+#begin data/bike_complete1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/bike_complete1.png
+
+#begin data/bike_complete2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/bike_complete2.png
+
+#begin data/damper_rear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/damper_rear.png
+
+#begin data/Main.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:data/Main.spritefont
+
+#begin data/wheel1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/wheel1.png
+
+#begin data/wheel2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/wheel2.png
+
+#begin data/wheel3.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/wheel3.png
+
+#begin data/wheel4.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:data/wheel4.png
 
