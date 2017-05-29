@@ -1,9 +1,9 @@
 
 #----------------------------- Global Properties ----------------------------#
 
-/outputDir:bin
+/outputDir:..\bin\DesktopGL\AnyCPU\Debug\Content
 /intermediateDir:obj
-/platform:Windows
+/platform:DesktopGL
 /config:
 /profile:Reach
 /compress:False
@@ -15,25 +15,25 @@
 
 #begin ..\..\Model\Content\data\sounds\acceleration.wma
 /importer:WmaImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:..\..\Model\Content\data\sounds\acceleration.wma
 
 #begin ..\..\Model\Content\data\sounds\constant.wma
 /importer:WmaImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:..\..\Model\Content\data\sounds\constant.wma
 
 #begin ..\..\Model\Content\data\sounds\deacceleration.wma
 /importer:WmaImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:..\..\Model\Content\data\sounds\deacceleration.wma
 
 #begin ..\..\Model\Content\data\sounds\idle.wma
 /importer:WmaImporter
-/processor:SongProcessor
+/processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:..\..\Model\Content\data\sounds\idle.wma
 

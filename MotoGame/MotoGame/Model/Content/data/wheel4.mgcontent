@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>G:/Programming/C#.net/motogame/MotoGame/MotoGame/Content/../../Model/Content/data/wheel4.png</SourceFile>
-  <SourceTime>2017-05-27T08:10:46.1214169+02:00</SourceTime>
-  <DestFile>G:/Programming/C#.net/motogame/MotoGame/MotoGame/Content/bin/../../Model/Content/data/wheel4.xnb</DestFile>
-  <DestTime>2017-05-29T10:57:31.6704503+02:00</DestTime>
+  <SourceFile>C:/Users/pontu/Documents/Programmering/C#/MotoGame/MotoGame/MotoGame/Content/../../Model/Content/data/wheel4.png</SourceFile>
+  <SourceTime>2017-05-29T11:48:12.0752788+02:00</SourceTime>
+  <DestFile>C:/Users/pontu/Documents/Programmering/C#/MotoGame/MotoGame/MotoGame/bin/DesktopGL/AnyCPU/Debug/Content/../../Model/Content/data/wheel4.xnb</DestFile>
+  <DestTime>2017-05-29T12:30:17.9028678+02:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T16:05:36+01:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
