@@ -9,6 +9,8 @@ namespace InfiniteMoto.Model
 {
     public class World
     {
+        public const int HEIGHT = 800;
+
         public List<SlopeSegment> Segments { get; private set; }
 
         public Bike Bike { get; private set; }

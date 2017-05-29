@@ -27,6 +27,8 @@ namespace InfiniteMoto
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            //graphics.IsFullScreen = true;
+
             graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
             graphics.ApplyChanges();

@@ -11,6 +11,8 @@ namespace InfiniteMoto.View
 {
     public class WorldRenderer
     {
+        public float Scale { get; private set; } = 2;
+
         private World world;
         private Texture2D lineTexture;
         private Texture2D wheelTexture;
@@ -32,6 +34,8 @@ namespace InfiniteMoto.View
 
             width = gd.Viewport.Width;
             height = gd.Viewport.Height;
+
+            Scale = height / World.HEIGHT;
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -62,25 +66,25 @@ namespace InfiniteMoto.View
         private void RenderScore(SpriteBatch sb)
         {
             sb.Begin();
-            DrawRect(sb, 10, 10, 140, 30);
+            DrawRect(sb, (int)(10*Scale), (int)(10*Scale), (int)(Scale*140), (int)(Scale*30));
             int score = (int)world.Bike.Position.X / 100;
             string scoreWithZeros = (1000000 + score).ToString().Substring(1);
-            sb.DrawString(mainFont, "Score: " + scoreWithZeros, new Vector2(15, 15), Color.Black);
+            sb.DrawString(mainFont, "Score: " + scoreWithZeros, new Vector2(15, 15)*Scale, Color.Black);
             sb.End();
         }
        
         private void DrawBike(SpriteBatch sb, Bike bike)
         {
-            Vector2 bikeRenderPos = new Vector2(width / 2, bike.Position.Y);
+            Vector2 bikeRenderPos = new Vector2(width / 2, bike.Position.Y*Scale);
 
             sb.Draw(
                 bikeTexture,
-                bikeRenderPos + bike.RearWheelOffset,
+                bikeRenderPos + bike.RearWheelOffset*Scale,
                 null,
                 Color.White,
                 bike.Rotation,
                 new Vector2(3,24),
-                1,
+                Scale,
                 SpriteEffects.None,
                 0);
             DrawWheel(sb, bike.RearWheel, bike.Position);
@@ -91,12 +95,12 @@ namespace InfiniteMoto.View
         {
             sb.Draw(
                 wheelTexture,
-                new Vector2(wheel.Position.X - bike.X + width/2,wheel.Position.Y),
+                new Vector2((wheel.Position.X - bike.X)*Scale + width/2, wheel.Position.Y*Scale),
                 null,
                 Color.White,
                 wheel.Rotation,
                 new Vector2(wheel.Radius, wheel.Radius),
-                1,
+                Scale,
                 SpriteEffects.None,
                 0);
         }
@@ -108,9 +112,9 @@ namespace InfiniteMoto.View
 
             sb.Draw(lineTexture,
                 new Rectangle(
-                    start.X - player.Position.ToPoint().X + width/2, 
-                    start.Y, 
-                    (int)edge.Length(), 3),
+                    (int)((start.X - player.Position.ToPoint().X)*Scale) + width/2, 
+                    (int)(start.Y*Scale), 
+                    (int)(edge.Length()*Scale), (int)(3*Scale)),
                 null, Color.DarkOrange, angle, new Vector2(0, 0), SpriteEffects.None, 0);
        }
 
@@ -122,7 +126,7 @@ namespace InfiniteMoto.View
        private void ShowFps(SpriteBatch sb, float dTime)
         {
             sb.Begin();
-            sb.DrawString(mainFont, "FPS: " + (int)Math.Round(1000/(dTime*1000), 0), new Vector2(15, 50), Color.White);
+            sb.DrawString(mainFont, "FPS: " + (int)Math.Round(1000/(dTime*1000), 0), new Vector2(15, 50)*Scale, Color.White);
             sb.End();
         }
     }
