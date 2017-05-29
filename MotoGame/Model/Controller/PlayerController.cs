@@ -14,7 +14,7 @@ namespace InfiniteMoto.Controller
         private World world;
         private SoundController soundController;
 
-        private bool willReset = false;
+        private KeyboardState oldState;
 
         public PlayerController(World world, SoundController soundController)
         {
@@ -31,28 +31,35 @@ namespace InfiniteMoto.Controller
 
         private void CheckKeyboard(float dTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            KeyboardState newState = Keyboard.GetState();
+
+            if (newState.IsKeyDown(Keys.Up))
             {
                 world.Bike.RearWheel.Accelerate(dTime);
                 soundController.Accelerate();
             }
-
-            else if (Keyboard.GetState().IsKeyUp(Keys.Up))
-                world.Bike.RearWheel.StopAcceleration();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                world.Bike.RearWheel.Brake(dTime);
-            else if (Keyboard.GetState().IsKeyUp(Keys.Down))
-                world.Bike.RearWheel.ReleaseBrake();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                willReset = true;
-
-            if (Keyboard.GetState().IsKeyUp(Keys.Space) && willReset)
+            else if (oldState.IsKeyDown(Keys.Up))
             {
-                world.Reset();
-                willReset = false;
+                world.Bike.RearWheel.StopAcceleration();
+                soundController.Idle();
             }
+            
+            if (newState.IsKeyDown(Keys.Down))
+            {
+                world.Bike.RearWheel.Brake(dTime);
+            }
+            else if (oldState.IsKeyDown(Keys.Down))
+            {
+                world.Bike.RearWheel.ReleaseBrake();
+            }
+
+            if (newState.IsKeyDown(Keys.Space))
+            {
+                if (!oldState.IsKeyDown(Keys.Space))
+                    world.Reset();
+            }
+
+            oldState = newState;
         }
 
         private void CheckTouch(float dTime)
