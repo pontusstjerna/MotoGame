@@ -45,5 +45,25 @@ namespace InfiniteMoto.Model
             if (Rotation > Math.PI * 2) Rotation -= (float)Math.PI * 2;
             if (Rotation < -Math.PI * 2) Rotation += (float)Math.PI * 2;
         }
+
+        public void LeanForward()
+        {
+            //FrontWheel.Weight = 1.5f*(float)Math.Cos(Rotation/2) + 0.5f*(float)Math.Sin(Rotation/2);
+            //RearWheel.Weight = 0.5f * (float)Math.Cos(Rotation / 2) + 1.5f * (float)Math.Sin(Rotation / 2);
+            FrontWheel.Weight = 1.5f;
+            RearWheel.Weight = 0.5f;
+        }
+
+        public void LeanBackward()
+        {
+            FrontWheel.Weight = 0.5f;
+            RearWheel.Weight = 1.5f;
+        }
+
+        public void StopLean()
+        {
+            FrontWheel.Weight = 1;
+            RearWheel.Weight = 1;
+        }
     }
 }

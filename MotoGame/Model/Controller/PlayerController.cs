@@ -53,6 +53,24 @@ namespace InfiniteMoto.Controller
                 world.Bike.RearWheel.ReleaseBrake();
             }
 
+            if (newState.IsKeyDown(Keys.Right))
+            {
+                world.Bike.LeanForward();
+            }
+            else if (oldState.IsKeyDown(Keys.Right))
+            {
+                world.Bike.StopLean();
+            }
+
+            if (newState.IsKeyDown(Keys.Left))
+            {
+                world.Bike.LeanBackward();
+            }
+            else if (oldState.IsKeyDown(Keys.Left))
+            {
+                world.Bike.StopLean();
+            }
+
             if (newState.IsKeyDown(Keys.Space))
             {
                 if (!oldState.IsKeyDown(Keys.Space))

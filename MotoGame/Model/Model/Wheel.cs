@@ -17,6 +17,7 @@ namespace InfiniteMoto.Model
             }
         }
 
+        public float Weight { get; set; } = 1;
         public int Radius = 8;
         public float Rotation { get; private set; }
         public const float GRAVITY = 5f;
@@ -139,7 +140,7 @@ namespace InfiniteMoto.Model
 
         private void ApplyGravity()
         {
-            velocity.Y += GRAVITY;
+            velocity.Y += GRAVITY*Weight;
         }
 
         private void AdjustWheelToLine(Vector2 normal, Vector2 intersection)
