@@ -37,7 +37,7 @@ namespace InfiniteMoto.Model
 
         public void Update(float dTime)
         {
-            if(Bike.RearWheel.Position.X > Segments[Segments.Count - 2].Start.X)
+            if(Bike.FrontWheel.Position.X > Segments[Segments.Count - 2].Start.X)
             {
                 GenerateSlopeSegment();
             }
@@ -74,7 +74,8 @@ namespace InfiniteMoto.Model
 
         private void GenerateSlopeSegment()
         {
-            points.Add(new Point(points.Last().X + 500, random.Next(425) + 325));
+            int newLength = 500 - (int)Math.Round(Bike.Position.X / 100);
+            points.Add(new Point(points.Last().X + Math.Max(newLength, 50), random.Next(425) + 325));
             Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
     }

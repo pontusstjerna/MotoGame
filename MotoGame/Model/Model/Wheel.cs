@@ -20,10 +20,10 @@ namespace InfiniteMoto.Model
         public float Weight { get; set; } = 1;
         public int Radius = 8;
         public float Rotation { get; private set; }
-        public const float GRAVITY = 5f;
+        public const float GRAVITY = 7f;
         public bool OnGround { get; private set; }
 
-        private const int MAX_SPEED = 100; //This does now have a unit :D It's pixels per second
+        private const int MAX_SPEED = 150; //This does now have a unit :D It's pixels per second
         private const float MAX_FRICTION = 0.2f;
         private const float MIN_FRICTION = 0.001f;
 
