@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace InfiniteMoto.Controller
 {
@@ -23,11 +24,19 @@ namespace InfiniteMoto.Controller
 
         public void Update(float dTime)
         {
+            CheckKeyboard(dTime);
+            CheckTouch(dTime);
+            
+        }
+
+        private void CheckKeyboard(float dTime)
+        {
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
                 world.Bike.RearWheel.Accelerate(dTime);
                 soundController.Accelerate();
             }
+
             else if (Keyboard.GetState().IsKeyUp(Keys.Up))
                 world.Bike.RearWheel.StopAcceleration();
 
@@ -44,7 +53,15 @@ namespace InfiniteMoto.Controller
                 world.Reset();
                 willReset = false;
             }
-                
+        }
+
+        private void CheckTouch(float dTime)
+        {
+            if(TouchPanel.GetState().Count() > 0)
+            {
+                world.Bike.RearWheel.Accelerate(dTime);
+                soundController.Accelerate();
+            }
         }
     }
 }
