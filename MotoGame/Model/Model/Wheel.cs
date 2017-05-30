@@ -16,8 +16,7 @@ namespace InfiniteMoto.Model
                 return position;
             }
         }
-
-        public float Weight { get; set; } = 1;
+        
         public int Radius = 8;
         public float Rotation { get; private set; }
         public const float GRAVITY = 7f;
@@ -92,6 +91,11 @@ namespace InfiniteMoto.Model
             this.position = position;
         }
 
+        public void AddForce(Vector2 force)
+        {
+            velocity += force;
+        }
+
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
         {
             float currentVelocity = MathVector.Dot(slope, velocity);
@@ -140,7 +144,7 @@ namespace InfiniteMoto.Model
 
         private void ApplyGravity()
         {
-            velocity.Y += GRAVITY*Weight;
+            velocity.Y += GRAVITY;
         }
 
         private void AdjustWheelToLine(Vector2 normal, Vector2 intersection)
