@@ -12,13 +12,14 @@ namespace InfiniteMoto.View
     public class WorldRenderer
     {
         public float Scale { get; private set; } = 2;
-
+        
         private World world;
         private Texture2D lineTexture;
         private Texture2D wheelTexture;
         private Texture2D bikeTexture;
         private SpriteFont mainFont;
 
+        public bool showGameOver = false;
         private int width, height;
         private float extraY = 0;
 
@@ -37,6 +38,8 @@ namespace InfiniteMoto.View
             height = gd.Viewport.Height;
 
             Scale = height / World.HEIGHT;
+
+            world.DeathEventHandler += (s, e) => showGameOver = true;
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -45,6 +48,7 @@ namespace InfiniteMoto.View
             RenderBike(sb);
             RenderScore(sb);
             ShowFps(sb, dTime);
+            if (showGameOver) ShowGameOver(sb);
 
             if(world.Bike.Position.Y - 20 < 0)
             {
@@ -139,10 +143,17 @@ namespace InfiniteMoto.View
        }
 
        private void ShowFps(SpriteBatch sb, float dTime)
-        {
+       {
             sb.Begin();
             sb.DrawString(mainFont, "FPS: " + (int)Math.Round(1000/(dTime*1000), 0), new Vector2(15, 50)*Scale, Color.White);
             sb.End();
-        }
+       }
+
+       private void ShowGameOver(SpriteBatch sb)
+       {
+            sb.Begin();
+            DrawRect(sb, 200, 200, 200, 200);
+            sb.End();
+       }
     }
 }

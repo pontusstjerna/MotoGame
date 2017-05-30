@@ -27,7 +27,7 @@ namespace InfiniteMoto
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = true;
 
             graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
@@ -53,11 +53,8 @@ namespace InfiniteMoto
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-
+            
             world = new World();
             worldRenderer = new WorldRenderer(
                 world, GraphicsDevice, 

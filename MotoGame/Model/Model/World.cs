@@ -9,11 +9,12 @@ namespace InfiniteMoto.Model
 {
     public class World
     {
-        public const int HEIGHT = 300;
+        public const int HEIGHT = 400;
 
         public List<SlopeSegment> Segments { get; private set; }
 
         public Bike Bike { get; private set; }
+        public event EventHandler DeathEventHandler;
 
         private Point startPosition = new Point(75, 50);
         private List<Point> points;
@@ -52,6 +53,7 @@ namespace InfiniteMoto.Model
         public void Reset()
         {
             Bike = new Bike(startPosition);
+            DeathEventHandler.Invoke(this, null);
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)
