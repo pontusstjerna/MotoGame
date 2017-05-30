@@ -20,6 +20,7 @@ namespace InfiniteMoto.View
         private SpriteFont mainFont;
 
         private int width, height;
+        private float extraY = 0;
 
         public WorldRenderer(World world, GraphicsDevice gd, Texture2D wheel, Texture2D bike, SpriteFont mainFont)
         {
@@ -44,6 +45,11 @@ namespace InfiniteMoto.View
             RenderBike(sb);
             RenderScore(sb);
             ShowFps(sb, dTime);
+
+            if(world.Bike.Position.Y - 20 < 0)
+            {
+                extraY = -(world.Bike.Position.Y - 20);
+            }
         }
 
         private void RenderWorld(SpriteBatch sb)
@@ -75,7 +81,7 @@ namespace InfiniteMoto.View
        
         private void DrawBike(SpriteBatch sb, Bike bike)
         {
-            Vector2 bikeRenderPos = new Vector2(width / 2, bike.Position.Y*Scale);
+            Vector2 bikeRenderPos = new Vector2(width / 2, (bike.Position.Y + extraY)*Scale);
 
             sb.Draw(
                 bikeTexture,
@@ -95,7 +101,7 @@ namespace InfiniteMoto.View
         {
             sb.Draw(
                 wheelTexture,
-                new Vector2((wheel.Position.X - bike.X)*Scale + width/2, wheel.Position.Y*Scale),
+                new Vector2((wheel.Position.X - bike.X)*Scale + width/2, (wheel.Position.Y + extraY)*Scale),
                 null,
                 Color.White,
                 wheel.Rotation,
@@ -113,7 +119,7 @@ namespace InfiniteMoto.View
             sb.Draw(lineTexture,
                 new Rectangle(
                     (int)((start.X - player.Position.ToPoint().X)*Scale) + width/2, 
-                    (int)(start.Y*Scale), 
+                    (int)(start.Y*Scale) + (int)(extraY*Scale), 
                     (int)(edge.Length()*Scale), (int)(3*Scale)),
                 null, Color.DarkOrange, angle, new Vector2(0, 0), SpriteEffects.None, 0);
        }

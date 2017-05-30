@@ -9,7 +9,7 @@ namespace InfiniteMoto.Model
 {
     public class World
     {
-        public const int HEIGHT = 800;
+        public const int HEIGHT = 300;
 
         public List<SlopeSegment> Segments { get; private set; }
 
@@ -75,7 +75,7 @@ namespace InfiniteMoto.Model
         private void GenerateSlopeSegment()
         {
             int newLength = 500 - (int)Math.Round(Bike.Position.X / 100);
-            points.Add(new Point(points.Last().X + Math.Max(newLength, 50), random.Next(425) + 325));
+            points.Add(new Point(points.Last().X + Math.Max(newLength, 50), random.Next(HEIGHT*4/5) + HEIGHT/5));
             Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
     }
