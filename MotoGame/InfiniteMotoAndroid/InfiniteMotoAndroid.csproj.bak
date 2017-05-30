@@ -19,7 +19,7 @@
     <AndroidSupportedAbis>armeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
     <MandroidI18n />
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <MonoGamePlatform>Android</MonoGamePlatform>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
@@ -63,9 +63,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\Content.mgcb" />
+    <AndroidAsset Include="Assets\Content\bike1.xnb" />
+    <AndroidAsset Include="Assets\Content\bike_complete1.xnb" />
+    <AndroidAsset Include="Assets\Content\bike_complete2.xnb" />
+    <AndroidAsset Include="Assets\Content\damper_rear.xnb" />
+    <AndroidAsset Include="Assets\Content\Main.xnb" />
+    <MonoGameContentReference Include="Assets\Content\Content.mgcb" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidAsset Include="Assets\Content\wheel1.xnb" />
+    <AndroidAsset Include="Assets\Content\wheel2.xnb" />
+    <AndroidAsset Include="Assets\Content\wheel3.xnb" />
+    <AndroidAsset Include="Assets\Content\wheel4.xnb" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />

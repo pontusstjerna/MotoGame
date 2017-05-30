@@ -15,6 +15,7 @@ namespace InfiniteMoto.Controller
         private SoundController soundController;
 
         private KeyboardState oldState;
+        private int oldTouchCount = 0;
 
         public PlayerController(World world, SoundController soundController)
         {
@@ -82,10 +83,16 @@ namespace InfiniteMoto.Controller
 
         private void CheckTouch(float dTime)
         {
-            if(TouchPanel.GetState().Count() > 0)
+            int newTouchCount = TouchPanel.GetState().Count();
+            if(newTouchCount > 0)
             {
                 world.Bike.RearWheel.Accelerate(dTime);
                 soundController.Accelerate();
+            }
+            else if(oldTouchCount > 0)
+            {
+                world.Bike.RearWheel.StopAcceleration();
+                soundController.Idle();
             }
         }
     }
