@@ -1,5 +1,4 @@
-﻿using InfiniteMoto.Util;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,7 +97,7 @@ namespace InfiniteMoto.Model
 
         private void ApplyFriction(Vector2 slope, float normalForce, float dTime)
         {
-            float currentVelocity = MathVector.Dot(slope, velocity);
+            float currentVelocity = Vector2.Dot(slope, velocity);
             Vector2 tangentialVelocity = new Vector2(slope.X * currentVelocity, slope.Y * currentVelocity);
 
             velocity.X -= COF * tangentialVelocity.X;
@@ -109,7 +108,7 @@ namespace InfiniteMoto.Model
         {
             Vector2 slopeNormal = currentSegment.GetNormal();
             Vector2 slope = currentSegment.GetSlope();
-            float normalForceLength = MathVector.Dot(velocity, slopeNormal);
+            float normalForceLength = Vector2.Dot(velocity, slopeNormal);
 
             Vector2 normalForce = new Vector2(
                 -slopeNormal.X * normalForceLength,
@@ -138,7 +137,7 @@ namespace InfiniteMoto.Model
 
         private void ApplyAngularVelocity(Vector2 slope)
         {
-            float tangentialAcceleration = MathVector.Dot(velocity, slope);
+            float tangentialAcceleration = Vector2.Dot(velocity, slope);
             angularVelocity = (tangentialAcceleration / Radius);
         }
 

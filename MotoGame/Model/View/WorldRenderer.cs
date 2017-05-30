@@ -75,7 +75,16 @@ namespace InfiniteMoto.View
             DrawRect(sb, (int)(10*Scale), (int)(10*Scale), (int)(Scale*140), (int)(Scale*30));
             int score = (int)world.Bike.Position.X / 100;
             string scoreWithZeros = (1000000 + score).ToString().Substring(1);
-            sb.DrawString(mainFont, "Score: " + scoreWithZeros, new Vector2(15, 15)*Scale, Color.Black);
+            sb.DrawString(
+                mainFont, 
+                "Score: " + scoreWithZeros, 
+                new Vector2(15, 15)*Scale, 
+                Color.Black,
+                0,
+                Vector2.Zero,
+                Scale,
+                SpriteEffects.None,
+                0);
             sb.End();
         }
        
