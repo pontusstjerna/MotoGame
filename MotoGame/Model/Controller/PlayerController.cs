@@ -14,13 +14,17 @@ namespace InfiniteMoto.Controller
         private World world;
         private SoundController soundController;
 
-        private KeyboardState oldState;
-        private int oldTouchCount = 0;
+        private int width, height;
 
-        public PlayerController(World world, SoundController soundController)
+        private KeyboardState oldState;
+        private TouchLocation oldTouchLocation;
+
+        public PlayerController(World world, SoundController soundController, int width, int height)
         {
             this.world = world;
             this.soundController = soundController;
+            this.width = width;
+            this.height = height;
         }
 
         public void Update(float dTime)
@@ -75,17 +79,22 @@ namespace InfiniteMoto.Controller
 
         private void CheckTouch(float dTime)
         {
-            int newTouchCount = TouchPanel.GetState().Count();
-            if(newTouchCount > 0)
+            TouchLocation newTouchLocation = TouchPanel.GetState().FirstOrDefault();
+            if(newTouchLocation != null)
             {
-                world.Bike.RearWheel.Accelerate(dTime);
-                soundController.Accelerate();
+                if(newTouchLocation.Position.X > width/2 && newTouchLocation.Position.Y < height / 2)
+                {
+                    world.Bike.RearWheel.Accelerate(dTime);
+                    soundController.Accelerate();
+                }
             }
-            else if(oldTouchCount > 0)
+            else if(oldTouchLocation != null)
             {
                 world.Bike.RearWheel.StopAcceleration();
                 soundController.Idle();
             }
+
+            oldTouchLocation = newTouchLocation;
         }
     }
 }
