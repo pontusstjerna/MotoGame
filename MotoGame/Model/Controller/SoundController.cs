@@ -45,7 +45,7 @@ namespace InfiniteMoto.Controller
 
         public void Deaccelerate()
         {
-            PlaySound("deaccelerate");
+            PlaySound("deacceleration");
         }
 
         public void StopAllSound()

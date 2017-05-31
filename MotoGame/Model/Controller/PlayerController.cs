@@ -107,7 +107,7 @@ namespace InfiniteMoto.Controller
                 }
             }
 
-            if(oldLocations == null) return;
+           /* if(oldLocations == null) return;
             //Those who are not in the new list
             foreach(Locations location in oldLocations.Where(x => !newLocations.Contains(x)))
             {
@@ -122,7 +122,7 @@ namespace InfiniteMoto.Controller
                     world.Bike.RearWheel.ReleaseBrake();
                     soundController.Idle();
                 }
-            }
+            }*/
 
             oldLocations = newLocations;
         }
