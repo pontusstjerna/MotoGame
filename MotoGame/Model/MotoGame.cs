@@ -19,6 +19,7 @@ namespace InfiniteMoto
 
         private World world;
         private WorldRenderer worldRenderer;
+        private GUIRenderer guiRenderer;
         private PlayerController playerController;
         private SoundController soundController;
         
@@ -59,8 +60,12 @@ namespace InfiniteMoto
             worldRenderer = new WorldRenderer(
                 world, GraphicsDevice, 
                 Content.Load<Texture2D>("data/wheel4"), 
-                Content.Load<Texture2D>("data/bike_complete2"),
-                Content.Load<SpriteFont>("data/Main"));
+                Content.Load<Texture2D>("data/bike_complete2"));
+
+            guiRenderer = new GUIRenderer(
+                world,
+                Content.Load<SpriteFont>("data/Main"),
+                GraphicsDevice);
             
             soundController = new SoundController(new Dictionary<string, SoundEffect> {
                 { "idle",Content.Load<SoundEffect>("data/sounds/idle") },
@@ -105,7 +110,8 @@ namespace InfiniteMoto
         {
             GraphicsDevice.Clear(new Color(16,16,16));
 
-            worldRenderer.Render(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
+            worldRenderer.Render(spriteBatch);
+            guiRenderer.Render(spriteBatch, (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             base.Draw(gameTime);
         }

@@ -16,6 +16,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Model\Wheel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\World.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MotoGame.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\BaseRenderer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)View\GUIRenderer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)View\WorldRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

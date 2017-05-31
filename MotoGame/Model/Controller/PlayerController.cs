@@ -84,24 +84,24 @@ namespace InfiniteMoto.Controller
             Locations[] newLocations = GetTouchLocations(TouchPanel.GetState());
             foreach(Locations newLocation in newLocations)
             {
-                if (newLocation == Locations.UP_RIGHT)
+                if (newLocation == Locations.UP_LEFT)
                 {
                     world.Bike.RearWheel.Accelerate(dTime);
                     soundController.Accelerate();
                 }
 
-                if (newLocation == Locations.DOWN_RIGHT)
+                if (newLocation == Locations.DOWN_LEFT)
                 {
                     world.Bike.RearWheel.Brake(dTime);
                     soundController.Deaccelerate();
                 }
 
-                if (newLocation == Locations.UP_LEFT)
+                if (newLocation == Locations.UP_RIGHT)
                 {
                     world.Bike.LeanForward();
                 }
 
-                if(newLocation == Locations.DOWN_LEFT)
+                if(newLocation == Locations.DOWN_RIGHT)
                 {
                     world.Bike.LeanBackward();
                 }
@@ -112,13 +112,13 @@ namespace InfiniteMoto.Controller
                 //Those who are not in the new list
                 foreach (Locations location in oldLocations.Where(x => !newLocations.Contains(x)))
                 {
-                    if (location == Locations.UP_RIGHT)
+                    if (location == Locations.UP_LEFT)
                     {
                         world.Bike.RearWheel.StopAcceleration();
                         soundController.Idle();
                     }
 
-                    if (location == Locations.DOWN_RIGHT)
+                    if (location == Locations.DOWN_LEFT)
                     {
                         world.Bike.RearWheel.ReleaseBrake();
                         soundController.Idle();
