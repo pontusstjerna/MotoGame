@@ -69,7 +69,7 @@ namespace InfiniteMoto
                 { "deacceleration", Content.Load<SoundEffect>("data/sounds/deacceleration")}
             });
 
-            playerController = new PlayerController(world, soundController);
+            playerController = new PlayerController(world, soundController, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         /// <summary>

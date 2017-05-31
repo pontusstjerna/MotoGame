@@ -37,7 +37,7 @@ namespace InfiniteMoto.View
             width = gd.Viewport.Width;
             height = gd.Viewport.Height;
 
-            Scale = height / World.HEIGHT;
+            Scale = (float)height / World.HEIGHT;
 
             world.DeathEventHandler += (s, e) => showGameOver = true;
         }
@@ -48,7 +48,7 @@ namespace InfiniteMoto.View
             RenderBike(sb);
             RenderScore(sb);
             ShowFps(sb, dTime);
-            if (showGameOver) ShowGameOver(sb);
+         //   if (showGameOver) ShowGameOver(sb);
 
             if(world.Bike.Position.Y - 20 < 0)
             {
