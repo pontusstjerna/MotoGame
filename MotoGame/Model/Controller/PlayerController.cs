@@ -107,7 +107,7 @@ namespace InfiniteMoto.Controller
                 }
             }
 
-           /* if(oldLocations == null) return;
+            if(oldLocations == null) return;
             //Those who are not in the new list
             foreach(Locations location in oldLocations.Where(x => !newLocations.Contains(x)))
             {
@@ -122,7 +122,7 @@ namespace InfiniteMoto.Controller
                     world.Bike.RearWheel.ReleaseBrake();
                     soundController.Idle();
                 }
-            }*/
+            }
 
             oldLocations = newLocations;
         }
@@ -142,17 +142,17 @@ namespace InfiniteMoto.Controller
         {
             if(location.Position.X > width / 2)
             {
-                if (location.Position.Y > width / 2)
-                    return Locations.UP_RIGHT;
-                else
+                if (location.Position.Y > height / 2)
                     return Locations.DOWN_RIGHT;
+                else
+                    return Locations.UP_RIGHT;
             }
             else
             {
-                if (location.Position.Y > width / 2)
-                    return Locations.UP_LEFT;
-                else
+                if (location.Position.Y > height / 2)
                     return Locations.DOWN_LEFT;
+                else
+                    return Locations.UP_LEFT;
             }
         }
     }
