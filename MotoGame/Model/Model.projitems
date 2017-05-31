@@ -9,8 +9,10 @@
     <Import_RootNamespace>Model</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Controller\KeyboardController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controller\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controller\SoundController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controller\TouchController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Bike.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\SlopeSegment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Model\Wheel.cs" />

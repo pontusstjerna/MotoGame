@@ -30,7 +30,7 @@ namespace InfiniteMoto.View
             RenderScore(sb);
             ShowFps(sb, dTime);
 
-            //if (Paused) ShowGameOver(sb);
+            if (Paused) ShowGameOver(sb);
         }
 
         private void RenderScore(SpriteBatch sb)

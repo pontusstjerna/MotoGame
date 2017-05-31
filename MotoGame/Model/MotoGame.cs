@@ -23,7 +23,7 @@ namespace InfiniteMoto
         private PlayerController playerController;
         private SoundController soundController;
         
-        public MotoGame()
+        public MotoGame(PlayerController controller)
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -33,6 +33,7 @@ namespace InfiniteMoto
             graphics.PreferredBackBufferWidth = 1500;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
             graphics.ApplyChanges();
+            this.playerController = playerController;
         }
 
         /// <summary>
@@ -74,7 +75,8 @@ namespace InfiniteMoto
                 { "deacceleration", Content.Load<SoundEffect>("data/sounds/deacceleration")}
             });
 
-            playerController = new PlayerController(world, soundController, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            //playerController = new PlayerController(world, soundController, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            //TODO Set playerController's SoundController HERE not in constructor
         }
 
         /// <summary>
@@ -96,8 +98,11 @@ namespace InfiniteMoto
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            playerController.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
-            world.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            if (!guiRenderer.Paused)
+            {
+                playerController.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+                world.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            }
 
             base.Update(gameTime);
         }
