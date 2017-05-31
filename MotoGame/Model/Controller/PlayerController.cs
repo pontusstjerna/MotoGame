@@ -107,23 +107,25 @@ namespace InfiniteMoto.Controller
                 }
             }
 
-            if(oldLocations == null) return;
-            //Those who are not in the new list
-            foreach(Locations location in oldLocations.Where(x => !newLocations.Contains(x)))
+            if(oldLocations != null)
             {
-                if (location == Locations.UP_RIGHT)
+                //Those who are not in the new list
+                foreach (Locations location in oldLocations.Where(x => !newLocations.Contains(x)))
                 {
-                    world.Bike.RearWheel.StopAcceleration();
-                    soundController.Idle();
-                }
+                    if (location == Locations.UP_RIGHT)
+                    {
+                        world.Bike.RearWheel.StopAcceleration();
+                        soundController.Idle();
+                    }
 
-                if (location == Locations.DOWN_RIGHT)
-                {
-                    world.Bike.RearWheel.ReleaseBrake();
-                    soundController.Idle();
+                    if (location == Locations.DOWN_RIGHT)
+                    {
+                        world.Bike.RearWheel.ReleaseBrake();
+                        soundController.Idle();
+                    }
                 }
             }
-
+            
             oldLocations = newLocations;
         }
 
