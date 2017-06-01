@@ -14,7 +14,7 @@ namespace InfiniteMoto.Model
         public List<SlopeSegment> Segments { get; private set; }
 
         public Bike Bike { get; private set; }
-        public event EventHandler GameOverEventHandler;
+        public bool IsGameOver { get; private set; } = false;
 
         private Point startPosition = new Point(75, 50);
         private List<Point> points;
@@ -22,18 +22,7 @@ namespace InfiniteMoto.Model
 
         public World()
         {
-            points = new List<Point>();
-            points.Add(new Point(10, 100));
-            points.Add(new Point(400, 110));
-            points.Add(new Point(800, 111));
-
-            Segments = new List<SlopeSegment>();
-            for (int i = 0; i < points.Count() - 1; i++)
-                Segments.Add(new SlopeSegment(points[i], points[i + 1]));
-
-            Bike = new Bike(startPosition);
-
-            random = new Random();
+            Initialize();
         }
 
         public void Update(float dTime)
@@ -52,15 +41,25 @@ namespace InfiniteMoto.Model
 
         public void Reset()
         {
-            var eArgs = new GameOverEventArgs();
-            eArgs.Score = Bike.Position.X;
-            GameOverEventHandler.Invoke(this, eArgs);
             Bike = new Bike(startPosition);
+            Initialize();
+            IsGameOver = false;
         }
 
-        private void GameOver()
+        private void Initialize()
         {
-            GameOverEventHandler.Invoke(this, null);
+            points = new List<Point>();
+            points.Add(new Point(10, 100));
+            points.Add(new Point(400, 110));
+            points.Add(new Point(800, 111));
+
+            Segments = new List<SlopeSegment>();
+            for (int i = 0; i < points.Count() - 1; i++)
+                Segments.Add(new SlopeSegment(points[i], points[i + 1]));
+
+            Bike = new Bike(startPosition);
+
+            random = new Random();
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)
@@ -75,10 +74,7 @@ namespace InfiniteMoto.Model
 
         private void CheckDeath()
         {
-            if (Bike.RearWheel.OnGround && Bike.FrontWheel.OnGround && Bike.FrontWheel.Position.X <= Bike.RearWheel.Position.X)
-            {
-                Reset();
-            }
+            IsGameOver = Bike.RearWheel.OnGround && Bike.FrontWheel.OnGround && Bike.FrontWheel.Position.X <= Bike.RearWheel.Position.X;
         }
 
         private void GenerateSlopeSegment()

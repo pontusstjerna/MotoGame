@@ -9,12 +9,9 @@ namespace InfiniteMoto.View
 {
     public class GUIRenderer : BaseRenderer
     {
-        public bool Paused { get; set; } = false;
-
         private SpriteFont mainFont;
         private Texture2D rectTexture;
         private Texture2D gameOver;
-        private float latestScore;
 
         public GUIRenderer(World world, SpriteFont mainFont, Texture2D gameOver, GraphicsDevice gd) : base(world, gd)
         {
@@ -23,9 +20,6 @@ namespace InfiniteMoto.View
             rectTexture = new Texture2D(gd, 1, 1);
             rectTexture.SetData<Color>(new Color[] { Color.DarkOrange });
             this.gameOver = gameOver;
-
-            world.GameOverEventHandler += (s, e) => { Paused = !Paused;
-                latestScore = ((GameOverEventArgs)e).Score; };
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -33,7 +27,7 @@ namespace InfiniteMoto.View
             RenderScore(sb);
             ShowFps(sb, dTime);
 
-            if (Paused) ShowGameOver(sb);
+            if (world.IsGameOver) ShowGameOver(sb);
         }
 
         private void RenderScore(SpriteBatch sb)
@@ -63,14 +57,14 @@ namespace InfiniteMoto.View
                 gameOver,
                 new Vector2((width / 2), (height / 2)),
                 null,
-                Color.White,
+                new Color(255,255,255,180),
                 0,
                 new Vector2(gameOver.Width * 0.5f, gameOver.Height * 0.5f),
                 Scale,
                 SpriteEffects.None,
                 0);          
 
-            DrawText("Your score: " + GetScoreString(latestScore), width / 2 - 90*Scale, height / 2, sb);
+            DrawText("Your score: " + GetScoreString(world.Bike.Position.X), width / 2 - 90*Scale, height / 2, sb);
             
             sb.End();
         }

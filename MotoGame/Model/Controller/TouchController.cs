@@ -43,6 +43,8 @@ namespace InfiniteMoto.Controller
                 {
                     world.Bike.LeanBackward();
                 }
+
+                if (world.IsGameOver) world.Reset();
             }
 
             if (oldLocations != null)

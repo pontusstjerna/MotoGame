@@ -67,7 +67,7 @@ namespace InfiniteMoto
             guiRenderer = new GUIRenderer(
                 world,
                 Content.Load<SpriteFont>("data/Main"),
-                Content.Load<Texture2D>("data/gameOver"),
+                Content.Load<Texture2D>("data/gameover"),
                 GraphicsDevice);
             
             soundController = new SoundController(new Dictionary<string, SoundEffect> {
@@ -101,7 +101,7 @@ namespace InfiniteMoto
 
             playerController.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (!guiRenderer.Paused)
+            if (!world.IsGameOver)
             {
                 world.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
             }
