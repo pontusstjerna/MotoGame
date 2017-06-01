@@ -10,12 +10,7 @@ namespace InfiniteMoto.Controller
     {
         private KeyboardState oldState;
 
-        public KeyboardController(World world, SoundController sound, int w, int h) : base(world, sound, w, h)
-        {
-
-        }
-
-        public new void Update(float dTime)
+        public override void Update(float dTime)
         {
             CheckKeyboard(dTime);
         }

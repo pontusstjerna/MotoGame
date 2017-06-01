@@ -9,14 +9,14 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace InfiniteMoto.Controller
 {
-    public class PlayerController
+    public abstract class PlayerController
     {
         protected World world;
         protected SoundController soundController;
 
         protected int width, height;
 
-        public PlayerController(World world, SoundController soundController, int width, int height)
+        public void Initialize(World world, SoundController soundController, int width, int height)
         {
             this.world = world;
             this.soundController = soundController;
@@ -24,10 +24,7 @@ namespace InfiniteMoto.Controller
             this.height = height;
         }
 
-        public void Update(float dTime)
-        {
-        
-        }
+        public abstract void Update(float dTime);
 
         
 

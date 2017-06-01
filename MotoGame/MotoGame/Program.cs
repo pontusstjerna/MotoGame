@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InfiniteMoto.Controller;
+using System;
 
 namespace MotoGame
 {
@@ -13,7 +14,7 @@ namespace MotoGame
         [STAThread]
         static void Main()
         {
-            using (var game = new InfiniteMoto.MotoGame())
+            using (var game = new InfiniteMoto.MotoGame(new KeyboardController()))
                 game.Run();
         }
     }

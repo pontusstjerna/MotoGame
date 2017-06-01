@@ -12,12 +12,7 @@ namespace InfiniteMoto.Controller
         private enum Locations { UP_RIGHT, DOWN_RIGHT, UP_LEFT, DOWN_LEFT };
         private Locations[] oldLocations;
 
-        public TouchController(World world, SoundController sc, int w, int h) : base(world, sc, w, h)
-        {
-
-        }
-
-        public new void Update(float dTime)
+        public override void Update(float dTime)
         {
             CheckTouch(dTime);
         }

@@ -13,16 +13,18 @@ namespace InfiniteMoto.View
 
         private SpriteFont mainFont;
         private Texture2D rectTexture;
+        private Texture2D gameOver;
         
 
-        public GUIRenderer(World world, SpriteFont mainFont, GraphicsDevice gd) : base(world, gd)
+        public GUIRenderer(World world, SpriteFont mainFont, Texture2D gameOver, GraphicsDevice gd) : base(world, gd)
         {
             this.world = world;
             this.mainFont = mainFont;
             rectTexture = new Texture2D(gd, 1, 1);
             rectTexture.SetData<Color>(new Color[] { Color.DarkOrange });
+            this.gameOver = gameOver;
 
-            world.DeathEventHandler += (s, e) => Paused = true;
+            world.GameOverEventHandler += (s, e) => Paused = !Paused;
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -67,8 +69,22 @@ namespace InfiniteMoto.View
         private void ShowGameOver(SpriteBatch sb)
         {
             sb.Begin();
-            DrawRect(sb, 200, 200, 200, 200);
+            sb.Draw(
+                gameOver,
+                new Vector2((width / 2), (height / 2)),
+                null,
+                Color.White,
+                0,
+                new Vector2(gameOver.Width*0.5f, gameOver.Height * 0.5f),
+                Scale,
+                SpriteEffects.None,
+                0);
             sb.End();
+        }
+
+        private void DrawText(string text, int x, int y)
+        {
+
         }
 
     }

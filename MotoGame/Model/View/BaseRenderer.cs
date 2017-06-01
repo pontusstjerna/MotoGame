@@ -6,7 +6,7 @@ using System.Text;
 
 namespace InfiniteMoto.View
 {
-    public class BaseRenderer
+    public abstract class BaseRenderer
     {
         protected World world;
         protected float Scale { get; set; }

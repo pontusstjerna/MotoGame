@@ -14,7 +14,7 @@ namespace InfiniteMoto.Model
         public List<SlopeSegment> Segments { get; private set; }
 
         public Bike Bike { get; private set; }
-        public event EventHandler DeathEventHandler;
+        public event EventHandler GameOverEventHandler;
 
         private Point startPosition = new Point(75, 50);
         private List<Point> points;
@@ -53,7 +53,12 @@ namespace InfiniteMoto.Model
         public void Reset()
         {
             Bike = new Bike(startPosition);
-            DeathEventHandler.Invoke(this, null);
+            GameOverEventHandler.Invoke(this, null);
+        }
+
+        private void GameOver()
+        {
+            GameOverEventHandler.Invoke(this, null);
         }
 
         private void UpdateWheel(float dTime, Wheel wheel)
