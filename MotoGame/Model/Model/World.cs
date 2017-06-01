@@ -52,8 +52,10 @@ namespace InfiniteMoto.Model
 
         public void Reset()
         {
+            var eArgs = new GameOverEventArgs();
+            eArgs.Score = Bike.Position.X;
+            GameOverEventHandler.Invoke(this, eArgs);
             Bike = new Bike(startPosition);
-            GameOverEventHandler.Invoke(this, null);
         }
 
         private void GameOver()

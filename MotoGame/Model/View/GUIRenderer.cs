@@ -14,7 +14,7 @@ namespace InfiniteMoto.View
         private SpriteFont mainFont;
         private Texture2D rectTexture;
         private Texture2D gameOver;
-        
+        private float latestScore;
 
         public GUIRenderer(World world, SpriteFont mainFont, Texture2D gameOver, GraphicsDevice gd) : base(world, gd)
         {
@@ -24,7 +24,8 @@ namespace InfiniteMoto.View
             rectTexture.SetData<Color>(new Color[] { Color.DarkOrange });
             this.gameOver = gameOver;
 
-            world.GameOverEventHandler += (s, e) => Paused = !Paused;
+            world.GameOverEventHandler += (s, e) => { Paused = !Paused;
+                latestScore = ((GameOverEventArgs)e).Score; };
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -39,18 +40,7 @@ namespace InfiniteMoto.View
         {
             sb.Begin();
             DrawRect(sb, (int)(10 * Scale), (int)(10 * Scale), (int)(Scale * 140), (int)(Scale * 30));
-            int score = (int)world.Bike.Position.X / 100;
-            string scoreWithZeros = (1000000 + score).ToString().Substring(1);
-            sb.DrawString(
-                mainFont,
-                "Score: " + scoreWithZeros,
-                new Vector2(15, 15) * Scale,
-                Color.Black,
-                0,
-                Vector2.Zero,
-                Scale,
-                SpriteEffects.None,
-                0);
+            DrawText("Score: " + GetScoreString(world.Bike.Position.X), 15*Scale, 15*Scale, sb);
             sb.End();
         }
 
@@ -75,17 +65,34 @@ namespace InfiniteMoto.View
                 null,
                 Color.White,
                 0,
-                new Vector2(gameOver.Width*0.5f, gameOver.Height * 0.5f),
+                new Vector2(gameOver.Width * 0.5f, gameOver.Height * 0.5f),
                 Scale,
                 SpriteEffects.None,
-                0);
+                0);          
+
+            DrawText("Your score: " + GetScoreString(latestScore), width / 2 - 90*Scale, height / 2, sb);
+            
             sb.End();
         }
 
-        private void DrawText(string text, int x, int y)
+        private void DrawText(string text, float x, float y, SpriteBatch sb)
         {
-
+            sb.DrawString(
+               mainFont,
+               text,
+               new Vector2(x,y),
+               Color.Black,
+               0,
+               Vector2.Zero,
+               Scale,
+               SpriteEffects.None,
+               0);
         }
 
+        private string GetScoreString(float xPosition)
+        {
+            int score = (int)xPosition / 100;
+            return (1000000 + score).ToString().Substring(1); 
+        }
     }
 }
