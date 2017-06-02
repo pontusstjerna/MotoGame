@@ -34,17 +34,17 @@ namespace InfiniteMoto.Controller
                     soundController.Deaccelerate();
                 }
 
-                if (newLocation == Locations.UP_RIGHT)
+                if (newLocation == Locations.DOWN_RIGHT)
                 {
                     world.Bike.LeanForward();
                 }
 
-                if (newLocation == Locations.DOWN_RIGHT)
+                if (newLocation == Locations.UP_RIGHT)
                 {
                     world.Bike.LeanBackward();
                 }
 
-                if (world.IsGameOver) world.Reset();
+                if (world.IsGameOver && oldLocations.Count() == 0) world.Reset();
             }
 
             if (oldLocations != null)
