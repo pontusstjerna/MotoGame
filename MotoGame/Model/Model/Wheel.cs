@@ -21,7 +21,8 @@ namespace InfiniteMoto.Model
         public const float GRAVITY = 7f;
         public bool OnGround { get; private set; }
 
-        private const int MAX_SPEED = 150; //This does now have a unit :D It's pixels per second
+        private const int MAX_SPEED = 800; //This does now have a unit :D It's pixels per second
+        private const int THRUST = 200;
         private const float MAX_FRICTION = 0.2f;
         private const float MIN_FRICTION = 0.001f;
 
@@ -60,7 +61,7 @@ namespace InfiniteMoto.Model
         public void Accelerate(float dTime)
         {
             isAccelerating = true;
-            acceleration = dTime*MAX_SPEED;
+            acceleration = dTime*THRUST;
         }
 
         public void Brake(float dTime)
@@ -130,9 +131,9 @@ namespace InfiniteMoto.Model
         private void ApplyAcceleration(Vector2 slope, float dTime)
         {
             float tangetialAcceleration = acceleration*Radius;
-
-            velocity.X += slope.X * tangetialAcceleration;
-            velocity.Y += slope.Y * tangetialAcceleration;
+            
+            if(Vector2.Dot(slope, velocity) < MAX_SPEED)
+                velocity += slope * tangetialAcceleration;
         }
 
         private void ApplyAngularVelocity(Vector2 slope)

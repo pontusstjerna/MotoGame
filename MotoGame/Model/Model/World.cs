@@ -20,6 +20,8 @@ namespace InfiniteMoto.Model
         private List<Point> points;
         private Random random;
 
+        private bool isLongSegment;
+
         public World()
         {
             Initialize();
@@ -79,7 +81,13 @@ namespace InfiniteMoto.Model
 
         private void GenerateSlopeSegment()
         {
-            int newLength = 500 - (int)Math.Round(Bike.Position.X / 100);
+            int newLength;
+            if (isLongSegment)
+                newLength = 800 - (int)Math.Round(Bike.Position.X / 100);
+            else
+                newLength = 300 - (int)Math.Round(Bike.Position.X / 100);
+
+            isLongSegment = !isLongSegment;
             points.Add(new Point(points.Last().X + Math.Max(newLength, 50), random.Next(HEIGHT*4/5) + HEIGHT/5));
             Segments.Add(new SlopeSegment(points[points.Count() - 2], points.Last()));
         }
