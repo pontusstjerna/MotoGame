@@ -66,7 +66,7 @@ namespace InfiniteMoto.View
                 null,
                 Color.White,
                 bike.Rotation,
-                new Vector2(3,24),
+                bike.BodyPosition,
                 Scale,
                 SpriteEffects.None,
                 0);

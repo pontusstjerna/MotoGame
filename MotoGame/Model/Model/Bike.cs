@@ -34,7 +34,9 @@ namespace InfiniteMoto.Model
 
         public void Update(float dTime)
         {
-            position = RearWheel.Position - RearWheelOffset;
+            float wheelDistance = (RearWheelOffset).Length();
+            position.X = RearWheel.Position.X + (float)Math.Cos(Rotation)*wheelDistance - (float)Math.Sin(Rotation);
+            position.Y = RearWheel.Position.Y + (float)Math.Sin(Rotation) * wheelDistance + (float)Math.Cos(Rotation);
 
             float restLength = rearToFront.Length();
             Vector2 delta = FrontWheel.Position - RearWheel.Position;
