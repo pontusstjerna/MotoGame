@@ -76,7 +76,7 @@ namespace InfiniteMoto
                 { "deacceleration", Content.Load<SoundEffect>("data/sounds/deacceleration")}
             });
 
-            playerController.Initialize(world, soundController, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+            playerController.Initialize(world, soundController, guiRenderer.Scale, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace InfiniteMoto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+              //  Exit();
 
             playerController.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 

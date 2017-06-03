@@ -8,8 +8,8 @@ namespace InfiniteMoto.View
 {
     public abstract class BaseRenderer
     {
+        public float Scale { get; set; }
         protected World world;
-        protected float Scale { get; set; }
         protected int width, height;
 
         public BaseRenderer(World world, GraphicsDevice gd)

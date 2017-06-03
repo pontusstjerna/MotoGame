@@ -9,7 +9,7 @@ namespace InfiniteMoto.Controller
 {
     public class TouchController : PlayerController
     {
-        private enum Locations { UP_RIGHT, DOWN_RIGHT, UP_LEFT, DOWN_LEFT };
+        private enum Locations { UP_RIGHT, DOWN_RIGHT, UP_LEFT, DOWN_LEFT, PAUSE};
         private Locations[] oldLocations;
 
         public override void Update(float dTime)
@@ -45,6 +45,8 @@ namespace InfiniteMoto.Controller
                 }
 
                 if (world.IsGameOver && oldLocations.Count() == 0) world.Reset();
+
+                if (newLocation == Locations.PAUSE && oldLocations.Count() == 0) world.IsPaused = !world.IsPaused;
             }
 
             if (oldLocations != null)
@@ -82,6 +84,9 @@ namespace InfiniteMoto.Controller
 
         private Locations GetTouchLocation(TouchLocation location)
         {
+            if (location.Position.X > width - width * 0.05f * Scale && location.Position.Y < 33*Scale)
+                return Locations.PAUSE;
+
             if (location.Position.X > width / 2)
             {
                 if (location.Position.Y > height / 2)

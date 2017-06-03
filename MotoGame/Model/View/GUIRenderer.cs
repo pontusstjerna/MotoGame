@@ -21,7 +21,7 @@ namespace InfiniteMoto.View
             this.world = world;
             LoadContent(content);
             rectTexture = new Texture2D(gd, 1, 1);
-            rectTexture.SetData<Color>(new Color[] { Color.AntiqueWhite });
+            rectTexture.SetData<Color>(new Color[] { Color.DarkOrange });
         }
 
         public void Render(SpriteBatch sb, float dTime)

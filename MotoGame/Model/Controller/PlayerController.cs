@@ -15,13 +15,15 @@ namespace InfiniteMoto.Controller
         protected SoundController soundController;
 
         protected int width, height;
+        protected float Scale;
 
-        public void Initialize(World world, SoundController soundController, int width, int height)
+        public void Initialize(World world, SoundController soundController, float scale, int width, int height)
         {
             this.world = world;
             this.soundController = soundController;
             this.width = width;
             this.height = height;
+            Scale = scale;
         }
 
         public abstract void Update(float dTime);

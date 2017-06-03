@@ -55,6 +55,10 @@ namespace InfiniteMoto.Controller
                     world.Reset();
             }
 
+            if (newState.IsKeyDown(Keys.Escape))
+                if (!oldState.IsKeyDown(Keys.Escape))
+                    world.IsPaused = !world.IsPaused;
+
             oldState = newState;
         }
     }
