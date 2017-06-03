@@ -1,5 +1,6 @@
 ﻿using InfiniteMoto.Model;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,15 @@ namespace InfiniteMoto.View
         private SpriteFont mainFont;
         private Texture2D rectTexture;
         private Texture2D gameOver;
+        private Texture2D paused;
+        private Texture2D play;
 
-        public GUIRenderer(World world, SpriteFont mainFont, Texture2D gameOver, GraphicsDevice gd) : base(world, gd)
+        public GUIRenderer(World world, ContentManager content, GraphicsDevice gd) : base(world, gd)
         {
             this.world = world;
-            this.mainFont = mainFont;
+            LoadContent(content);
             rectTexture = new Texture2D(gd, 1, 1);
-            rectTexture.SetData<Color>(new Color[] { Color.DarkOrange });
-            this.gameOver = gameOver;
+            rectTexture.SetData<Color>(new Color[] { Color.AntiqueWhite });
         }
 
         public void Render(SpriteBatch sb, float dTime)
@@ -28,6 +30,16 @@ namespace InfiniteMoto.View
             ShowFps(sb, dTime);
 
             if (world.IsGameOver) ShowGameOver(sb);
+            if (!world.IsPaused) DrawMenuControl(sb, paused);
+            else DrawMenuControl(sb, play);
+        }
+
+        private void LoadContent(ContentManager content)
+        {
+            mainFont = content.Load<SpriteFont>("data/Main");
+            gameOver = content.Load<Texture2D>("data/gameover");
+            paused = content.Load<Texture2D>("data/pause");
+            play = content.Load<Texture2D>("data/play");
         }
 
         private void RenderScore(SpriteBatch sb)
@@ -81,6 +93,22 @@ namespace InfiniteMoto.View
                Scale,
                SpriteEffects.None,
                0);
+        }
+
+        private void DrawMenuControl(SpriteBatch sb, Texture2D texture)
+        {
+            sb.Begin();
+            sb.Draw(
+                texture,
+                new Vector2(width - width * 0.05f, 15 * Scale),
+                null,
+                Color.White,
+                0,
+                Vector2.Zero,
+                Scale,
+                SpriteEffects.None,
+                0);
+            sb.End();
         }
 
         private string GetScoreString(float xPosition)

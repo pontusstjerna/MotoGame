@@ -15,6 +15,7 @@ namespace InfiniteMoto.Model
 
         public Bike Bike { get; private set; }
         public bool IsGameOver { get; private set; } = false;
+        public bool IsPaused { get; set; } = false;
 
         private Point startPosition = new Point(75, 50);
         private List<Point> points;
