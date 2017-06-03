@@ -62,11 +62,11 @@ namespace InfiniteMoto.View
 
             sb.Draw(
                 bikeTexture,
-                bikeRenderPos + bike.RearWheelOffset*Scale,
+                bikeRenderPos,
                 null,
                 Color.White,
                 bike.Rotation,
-                bike.BodyPosition,
+                bike.CenterOfGravity,
                 Scale,
                 SpriteEffects.None,
                 0);
