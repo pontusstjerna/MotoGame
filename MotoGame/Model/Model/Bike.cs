@@ -9,7 +9,7 @@ namespace InfiniteMoto.Model
 {
     public class Bike
     {
-        public const int ROTATION_SPEED = 5;
+        public const int ROTATION_SPEED = 4;
 
         public Wheel RearWheel { get; private set; }
         public Wheel FrontWheel { get; private set; }
@@ -54,7 +54,13 @@ namespace InfiniteMoto.Model
             Vector2 downForce = new Vector2(
                 -ROTATION_SPEED * (float)Math.Sin(Rotation),
                 ROTATION_SPEED * (float)Math.Cos(Rotation));
+
             FrontWheel.AddForce(downForce);
+
+            if (FrontWheel.OnGround)
+                RearWheel.AddForce(-downForce * 2f);
+            else
+                RearWheel.AddForce(-downForce);
         }
 
         public void LeanBackward()
@@ -62,7 +68,13 @@ namespace InfiniteMoto.Model
             Vector2 upForce = new Vector2(
                 ROTATION_SPEED * (float)Math.Sin(Rotation),
                 -ROTATION_SPEED * (float)Math.Cos(Rotation));
-            FrontWheel.AddForce(upForce);
+            if (RearWheel.OnGround)
+                FrontWheel.AddForce(upForce * 2f);
+            else
+                FrontWheel.AddForce(upForce);
+            RearWheel.AddForce(-upForce);
+
+
         }
     }
 }

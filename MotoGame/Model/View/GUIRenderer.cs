@@ -100,12 +100,12 @@ namespace InfiniteMoto.View
             sb.Begin();
             sb.Draw(
                 texture,
-                new Vector2(width - width * 0.05f, 15 * Scale),
+                new Vector2(width - width * 0.1f, 15 * Scale),
                 null,
                 Color.White,
                 0,
                 Vector2.Zero,
-                Scale,
+                Scale*2f,
                 SpriteEffects.None,
                 0);
             sb.End();
