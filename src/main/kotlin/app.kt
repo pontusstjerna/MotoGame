@@ -4,8 +4,8 @@
 * https://github.com/libgdx/libgdx/wiki/A-simple-game
 * */
 
-    fun main(args: Array<String>) {
-        //Example().run()
+    fun main() {
+        Example().run()
 
 
 

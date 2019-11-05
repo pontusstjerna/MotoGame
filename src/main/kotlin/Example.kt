@@ -37,6 +37,20 @@ class Example {
         }
 
         val someItems = items.filter { it.startsWith("g") }
+
+        val myLittlePony: () -> Unit = {
+            println("Är söt")
+        }
+
+        val myLittleLambda: (Int) -> Int = { x -> x + 1 }
+        val myBiggerLambda: (Int) -> Int = fun(x: Int): Int {
+            val y = x - 1
+            return y
+        }
+
+        myLittlePony()
+        println(myLittleLambda(5))
+        println(myBiggerLambda(5))
     }
 
     fun test(arg: String): Int {
