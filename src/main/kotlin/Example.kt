@@ -1,3 +1,8 @@
+/*
+    USEFUL LINKS:
+    https://medium.com/@elye.project/mastering-kotlin-standard-functions-run-with-let-also-and-apply-9cd334b0ef84
+ */
+
 class Example {
 
     fun run() {
@@ -7,6 +12,8 @@ class Example {
         var myInt2: Int = 3
 
         printNumber("hejsan", 1337)
+
+        // CONTROL and FUNCTIONS
 
         if (1 == 2) {
             return
@@ -30,11 +37,16 @@ class Example {
             println(i)
         }
 
+        // WHEN
+
         val items: List<String> = listOf("gosigt", "banana", "avocado", "apple", "kiwifruit")
         when {
             "orange" in items -> println("juicy")
             "apple" in items -> println("apple is fine too")
         }
+
+
+        // LAMBDAS
 
         val someItems = items.filter { it.startsWith("g") }
 
@@ -51,6 +63,30 @@ class Example {
         myLittlePony()
         println(myLittleLambda(5))
         println(myBiggerLambda(5))
+
+
+        // SCOPE SHIT
+        var hej = "hola"
+        println(this.run {
+            hej = "knark"
+            hej // returns the last statement so it prints knark
+        })
+        println(hej)
+
+        hej.run {
+            println("The length of this String is $length")
+        }
+
+        // Similarly.
+        // sending in it as argument.
+        hej.let { println("The length of this String is ${it.length}") }
+        hej.let { str -> println(str) }
+
+        println(hej.also {
+            "$it this will not be returned"
+        })
+
+        // These are chainable!
     }
 
     fun test(arg: String): Int {
