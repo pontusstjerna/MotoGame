@@ -3,8 +3,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import ktx.app.KtxGame
-import ktx.app.KtxScreen
 
 class MotoGame : ApplicationAdapter() {
     lateinit private var batch: SpriteBatch
@@ -12,7 +10,9 @@ class MotoGame : ApplicationAdapter() {
 
     override fun create() {
 
-        img = Texture(Gdx.files.internal("bike_complete1.png"))
+        println(Gdx.files.localStoragePath)
+
+        img = Texture(Gdx.files.local("assets/bike_complete1.png"))
         batch = SpriteBatch()
 
         super.create()
