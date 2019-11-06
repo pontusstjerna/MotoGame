@@ -11,7 +11,8 @@ class MotoGame : ApplicationAdapter() {
     lateinit private var img: Texture
 
     override fun create() {
-        img = Texture(Gdx.files.internal("test.png"))
+
+        img = Texture(Gdx.files.internal("bike_complete1.png"))
         batch = SpriteBatch()
 
         super.create()
