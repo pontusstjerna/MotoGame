@@ -1,3 +1,5 @@
+import com.badlogic.gdx.Application
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 
 /*
@@ -15,5 +17,5 @@ fun main() {
         config.width = 800
         config.height = 600
     }
-
+    LwjglApplication(MotoGame(), config).logLevel = Application.LOG_DEBUG;
 }
