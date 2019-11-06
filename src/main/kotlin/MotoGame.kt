@@ -22,6 +22,10 @@ class MotoGame : ApplicationAdapter() {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
+        batch.begin()
+        batch.draw(img, 50f,50f)
+        batch.end()
+
         super.render()
     }
 }
