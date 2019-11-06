@@ -8,6 +8,8 @@ class MotoGame : ApplicationAdapter() {
     lateinit private var batch: SpriteBatch
     lateinit private var img: Texture
 
+    private var x: Float = 0.0f
+
     override fun create() {
 
         println(Gdx.files.localStoragePath)
@@ -23,9 +25,17 @@ class MotoGame : ApplicationAdapter() {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
         batch.begin()
-        batch.draw(img, 50f,50f)
+        batch.draw(img, x,50f)
         batch.end()
 
+        // 10 pixels per second YEAH
+        x += Gdx.graphics.deltaTime * 10
+
         super.render()
+    }
+
+    override fun dispose() {
+        img.dispose()
+        super.dispose()
     }
 }
