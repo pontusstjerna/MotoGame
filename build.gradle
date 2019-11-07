@@ -22,6 +22,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "com.badlogicgames.gdx:gdx:1.9.10"
     implementation "io.github.libktx:ktx-app:1.9.10-b2"
+    implementation "io.github.libktx:ktx-graphics:1.9.10-b2"
+    implementation "io.github.libktx:ktx-collections:1.9.10-b2"
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.10"
     implementation "com.badlogicgames.gdx:gdx-platform:1.9.10:natives-x86_64"
     implementation "com.badlogicgames.gdx:gdx-platform:1.9.10:natives-desktop"

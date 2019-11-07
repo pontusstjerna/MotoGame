@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import ktx.app.KtxScreen
+import ktx.graphics.use
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -19,9 +20,10 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
-        batch.begin()
-        batch.draw(img, x,50f)
-        batch.end()
+
+        batch.use { b ->
+            b.draw(img, x, 50f)
+        }
 
         // 10 pixels per second YEAH
         x += Gdx.graphics.deltaTime * 10
