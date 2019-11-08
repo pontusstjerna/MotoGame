@@ -10,7 +10,7 @@ class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    val segment: Segment by lazy { Segment(physicsWorld, 50f, 50f, 10f, 10f) }
+    val segment: Segment by lazy { Segment(physicsWorld, 10f, 10f, 10f, 10f) }
 
     // TODO: refactor
     lateinit var dynamicBody: Body

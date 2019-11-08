@@ -1,19 +1,17 @@
 package model
 
-import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.Fixture
-import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.body
 import ktx.box2d.box
 
 class Segment(world: World, x: Float, y: Float, width: Float, height: Float) {
 
-    private val body: Body = world.body {
+    val body: Body = world.body(type = BodyDef.BodyType.DynamicBody) {
         box(width = width, height = height)
     }
 
-    val fixture: Fixture = body.box (width = width, height = height) {
-
+    val fixture: Fixture = body.box (width = width / 2, height = height / 2) {
+        density = 1.0f
+        friction = 0.3f
     }
-
 }
