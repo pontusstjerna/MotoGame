@@ -18,13 +18,21 @@ compileTestKotlin {
     }
 }
 
+ext {
+    gdxVersion = "1.9.10"
+    ktxVersion = "1.9.10-b2"
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "com.badlogicgames.gdx:gdx:1.9.10"
-    implementation "io.github.libktx:ktx-app:1.9.10-b2"
-    implementation "io.github.libktx:ktx-graphics:1.9.10-b2"
-    implementation "io.github.libktx:ktx-collections:1.9.10-b2"
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:1.9.10"
-    implementation "com.badlogicgames.gdx:gdx-platform:1.9.10:natives-x86_64"
-    implementation "com.badlogicgames.gdx:gdx-platform:1.9.10:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86_64"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    implementation "io.github.libktx:ktx-app:$ktxVersion"
+    implementation "io.github.libktx:ktx-graphics:$ktxVersion"
+    implementation "io.github.libktx:ktx-collections:$ktxVersion"
+    implementation "io.github.libktx:ktx-math:$ktxVersion"
+    implementation "io.github.libktx:ktx-box2d:$ktxVersion"
 }

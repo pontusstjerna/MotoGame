@@ -6,6 +6,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 * Some tutorials I used:
 * https://github.com/Quillraven/SimpleKtxGame/wiki/Application
 * https://github.com/libgdx/libgdx/wiki/A-simple-game
+*
+* Box2D module:
+* https://github.com/libktx/ktx/tree/master/box2d
+* http://box2d.org/manual.pdf
+*
 * */
 
 fun main() {

@@ -1,6 +1,6 @@
 package model
 
-class Segment {
+class Segment() {
 
 
 }
