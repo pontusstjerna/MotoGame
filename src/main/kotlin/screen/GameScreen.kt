@@ -13,13 +13,15 @@ import model.GameWorld
 
 class GameScreen : KtxScreen {
 
-    private val world: GameWorld by lazy { GameWorld() }
+    private val world: GameWorld by lazy { GameWorld().apply { create() } }
 
     private val batch: SpriteBatch by lazy { SpriteBatch() }
     private val shapeRenderer: ShapeRenderer by lazy { ShapeRenderer() }
     private val img: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
 
-    private var x: Float = 0.0f
+    private val scale = 10f
+
+    private var accumulator: Float = 0.0f
 
     override fun show() {
         super.show()
@@ -27,18 +29,21 @@ class GameScreen : KtxScreen {
 
     override fun render(delta: Float) {
 
+        accumulator += delta
+
+        while (accumulator <= world.timeStep) {
+            world.update()
+            accumulator -= world.timeStep
+        }
+
         /*batch.use { b ->
             b.draw(img, x, 50f)
         }*/
 
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-            val position = world.body.position
-            val dimension = world.body
-            it.rect(position.x, position.y, )
+            val position = world.dynamicBody.position
+            it.rect(position.x * scale, position.y * scale, 50f, 50f)
         }
-
-        // 10 pixels per second YEAH
-        x += Gdx.graphics.deltaTime * 10
     }
 
     override fun dispose() {
