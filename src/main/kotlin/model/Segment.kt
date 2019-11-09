@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World
 import ktx.box2d.body
 import ktx.box2d.edge
 
-class Segment(from: Vector2, to: Vector2, world: World) {
+class Segment(val from: Vector2, val to: Vector2, world: World) {
 
     val body: Body = world.body {
         edge(from, to) {

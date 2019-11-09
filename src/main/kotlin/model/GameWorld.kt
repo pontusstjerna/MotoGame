@@ -13,7 +13,7 @@ class GameWorld {
 
     val physicsWorld: World = createWorld(gravity = earthGravity)
 
-    val segment = Segment(from = Vector2(2.0f, 50f), to = Vector2(800f, 50f), world = physicsWorld)
+    val segment = Segment(from = Vector2(2.0f, 2f), to = Vector2(50f, 10f), world = physicsWorld)
 
     // TODO: refactor
     lateinit var dynamicBody: Body
@@ -25,11 +25,11 @@ class GameWorld {
 
         // CREATE DYNAMIC BODY
         dynamicBody = physicsWorld.body(type = BodyDef.BodyType.DynamicBody) {
-            position.set(100f, 300f)
+            position.set(10f, 20f)
         }
 
         val dynamicBox: Shape = PolygonShape().apply {
-            setAsBox(10f,10f)
+            setAsBox(1f,1f)
         }
 
         val fixtureDef: FixtureDef = FixtureDef().apply {

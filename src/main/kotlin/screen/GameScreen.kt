@@ -15,12 +15,16 @@ import model.GameWorld
 
 class GameScreen : KtxScreen {
 
-    private val world: GameWorld by lazy { GameWorld().apply { create() } }
+    private val world: GameWorld = GameWorld().apply { create() }
 
     private val batch: SpriteBatch by lazy { SpriteBatch() }
     private val debugRenderer = Box2DDebugRenderer()
     private val camera = OrthographicCamera().apply {
-        setToOrtho(false, 800f, 600f);
+        // in meters
+        val gameWidth = 50f
+        val scale = gameWidth / Gdx.graphics.width
+
+        setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val img: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
@@ -38,26 +42,31 @@ class GameScreen : KtxScreen {
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
             val position = world.dynamicBody.position
-            it.rect(position.x - 10f, position.y - 10f, 20f, 20f)
+            it.rect(position.x - 1f, position.y - 1f, 2f, 2f)
+            it.line(world.segment.from, world.segment.to)
         }
 
-        //camera.update()
-        batch.projectionMatrix = camera.combined
-        accumulator += delta
-
-        while (accumulator >= world.timeStep) {
-            world.update()
-            accumulator -= world.timeStep
-        }
+        //batch.projectionMatrix = camera.combined
 
         /*batch.use { b ->
             b.draw(img, x, 50f)
         }*/
+
+        updatePhysics(delta)
     }
 
     override fun dispose() {
         batch.dispose()
         img.dispose()
         super.dispose()
+    }
+
+    private fun updatePhysics(delta: Float) {
+        accumulator += delta
+
+        while (accumulator >= world.timeStep) {
+            world.update()
+            accumulator -= world.timeStep
+        }
     }
 }
