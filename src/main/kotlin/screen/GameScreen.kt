@@ -1,10 +1,12 @@
 package screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Rectangle
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
 import model.GameWorld
@@ -16,10 +18,12 @@ class GameScreen : KtxScreen {
     private val world: GameWorld by lazy { GameWorld().apply { create() } }
 
     private val batch: SpriteBatch by lazy { SpriteBatch() }
-    private val shapeRenderer: ShapeRenderer by lazy { ShapeRenderer() }
+    private val debugRenderer = Box2DDebugRenderer()
+    private val camera = OrthographicCamera().apply {
+        setToOrtho(false, 800f, 600f);
+    }
+    private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val img: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
-
-    private val scale = 10f
 
     private var accumulator: Float = 0.0f
 
@@ -28,10 +32,24 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
+        debugRenderer.render(world.physicsWorld, camera.combined)
 
+        camera.update()
+        shapeRenderer.projectionMatrix = camera.combined
+        shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
+            val position = world.dynamicBody.position
+            it.rect(position.x - 10f, position.y - 10f, 20f, 20f)
+        }
+
+        shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
+           it.rect(world.groundBody.position.x, world.groundBody.position.y - 10f, 1600f, 20f)
+        }
+
+        //camera.update()
+        batch.projectionMatrix = camera.combined
         accumulator += delta
 
-        while (accumulator <= world.timeStep) {
+        while (accumulator >= world.timeStep) {
             world.update()
             accumulator -= world.timeStep
         }
@@ -39,11 +57,6 @@ class GameScreen : KtxScreen {
         /*batch.use { b ->
             b.draw(img, x, 50f)
         }*/
-
-        shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-            val position = world.dynamicBody.position
-            it.rect(position.x * scale, position.y * scale, 50f, 50f)
-        }
     }
 
     override fun dispose() {

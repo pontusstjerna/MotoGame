@@ -14,11 +14,12 @@ class GameWorld {
 
     // TODO: refactor
     lateinit var dynamicBody: Body
+    lateinit var groundBody: Body
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
 
-    private val physicsWorld: World = createWorld(gravity = earthGravity)
+    val physicsWorld: World = createWorld(gravity = earthGravity)
 
     fun create() {
 
@@ -29,23 +30,24 @@ class GameWorld {
         }
         val groundBody: Body = physicsWorld.createBody(groundBodyDef)*/
 
-        val groundBody: Body = physicsWorld.body {
-            position.set(0f, 0f)
+        groundBody = physicsWorld.body {
+            position.set(0f, 10f)
         }
 
         val groundBox: Shape = PolygonShape().apply {
-            setAsBox(50f, 20f)
+            setAsBox(800f, 10f)
         }
 
         val groundFixture: Fixture = groundBody.createFixture(groundBox, 0.0f)
+        groundBox.dispose()
 
         // CREATE DYNAMIC BODY
         dynamicBody = physicsWorld.body(type = BodyDef.BodyType.DynamicBody) {
-            position.set(10f, 10f)
+            position.set(100f, 300f)
         }
 
         val dynamicBox: Shape = PolygonShape().apply {
-            setAsBox(1f,1f)
+            setAsBox(10f,10f)
         }
 
         val fixtureDef: FixtureDef = FixtureDef().apply {
@@ -55,6 +57,7 @@ class GameWorld {
         }
 
         val dynamicFixture: Fixture = dynamicBody.createFixture(fixtureDef)
+        dynamicBox.dispose()
     }
 
     fun update() {
