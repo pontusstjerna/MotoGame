@@ -14,33 +14,10 @@ class GameWorld {
     val physicsWorld: World = createWorld(gravity = earthGravity)
 
     val segment = Segment(from = Vector2(2.0f, 2f), to = Vector2(50f, 10f), world = physicsWorld)
-
-    // TODO: refactor
-    lateinit var dynamicBody: Body
+    val wheel = Wheel(position = Vector2(10f, 20f), world = physicsWorld)
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
-
-    fun create() {
-
-        // CREATE DYNAMIC BODY
-        dynamicBody = physicsWorld.body(type = BodyDef.BodyType.DynamicBody) {
-            position.set(10f, 20f)
-        }
-
-        val dynamicBox: Shape = PolygonShape().apply {
-            setAsBox(1f,1f)
-        }
-
-        val fixtureDef: FixtureDef = FixtureDef().apply {
-            shape = dynamicBox
-            density = 1.0f
-            friction = 0.3f
-        }
-
-        val dynamicFixture: Fixture = dynamicBody.createFixture(fixtureDef)
-        dynamicBox.dispose()
-    }
 
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
