@@ -41,10 +41,6 @@ class GameScreen : KtxScreen {
             it.rect(position.x - 10f, position.y - 10f, 20f, 20f)
         }
 
-        shapeRenderer.use(ShapeRenderer.ShapeType.Filled) {
-           it.rect(world.groundBody.position.x, world.groundBody.position.y - 10f, 1600f, 20f)
-        }
-
         //camera.update()
         batch.projectionMatrix = camera.combined
         accumulator += delta

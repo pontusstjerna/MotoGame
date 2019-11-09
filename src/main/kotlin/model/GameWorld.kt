@@ -1,5 +1,6 @@
 package model
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.body
 import ktx.box2d.box
@@ -10,36 +11,17 @@ class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    val segment: Segment by lazy { Segment(physicsWorld, 50f, 50f, 10f, 10f) }
+    val physicsWorld: World = createWorld(gravity = earthGravity)
+
+    val segment = Segment(from = Vector2(2.0f, 50f), to = Vector2(800f, 50f), world = physicsWorld)
 
     // TODO: refactor
     lateinit var dynamicBody: Body
-    lateinit var groundBody: Body
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
 
-    val physicsWorld: World = createWorld(gravity = earthGravity)
-
     fun create() {
-
-        // CREATE GROUND BODY
-        // Long version
-        /*val groundBodyDef: BodyDef = BodyDef().apply {
-            position.set(0f, 0f)
-        }
-        val groundBody: Body = physicsWorld.createBody(groundBodyDef)*/
-
-        groundBody = physicsWorld.body {
-            position.set(0f, 10f)
-        }
-
-        val groundBox: Shape = PolygonShape().apply {
-            setAsBox(800f, 10f)
-        }
-
-        val groundFixture: Fixture = groundBody.createFixture(groundBox, 0.0f)
-        groundBox.dispose()
 
         // CREATE DYNAMIC BODY
         dynamicBody = physicsWorld.body(type = BodyDef.BodyType.DynamicBody) {

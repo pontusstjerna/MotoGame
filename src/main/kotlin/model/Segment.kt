@@ -1,19 +1,19 @@
 package model
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.World
 import ktx.box2d.body
-import ktx.box2d.box
+import ktx.box2d.edge
 
-class Segment(world: World, x: Float, y: Float, width: Float, height: Float) {
+class Segment(from: Vector2, to: Vector2, world: World) {
 
-    private val body: Body = world.body {
-        box(width = width, height = height)
+    val body: Body = world.body {
+        edge(from, to) {
+            density = 0.0f
+            disposeOfShape = true
+        }
+    }.apply {
+        edge(from = from, to = to)
     }
-
-    val fixture: Fixture = body.box (width = width, height = height) {
-
-    }
-
 }
