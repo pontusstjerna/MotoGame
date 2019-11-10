@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
@@ -40,7 +41,9 @@ class GameScreen : KtxScreen {
     override fun render(delta: Float) {
         debugRenderer.render(world.physicsWorld, camera.combined)
 
+        camera.position.set(Vector3(world.bike.rearWheel.body.position, 0f))
         camera.update()
+
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
             world.segments.forEach { segment ->
