@@ -3,9 +3,7 @@ package model
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
-import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef
 import ktx.box2d.*
-import ktx.math.minus
 
 class Bike (private val position: Vector2, world: World) {
 
@@ -20,18 +18,18 @@ class Bike (private val position: Vector2, world: World) {
     val topRightOffset = Vector2(.3f, 0.36f)
     val bottomOffset = Vector2(0f, -.2625f)
 
-    val thrust = 100f
-    val breakThrust = 100f
+    val thrust = 20f
+    val brakeThrust = 20f
 
     val body = world.body(type = BodyDef.BodyType.DynamicBody) {
         position.set(this@Bike.position)
         polygon(topLeftOffset, topRightOffset, bottomOffset) {
-            density = 100f
+            density = 10f
         }
     }.apply {
-        massData.center.set(bottomOffset)
+        //massData.center.set(bottomOffset)
         polygon(topLeftOffset, topRightOffset, bottomOffset) {
-            density = 100f
+            density = 0f
         }
     }
 
@@ -45,16 +43,6 @@ class Bike (private val position: Vector2, world: World) {
     }
 
     init {
-        rearWheel.body.distanceJointWith(body) {
-            length = rearOffset.len()
-            dampingRatio = 1f
-        }
-
-        frontWheel.body.distanceJointWith(body) {
-            length = frontOffset.len()
-            dampingRatio = 1f
-        }
-
         frontWheel.body.revoluteJointWith(body) {
             localAnchorB.set(frontOffset)
         }
@@ -66,9 +54,17 @@ class Bike (private val position: Vector2, world: World) {
 
     fun brake() {
         if (rearWheel.body.angularVelocity < 0) {
-            rearWheel.body.applyTorque(breakThrust, true)
+            rearWheel.body.applyTorque(brakeThrust, true)
         } else if (rearWheel.body.angularVelocity > 0) {
-            rearWheel.body.applyTorque(-breakThrust, true)
+            rearWheel.body.applyTorque(-brakeThrust, true)
         }
+    }
+
+    fun leanBack() {
+        body.applyTorque(20f, true)
+    }
+
+    fun leanForward() {
+        body.applyTorque(-20f, true)
     }
 }

@@ -18,7 +18,7 @@ class Wheel(private val position: Vector2, world: World) {
         position.set(this@Wheel.position)
         circle(radius = radius) {
             restitution = 0.2f
-            friction = 15.0f
+            friction = 30.0f
             density = 10.0f
         }
     }).apply {

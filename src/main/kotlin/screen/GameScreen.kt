@@ -31,7 +31,7 @@ class GameScreen : KtxScreen {
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
-    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete2.png")) }
+    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
 
     private var accumulator: Float = 0.0f
 
@@ -40,9 +40,9 @@ class GameScreen : KtxScreen {
     }
 
     override fun render(delta: Float) {
-        debugRenderer.render(world.physicsWorld, camera.combined)
+        //debugRenderer.render(world.physicsWorld, camera.combined)
 
-        camera.position.set(Vector3(world.bike.rearWheel.body.position, 0f))
+        camera.position.set(Vector3(world.bike.body.position, 0f))
         camera.update()
 
         shapeRenderer.projectionMatrix = camera.combined
@@ -59,6 +59,21 @@ class GameScreen : KtxScreen {
 
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
+            b.draw(
+                    bikeTexture,
+                    world.bike.body.position.x - .95f, world.bike.body.position.y - .8f,
+                    1f, .6f,
+                    2f, 1.2f,
+                    1f,
+                    1f,
+                    world.bike.body.angle * MathUtils.radiansToDegrees,
+                    0,
+                    0,
+                    this.bikeTexture.width,
+                    this.bikeTexture.height,
+                    false,
+                    false
+            )
         }
 
         checkInput()
@@ -76,6 +91,12 @@ class GameScreen : KtxScreen {
             world.bike.brake()
         } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             world.bike.accelerate()
+        }
+
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            world.bike.leanForward()
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            world.bike.leanBack()
         }
     }
 
