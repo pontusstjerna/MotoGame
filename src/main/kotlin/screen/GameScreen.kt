@@ -1,6 +1,7 @@
 package screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -60,6 +61,7 @@ class GameScreen : KtxScreen {
             renderWheel(world.bike.rearWheel, b)
         }
 
+        checkInput()
         updatePhysics(delta)
     }
 
@@ -67,6 +69,14 @@ class GameScreen : KtxScreen {
         batch.dispose()
         wheelTexture.dispose()
         super.dispose()
+    }
+
+    private fun checkInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            world.bike.brake()
+        } else if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            world.bike.accelerate()
+        }
     }
 
     private fun renderWheel(wheel: Wheel, batch: SpriteBatch) {

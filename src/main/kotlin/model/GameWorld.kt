@@ -17,17 +17,14 @@ class GameWorld {
     val segments: List<Segment> = mutableListOf(
             Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld)
     ).let {
-        for(i in 1..50) {
+        for(i in 1..500) {
             val last = it.last()
             it.add(Segment(
                     from = last.to,
-                    to = Vector2(last.to.x + 10f, last.to.y - 2f + Random.nextInt(-1, 1)),
+                    to = Vector2(last.to.x + 5f, last.to.y + Random.nextInt(-1, 2)),
                     world = physicsWorld
             ))
         }
-
-        // A little jump
-        it.add(Segment(it.last().to, Vector2(it.last().to.x + 50f, it.last().to.y + 10f), physicsWorld))
         it.toList()
     }
 
