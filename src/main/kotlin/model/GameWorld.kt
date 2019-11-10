@@ -1,61 +1,40 @@
 package model
 
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.body
 import ktx.box2d.box
 import ktx.box2d.createWorld
 import ktx.box2d.earthGravity
+import kotlin.random.Random
 
 class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    val segment: Segment by lazy { Segment(physicsWorld, 10f, 10f, 10f, 10f) }
+    val physicsWorld: World = createWorld(gravity = earthGravity)
 
-    // TODO: refactor
-    lateinit var dynamicBody: Body
+    val segments: List<Segment> = mutableListOf(
+            Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld)
+    ).let {
+        for(i in 1..50) {
+            val last = it.last()
+            it.add(Segment(
+                    from = last.to,
+                    to = Vector2(last.to.x + 10f, last.to.y - 2f + Random.nextInt(-1, 1)),
+                    world = physicsWorld
+            ))
+        }
+
+        // A little jump
+        it.add(Segment(it.last().to, Vector2(it.last().to.x + 50f, it.last().to.y + 10f), physicsWorld))
+        it.toList()
+    }
+
+    val bike: Bike = Bike(Vector2(10f, 10f), physicsWorld)
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
-
-    private val physicsWorld: World = createWorld(gravity = earthGravity)
-
-    fun create() {
-
-        // CREATE GROUND BODY
-        // Long version
-        /*val groundBodyDef: BodyDef = BodyDef().apply {
-            position.set(0f, 0f)
-        }
-        val groundBody: Body = physicsWorld.createBody(groundBodyDef)*/
-
-        val groundBody: Body = physicsWorld.body {
-            position.set(0f, 0f)
-        }
-
-        val groundBox: Shape = PolygonShape().apply {
-            setAsBox(50f, 20f)
-        }
-
-        val groundFixture: Fixture = groundBody.createFixture(groundBox, 0.0f)
-
-        // CREATE DYNAMIC BODY
-        dynamicBody = physicsWorld.body(type = BodyDef.BodyType.DynamicBody) {
-            position.set(10f, 10f)
-        }
-
-        val dynamicBox: Shape = PolygonShape().apply {
-            setAsBox(1f,1f)
-        }
-
-        val fixtureDef: FixtureDef = FixtureDef().apply {
-            shape = dynamicBox
-            density = 1.0f
-            friction = 0.3f
-        }
-
-        val dynamicFixture: Fixture = dynamicBody.createFixture(fixtureDef)
-    }
 
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
