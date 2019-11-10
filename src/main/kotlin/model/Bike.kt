@@ -2,6 +2,7 @@ package model
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef
 
 class Bike (position: Vector2, world: World) {
 
@@ -13,4 +14,12 @@ class Bike (position: Vector2, world: World) {
 
     val rearWheel: Wheel = Wheel(position = position.cpy().add(rearOffset), world = world)
     val frontWheel: Wheel = Wheel(position = position.cpy().add(frontOffset), world = world)
+
+    init {
+        DistanceJointDef().apply {
+            length = 1f
+            initialize(rearWheel.body, frontWheel.body, rearWheel.body.position, frontWheel.body.position)
+            world.createJoint(this)
+        }
+    }
 }

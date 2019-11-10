@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
@@ -29,7 +28,8 @@ class GameScreen : KtxScreen {
         setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
-    private val wheel: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
+    private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
+    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete2.png")) }
 
     private var accumulator: Float = 0.0f
 
@@ -51,6 +51,8 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
 
         batch.use { b ->
+            // TODO:  draw bike
+
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
         }
@@ -60,13 +62,13 @@ class GameScreen : KtxScreen {
 
     override fun dispose() {
         batch.dispose()
-        wheel.dispose()
+        wheelTexture.dispose()
         super.dispose()
     }
 
     private fun renderWheel(wheel: Wheel, batch: SpriteBatch) {
         batch.draw(
-                this.wheel,
+                this.wheelTexture,
                 wheel.body.position.x - wheel.radius,
                 wheel.body.position.y - wheel.radius,
                 wheel.radius,
@@ -78,8 +80,8 @@ class GameScreen : KtxScreen {
                 wheel.body.angle * MathUtils.radiansToDegrees,
                 0,
                 0,
-                this.wheel.width,
-                this.wheel.height,
+                this.wheelTexture.width,
+                this.wheelTexture.height,
                 false,
                 false
         )
