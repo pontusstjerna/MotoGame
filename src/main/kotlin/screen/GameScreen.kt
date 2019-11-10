@@ -42,34 +42,34 @@ class GameScreen : KtxScreen {
         camera.update()
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-
-            it.line(world.segment.from, world.segment.to)
+            world.segments.forEach { segment ->
+                it.line(segment.from, segment.to)
+            }
         }
 
         batch.projectionMatrix = camera.combined
 
         batch.use { b ->
-            val wheel = world.wheel
-
-            //b.draw(this.wheel, wheel.body.position.x + 10f, wheel.body.position.y + 20f, .5f, .5f)
-            b.draw(
-                    this.wheel,
-                    wheel.body.position.x - wheel.radius,
-                    wheel.body.position.y - wheel.radius,
-                    wheel.radius,
-                    wheel.radius,
-                    wheel.radius * 2,
-                    wheel.radius * 2,
-                    1f,
-                    1f,
-                    wheel.body.angle * MathUtils.radiansToDegrees,
-                    0,
-                    0,
-                    this.wheel.width,
-                    this.wheel.height,
-                    false,
-                    false
-                    )
+            world.wheels.forEach { wheel ->
+                b.draw(
+                        this.wheel,
+                        wheel.body.position.x - wheel.radius,
+                        wheel.body.position.y - wheel.radius,
+                        wheel.radius,
+                        wheel.radius,
+                        wheel.radius * 2,
+                        wheel.radius * 2,
+                        1f,
+                        1f,
+                        wheel.body.angle * MathUtils.radiansToDegrees,
+                        0,
+                        0,
+                        this.wheel.width,
+                        this.wheel.height,
+                        false,
+                        false
+                )
+            }
         }
 
         updatePhysics(delta)

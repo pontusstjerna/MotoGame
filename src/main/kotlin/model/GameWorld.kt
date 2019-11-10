@@ -13,8 +13,17 @@ class GameWorld {
 
     val physicsWorld: World = createWorld(gravity = earthGravity)
 
-    val segment = Segment(from = Vector2(2.0f, 2f), to = Vector2(50f, 10f), world = physicsWorld)
-    val wheel = Wheel(position = Vector2(10f, 20f), world = physicsWorld)
+    val segments: Array<Segment> = arrayOf(
+        Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld),
+        Segment(from = Vector2(10f, 4f), to = Vector2(25f, 6f), world = physicsWorld)
+    )
+
+    val wheels: Array<Wheel> = arrayOf(
+        Wheel(position = Vector2(10f, 20f), world = physicsWorld),
+        Wheel(position = Vector2(5f, 20f), world = physicsWorld),
+        Wheel(position = Vector2(8f, 10f), world = physicsWorld),
+        Wheel(position = Vector2(4f, 8f), world = physicsWorld)
+    )
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
