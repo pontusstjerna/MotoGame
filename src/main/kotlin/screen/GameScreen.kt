@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
@@ -48,20 +49,20 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
 
         batch.use { b ->
-            b.projectionMatrix = camera.combined
             val wheel = world.wheel
-            b.draw(this.wheel, wheel.body.position.x, wheel.body.position.y, 5f, 5f)
+
+            //b.draw(this.wheel, wheel.body.position.x + 10f, wheel.body.position.y + 20f, .5f, .5f)
             b.draw(
                     this.wheel,
-                    wheel.body.position.x,
-                    wheel.body.position.y,
+                    wheel.body.position.x - wheel.radius,
+                    wheel.body.position.y - wheel.radius,
                     wheel.radius,
                     wheel.radius,
                     wheel.radius * 2,
                     wheel.radius * 2,
                     1f,
                     1f,
-                    wheel.body.angle,
+                    wheel.body.angle * MathUtils.radiansToDegrees,
                     0,
                     0,
                     this.wheel.width,
