@@ -12,7 +12,7 @@ class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    val physicsWorld: World = createWorld(gravity = earthGravity)
+    val physicsWorld: World = createWorld(gravity = Vector2(0f, -5.81f))
 
     val segments: List<Segment> = mutableListOf(
             Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld)
@@ -28,7 +28,7 @@ class GameWorld {
         it.toList()
     }
 
-    val bike: Bike = Bike(Vector2(10f, 10f), physicsWorld)
+    val bike: Bike = Bike(Vector2(10f, 7f), physicsWorld)
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
