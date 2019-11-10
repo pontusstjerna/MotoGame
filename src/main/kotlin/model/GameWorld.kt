@@ -18,12 +18,7 @@ class GameWorld {
         Segment(from = Vector2(10f, 4f), to = Vector2(25f, 6f), world = physicsWorld)
     )
 
-    val wheels: Array<Wheel> = arrayOf(
-        Wheel(position = Vector2(10f, 20f), world = physicsWorld),
-        Wheel(position = Vector2(5f, 20f), world = physicsWorld),
-        Wheel(position = Vector2(8f, 10f), world = physicsWorld),
-        Wheel(position = Vector2(4f, 8f), world = physicsWorld)
-    )
+    val bike: Bike = Bike(Vector2(10f, 10f), physicsWorld)
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3

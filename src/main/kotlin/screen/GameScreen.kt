@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
 import model.GameWorld
+import model.Wheel
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -50,26 +51,8 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
 
         batch.use { b ->
-            world.wheels.forEach { wheel ->
-                b.draw(
-                        this.wheel,
-                        wheel.body.position.x - wheel.radius,
-                        wheel.body.position.y - wheel.radius,
-                        wheel.radius,
-                        wheel.radius,
-                        wheel.radius * 2,
-                        wheel.radius * 2,
-                        1f,
-                        1f,
-                        wheel.body.angle * MathUtils.radiansToDegrees,
-                        0,
-                        0,
-                        this.wheel.width,
-                        this.wheel.height,
-                        false,
-                        false
-                )
-            }
+            renderWheel(world.bike.frontWheel, b)
+            renderWheel(world.bike.rearWheel, b)
         }
 
         updatePhysics(delta)
@@ -79,6 +62,27 @@ class GameScreen : KtxScreen {
         batch.dispose()
         wheel.dispose()
         super.dispose()
+    }
+
+    private fun renderWheel(wheel: Wheel, batch: SpriteBatch) {
+        batch.draw(
+                this.wheel,
+                wheel.body.position.x - wheel.radius,
+                wheel.body.position.y - wheel.radius,
+                wheel.radius,
+                wheel.radius,
+                wheel.radius * 2,
+                wheel.radius * 2,
+                1f,
+                1f,
+                wheel.body.angle * MathUtils.radiansToDegrees,
+                0,
+                0,
+                this.wheel.width,
+                this.wheel.height,
+                false,
+                false
+        )
     }
 
     private fun updatePhysics(delta: Float) {
