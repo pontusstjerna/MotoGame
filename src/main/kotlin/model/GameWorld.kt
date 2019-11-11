@@ -12,7 +12,7 @@ class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    val physicsWorld: World = createWorld(gravity = Vector2(0f, -5.81f))
+    val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f))
 
     val segments: List<Segment> = mutableListOf(
             Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld)
@@ -21,7 +21,7 @@ class GameWorld {
             val last = it.last()
             it.add(Segment(
                     from = last.to,
-                    to = Vector2(last.to.x + 5f, last.to.y + Random.nextInt(-1, 2)),
+                    to = Vector2(last.to.x + 2f, last.to.y + Random.nextInt(-2, 3)),
                     world = physicsWorld
             ))
         }

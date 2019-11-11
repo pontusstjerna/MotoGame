@@ -18,6 +18,7 @@ class Bike (private val position: Vector2, world: World) {
     val topRightOffset = Vector2(.3f, 0.36f)
     val bottomOffset = Vector2(0f, -.2625f)
 
+    val maxThrust = 40f
     val thrust = 20f
     val brakeThrust = 20f
 
@@ -39,6 +40,7 @@ class Bike (private val position: Vector2, world: World) {
     private val rearWheelJoint = rearWheel.body.revoluteJointWith(body) {
         localAnchorB.set(rearOffset)
         //enableMotor = true
+        //maxMotorTorque = 100f
         //motorSpeed = 500f
     }
 
@@ -49,7 +51,10 @@ class Bike (private val position: Vector2, world: World) {
     }
 
     fun accelerate() {
-        rearWheel.body.applyTorque(-thrust, true)
+        if (rearWheel.body.angularVelocity > -maxThrust) {
+            rearWheel.body.applyTorque(-thrust, true)
+        }
+        //rearWheelJoint.motorSpeed = 10f
     }
 
     fun brake() {
