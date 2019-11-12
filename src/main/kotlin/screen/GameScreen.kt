@@ -40,6 +40,8 @@ class GameScreen : KtxScreen {
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
 
     private var accumulator: Float = 0.0f
+    private var deltaTimer: Float = 0.0f
+    private var fps: Int = 0
 
     override fun show() {
         super.show()
@@ -77,7 +79,13 @@ class GameScreen : KtxScreen {
         }
 
         textBatch.use {b ->
-            font.draw(b, "Score: " + world.bike.body.position.x.roundToInt(), 20f, Gdx.graphics.height - 20f)
+            font.draw(b, "Score: ${world.bike.body.position.x.roundToInt()}", 20f, Gdx.graphics.height - 20f)
+            font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
+            deltaTimer += delta
+            if (deltaTimer > .1f) {
+                fps = (1 / delta).toInt()
+                deltaTimer = 0f
+            }
         }
 
         checkInput()
