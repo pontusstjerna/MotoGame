@@ -53,8 +53,10 @@ class GameScreen : KtxScreen {
 
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-            world.segments.forEach { segment ->
-                it.line(segment.from, segment.to)
+            val vertices = world.vertices
+            for (i in 0 until vertices.lastIndex) {
+                // TODO: 3d :D
+                it.line(vertices[i], vertices[i + 1])
             }
         }
 

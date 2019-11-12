@@ -27,11 +27,6 @@ class Bike (private val position: Vector2, world: World) {
         polygon(topLeftOffset, topRightOffset, bottomOffset) {
             density = 10f
         }
-    }.apply {
-        //massData.center.set(bottomOffset)
-        polygon(topLeftOffset, topRightOffset, bottomOffset) {
-            density = 0f
-        }
     }
 
     val rearWheel: Wheel = Wheel(position = position.cpy().add(rearOffset), world = world)

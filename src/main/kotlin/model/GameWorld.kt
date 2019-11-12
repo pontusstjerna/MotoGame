@@ -14,8 +14,10 @@ class GameWorld {
 
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f))
 
-    val segments: MutableList<Segment> = mutableListOf(
-            Segment(from = Vector2(-10.0f, 2f), to = Vector2(10f, 2f), world = physicsWorld)
+    val vertices: MutableList<Vector2> = mutableListOf(
+            Vector2(-10.0f, 2f),
+            Vector2(5f, 2f),
+            Vector2(10f, 2f)
     )
 
     val bike: Bike = Bike(Vector2(0f, 7f), physicsWorld)
@@ -27,22 +29,34 @@ class GameWorld {
     private val POSITION_ITERATIONS = 3
     private val generationThreshold = 5
 
+    init {
+        createSegment(vertices.first(), vertices[1], null, vertices.last(), physicsWorld)
+    }
+
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
         generateTrack()
     }
 
     private fun generateTrack() {
-        while (segments.last().to.x < bike.body.position.x + generationThreshold) {
-            val last = segments.last()
-            segments.add(Segment(
-                    from = last.to,
-                    to = Vector2(last.to.x + Random.nextFloat() + .2f, last.to.y + dy),
-                    world = physicsWorld
-            ))
-            //dy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.4f)
+        while (vertices.last().x < bike.body.position.x + generationThreshold) {
+            val last = vertices.last()
+            vertices.add(Vector2(last.x /* + Random.nextFloat()*/ + .5f, last.y + dy))
             dy += ddy * 0.1f
-            ddy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.1f)
+            ddy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.1f) - (ddy * 0.03f)
+            //dy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.4f)
+
+            val ghostTo = vertices.last()
+            val to = if (vertices.size > 2) last else vertices.last()
+            val from = vertices[vertices.lastIndex - 2]
+            val ghostFrom = if (vertices.size > 3) vertices[vertices.lastIndex - 3] else null
+
+            createSegment(from, to, ghostFrom, ghostTo, physicsWorld)
+            /*segments.add(Segment(
+                    from = last.to,
+                    to = Vector2(last.to.x /*+ Random.nextFloat()*/ + .5f, last.to.y + dy),
+                    world = physicsWorld
+            ))*/
         }
     }
 
