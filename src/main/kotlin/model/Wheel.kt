@@ -26,5 +26,4 @@ class Wheel(private val position: Vector2, world: World) {
             restitution = 0.2f
         }
     }
-
 }
