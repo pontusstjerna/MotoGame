@@ -11,13 +11,14 @@ import kotlin.random.Random
 class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
+    val generationThreshold = 5;
 
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f))
 
-    val segments: List<Segment> = mutableListOf(
+    val segments: MutableList<Segment> = mutableListOf(
             Segment(from = Vector2(1.0f, 5f), to = Vector2(10f, 4f), world = physicsWorld)
     ).let {
-        for(i in 1..500) {
+        for(i in 1..10) {
             val last = it.last()
             it.add(Segment(
                     from = last.to,
@@ -25,7 +26,7 @@ class GameWorld {
                     world = physicsWorld
             ))
         }
-        it.toList()
+        it
     }
 
     val bike: Bike = Bike(Vector2(10f, 7f), physicsWorld)
@@ -35,6 +36,18 @@ class GameWorld {
 
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
+        generateTrack()
+    }
+
+    private fun generateTrack() {
+        while (segments.last().to.x < bike.body.position.x + generationThreshold) {
+            val last = segments.last()
+            segments.add(Segment(
+                    from = last.to,
+                    to = Vector2(last.to.x + 2f, last.to.y + Random.nextInt(-2, 3)),
+                    world = physicsWorld
+            ))
+        }
     }
 
 }
