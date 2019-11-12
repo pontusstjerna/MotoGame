@@ -2,10 +2,7 @@ package model
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import ktx.box2d.body
-import ktx.box2d.box
 import ktx.box2d.createWorld
-import ktx.box2d.earthGravity
 import kotlin.random.Random
 
 class GameWorld {
@@ -29,6 +26,13 @@ class GameWorld {
     private val POSITION_ITERATIONS = 3
     private val generationThreshold = 5
 
+    // GENERATION CONFIG
+    private val bigSlopeFactor = 0.03f
+    private val smallSlopeFactor = 0.03f
+    private val bigRandomFactor = 0.1f
+    private val smallRandomFactor = 0.1f
+    private val bumps = 0.2f // smaller value = more bumps!
+
     init {
         createSegment(vertices.first(), vertices[1], null, vertices.last(), physicsWorld)
     }
@@ -41,10 +45,9 @@ class GameWorld {
     private fun generateTrack() {
         while (vertices.last().x < bike.body.position.x + generationThreshold) {
             val last = vertices.last()
-            vertices.add(Vector2(last.x /* + Random.nextFloat()*/ + .5f, last.y + dy))
-            dy += ddy * 0.1f
-            ddy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.1f) - (ddy * 0.03f)
-            //dy += ((Random.nextFloat() - .5f) * .1f) - (dy * 0.4f)
+            vertices.add(Vector2(last.x + Random.nextFloat() + bumps, last.y + dy))
+            dy += ddy * smallRandomFactor
+            ddy += ((Random.nextFloat() - .5f) * bigRandomFactor) - (dy * bigSlopeFactor) - (ddy * smallSlopeFactor)
 
             val ghostTo = vertices.last()
             val to = if (vertices.size > 2) last else vertices.last()
@@ -52,11 +55,6 @@ class GameWorld {
             val ghostFrom = if (vertices.size > 3) vertices[vertices.lastIndex - 3] else null
 
             createSegment(from, to, ghostFrom, ghostTo, physicsWorld)
-            /*segments.add(Segment(
-                    from = last.to,
-                    to = Vector2(last.to.x /*+ Random.nextFloat()*/ + .5f, last.to.y + dy),
-                    world = physicsWorld
-            ))*/
         }
     }
 
