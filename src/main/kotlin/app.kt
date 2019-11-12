@@ -11,6 +11,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration
 * https://github.com/libktx/ktx/tree/master/box2d
 * http://box2d.org/manual.pdf
 *
+* Scene2D module:
+* https://github.com/libgdx/libgdx/wiki/Scene2d
+*
 * */
 
 fun main() {

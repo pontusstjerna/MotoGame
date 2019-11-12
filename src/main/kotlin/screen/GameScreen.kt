@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
@@ -13,6 +14,7 @@ import ktx.app.KtxScreen
 import ktx.graphics.use
 import model.GameWorld
 import model.Wheel
+import kotlin.math.roundToInt
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -20,7 +22,11 @@ class GameScreen : KtxScreen {
 
     private val world: GameWorld = GameWorld()
 
-    private val batch: SpriteBatch by lazy { SpriteBatch() }
+    private val batch = SpriteBatch()
+    private val textBatch = SpriteBatch()
+    private val font = BitmapFont().apply {
+
+    }
     private val debugRenderer = Box2DDebugRenderer()
     private val camera = OrthographicCamera().apply {
         // in meters
@@ -68,12 +74,17 @@ class GameScreen : KtxScreen {
             )*/
         }
 
+        textBatch.use {b ->
+            font.draw(b, "Score: " + world.bike.body.position.x.roundToInt(), 20f, Gdx.graphics.height - 20f)
+        }
+
         checkInput()
         updatePhysics(delta)
     }
 
     override fun dispose() {
         batch.dispose()
+        textBatch.dispose()
         wheelTexture.dispose()
         super.dispose()
     }
