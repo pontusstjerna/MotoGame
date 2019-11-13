@@ -1,7 +1,7 @@
 import com.badlogic.gdx.Gdx
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
-import screen.GameScreen
+import se.nocroft.motogame.screen.GameScreen
 
 class MotoGame : KtxGame<KtxScreen>() {
 

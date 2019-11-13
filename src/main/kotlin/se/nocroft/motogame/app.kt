@@ -1,3 +1,6 @@
+package se.nocroft.motogame
+
+import MotoGame
 import com.badlogic.gdx.Application
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration

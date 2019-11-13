@@ -1,4 +1,4 @@
-package screen
+package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -12,10 +12,9 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
-import ktx.math.minus
-import model.Bike
-import model.GameWorld
-import model.Wheel
+import se.nocroft.motogame.model.Bike
+import se.nocroft.motogame.model.GameWorld
+import se.nocroft.motogame.model.Wheel
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
