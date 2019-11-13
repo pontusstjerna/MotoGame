@@ -6,14 +6,16 @@ import ktx.box2d.createWorld
 import java.lang.Float.max
 import kotlin.random.Random
 
-class GameWorld {
+class GameWorld: ContactListener {
 
     val timeStep: Float = 1.0f / 60.0f
 
     var score: Float = 0.0f
     private set
 
-    val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f))
+    val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
+        setContactListener(this@GameWorld)
+    }
 
     val vertices: MutableList<Vector2> = mutableListOf(
             Vector2(-10.0f, 2f),
@@ -21,7 +23,9 @@ class GameWorld {
             Vector2(10f, 2f)
     )
 
-    val bike: Bike = Bike(Vector2(0f, 7f), physicsWorld)
+    private val initBikePos = Vector2(0f, 7f)
+
+    val bike: Bike = Bike(initBikePos, physicsWorld)
 
     private var dy: Float = 0f
     private var ddy: Float = 0f
@@ -47,6 +51,28 @@ class GameWorld {
         score = max(score, bike.body.position.x)
     }
 
+    override fun endContact(contact: Contact?) {
+
+    }
+
+    override fun beginContact(contact: Contact?) {
+        contact?.let {
+
+            // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
+            if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
+                // TODO: Crash
+            }
+        }
+    }
+
+    override fun preSolve(contact: Contact?, oldManifold: Manifold?) {
+
+    }
+
+    override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {
+
+    }
+
     private fun generateTrack() {
         while (vertices.last().x < bike.body.position.x + generationThreshold) {
             val last = vertices.last()
@@ -62,5 +88,4 @@ class GameWorld {
             createSegment(from, to, ghostFrom, ghostTo, physicsWorld)
         }
     }
-
 }

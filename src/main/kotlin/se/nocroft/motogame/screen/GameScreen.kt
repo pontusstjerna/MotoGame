@@ -74,7 +74,7 @@ class GameScreen : KtxScreen {
             renderBike(world.bike, b)
         }
 
-        textBatch.use {b ->
+        textBatch.use { b ->
             font.draw(b, "Score: ${world.score.roundToInt()}", 20f, Gdx.graphics.height - 20f)
             font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
             deltaTimer += delta
