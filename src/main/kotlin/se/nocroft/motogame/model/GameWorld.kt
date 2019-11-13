@@ -3,11 +3,15 @@ package se.nocroft.motogame.model
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.createWorld
+import java.lang.Float.max
 import kotlin.random.Random
 
 class GameWorld {
 
     val timeStep: Float = 1.0f / 60.0f
+
+    var score: Float = 0.0f
+    private set
 
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f))
 
@@ -40,6 +44,7 @@ class GameWorld {
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
         generateTrack()
+        score = max(score, bike.body.position.x)
     }
 
     private fun generateTrack() {

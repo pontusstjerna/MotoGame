@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "se.nocroft"
-version = "0.1"
+version = "0.2"
 
 repositories {
     mavenCentral()
@@ -19,16 +19,6 @@ compileTestKotlin {
         jvmTarget = "1.8"
     }
 }
-
-/*jar {
-    manifest {
-        attributes 'Main-Class': 'se.nocroft.motogame.AppKt'
-    }
-
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}*/
 
 //create a single Jar with all dependencies
 task fatJar(type: Jar) {

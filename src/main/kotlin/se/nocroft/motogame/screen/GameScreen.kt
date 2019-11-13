@@ -27,9 +27,7 @@ class GameScreen : KtxScreen {
 
     private val batch = SpriteBatch()
     private val textBatch = SpriteBatch()
-    private val font = BitmapFont().apply {
-
-    }
+    private val font = BitmapFont()
     private val debugRenderer = Box2DDebugRenderer()
     private val camera = OrthographicCamera().apply {
         // in meters
@@ -77,7 +75,7 @@ class GameScreen : KtxScreen {
         }
 
         textBatch.use {b ->
-            font.draw(b, "Score: ${world.bike.body.position.x.roundToInt()}", 20f, Gdx.graphics.height - 20f)
+            font.draw(b, "Score: ${world.score.roundToInt()}", 20f, Gdx.graphics.height - 20f)
             font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
             deltaTimer += delta
             if (deltaTimer > .1f) {
@@ -133,19 +131,13 @@ class GameScreen : KtxScreen {
                 this.wheelTexture,
                 wheel.body.position.x - wheel.radius,
                 wheel.body.position.y - wheel.radius,
-                wheel.radius,
-                wheel.radius,
+                 wheel.radius, wheel.radius,
                 wheel.radius * 2,
                 wheel.radius * 2,
-                1f,
-                1f,
+                1f, 1f,
                 wheel.body.angle * MathUtils.radiansToDegrees,
-                0,
-                0,
-                this.wheelTexture.width,
-                this.wheelTexture.height,
-                false,
-                false
+                0, 0,
+                this.wheelTexture.width, this.wheelTexture.height, false, false
         )
     }
 
