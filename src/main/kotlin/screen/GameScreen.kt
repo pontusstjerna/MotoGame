@@ -12,9 +12,13 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.KtxScreen
 import ktx.graphics.use
+import ktx.math.minus
+import model.Bike
 import model.GameWorld
 import model.Wheel
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -37,18 +41,21 @@ class GameScreen : KtxScreen {
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
-    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_complete1.png")) }
+    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
 
     private var accumulator: Float = 0.0f
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
+
+    // TODO: Refactor to another file
+    private val bikeWheelWidthPixels = 93f
 
     override fun show() {
         super.show()
     }
 
     override fun render(delta: Float) {
-        debugRenderer.render(world.physicsWorld, camera.combined)
+        //debugRenderer.render(world.physicsWorld, camera.combined)
 
         camera.position.set(Vector3(world.bike.body.position, 0f))
         camera.update()
@@ -65,17 +72,9 @@ class GameScreen : KtxScreen {
         batch.projectionMatrix = camera.combined
 
         batch.use { b ->
-            // TODO:  draw bike
-
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
-            /*b.draw(
-                    bikeTexture,
-                    world.bike.body.position.x - .95f, world.bike.body.position.y - .8f,
-                    1f, .6f, 2f, 1.2f, 1f, 1f,
-                    world.bike.body.angle * MathUtils.radiansToDegrees,
-                    0, 0, this.bikeTexture.width, this.bikeTexture.height, false, false
-            )*/
+            renderBike(world.bike, b)
         }
 
         textBatch.use {b ->
@@ -111,6 +110,23 @@ class GameScreen : KtxScreen {
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             world.bike.leanBack()
         }
+    }
+
+    private fun renderBike(bike: Bike, batch: SpriteBatch) {
+        val bikeWheelsWidthMeters: Float = bike.frontWheel.body.position.let { front ->
+            val rear = bike.rearWheel.body.position
+            sqrt((front.x - rear.x).pow(2) + (front.y - rear.y).pow(2))
+        }
+        val scale = bikeWheelsWidthMeters / bikeWheelWidthPixels
+        val width = bikeTexture.width * scale
+        val height = bikeTexture.height * scale
+        batch.draw(
+                bikeTexture,
+                world.bike.body.position.x - (width / 2) + (width - bikeWheelsWidthMeters) - .1f, world.bike.body.position.y - (height / 2) - .15f,
+                width / 2, height / 2, width, bikeTexture.height * scale, 1f, 1f,
+                world.bike.body.angle * MathUtils.radiansToDegrees,
+                0, 0, bikeTexture.width, bikeTexture.height, false, false
+        )
     }
 
     private fun renderWheel(wheel: Wheel, batch: SpriteBatch) {
