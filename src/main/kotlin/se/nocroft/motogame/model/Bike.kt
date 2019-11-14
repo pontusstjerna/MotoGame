@@ -32,10 +32,10 @@ class Bike (private val position: Vector2, world: World) {
     val rearWheel: Wheel = Wheel(position = position.cpy().add(rearOffset), world = world)
     val frontWheel: Wheel = Wheel(position = position.cpy().add(frontOffset).add(frontOffset), world = world)
 
-    fun destroy(world: World) {
-        world.destroyBody(body)
-        world.destroyBody(rearWheel.body)
-        world.destroyBody(frontWheel.body)
+    fun destroy(with: World) {
+        with.destroyBody(body)
+        with.destroyBody(rearWheel.body)
+        with.destroyBody(frontWheel.body)
     }
 
     private val rearWheelJoint = rearWheel.body.revoluteJointWith(body) {

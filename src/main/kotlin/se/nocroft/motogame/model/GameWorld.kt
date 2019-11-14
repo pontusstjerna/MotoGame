@@ -19,8 +19,8 @@ class GameWorld: ContactListener {
 
     val vertices: MutableList<Vector2> = mutableListOf(
             Vector2(-10.0f, 2f),
-            Vector2(5f, 2f),
-            Vector2(10f, 2f)
+            Vector2(2f, 2f),
+            Vector2(4f, 2f)
     )
 
     private val initBikePos = Vector2(0f, 7f)
@@ -29,6 +29,7 @@ class GameWorld: ContactListener {
 
     private var dy: Float = 0f
     private var ddy: Float = 0f
+    private var reset = false
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
@@ -49,6 +50,11 @@ class GameWorld: ContactListener {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
         generateTrack()
         score = max(score, bike.body.position.x)
+
+        if (reset) {
+            reset()
+            reset = false
+        }
     }
 
     override fun endContact(contact: Contact?) {
@@ -56,13 +62,7 @@ class GameWorld: ContactListener {
     }
 
     override fun beginContact(contact: Contact?) {
-        contact?.let {
 
-            // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
-            if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
-                reset()
-            }
-        }
     }
 
     override fun preSolve(contact: Contact?, oldManifold: Manifold?) {
@@ -70,7 +70,13 @@ class GameWorld: ContactListener {
     }
 
     override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {
+        contact?.let {
 
+            // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
+            if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
+                reset = true
+            }
+        }
     }
 
     private fun generateTrack() {
@@ -90,7 +96,8 @@ class GameWorld: ContactListener {
     }
 
     private fun reset() {
-        //physicsWorld.destroyBody(bike.body)
+        score = 0f
+        bike.destroy(physicsWorld)
         bike = Bike(initBikePos, physicsWorld)
     }
 }
