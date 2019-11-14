@@ -25,7 +25,7 @@ class GameWorld: ContactListener {
 
     private val initBikePos = Vector2(0f, 7f)
 
-    val bike: Bike = Bike(initBikePos, physicsWorld)
+    var bike: Bike = Bike(initBikePos, physicsWorld)
 
     private var dy: Float = 0f
     private var ddy: Float = 0f
@@ -60,7 +60,7 @@ class GameWorld: ContactListener {
 
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
-                // TODO: Crash
+                reset()
             }
         }
     }
@@ -87,5 +87,10 @@ class GameWorld: ContactListener {
 
             createSegment(from, to, ghostFrom, ghostTo, physicsWorld)
         }
+    }
+
+    private fun reset() {
+        //physicsWorld.destroyBody(bike.body)
+        bike = Bike(initBikePos, physicsWorld)
     }
 }
