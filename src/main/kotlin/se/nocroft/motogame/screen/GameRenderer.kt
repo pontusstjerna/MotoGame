@@ -36,25 +36,41 @@ class GameRenderer(private val world: GameWorld) {
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
     private val bikeWheelWidthPixels = 93f
 
+    private val depthZoom = 0.1f
+    private val trackWidth = .5f
+
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
 
     fun render(delta: Float) {
         //debugRenderer.render(world.physicsWorld, camera.combined)
 
-        camera.position.set(Vector3(world.bike.body.position, 0f))
+        camera.position.set(
+                world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
+                world.bike.body.position.y,
+                0f)
         camera.update()
 
         renderTerrain(world.vertices)
 
         batch.projectionMatrix = camera.combined
-
         batch.use { b ->
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
             renderBike(world.bike, b)
         }
 
+        renderUI(delta)
+    }
+
+    fun dispose() {
+        batch.dispose()
+        textBatch.dispose()
+        wheelTexture.dispose()
+    }
+
+    // TODO: refactor to Scene2D
+    private fun renderUI(delta: Float) {
         textBatch.use { b ->
             font.draw(b, "Distance: ${world.distance.roundToInt()} m", 20f, Gdx.graphics.height - 20f)
             font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
@@ -66,37 +82,45 @@ class GameRenderer(private val world: GameWorld) {
         }
     }
 
-    fun dispose() {
-        batch.dispose()
-        textBatch.dispose()
-        wheelTexture.dispose()
-    }
-
     private fun renderTerrain(vertices: List<Vector2>) {
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
+            val centerX = camera.position.x
             for (i in 0 until vertices.lastIndex) {
                 // TODO: 3d :D
-                it.line(vertices[i], vertices[i + 1])
+                val fst = vertices[i]
+                val snd = vertices[i + 1]
+                val fstOffsetX = (fst.x - centerX) * depthZoom
+                val sndOffsetX = (snd.x - centerX) * depthZoom
+                //it.line(vertices[i], vertices[i + 1])
+
+                it.line(fst.x - fstOffsetX, fst.y + trackWidth, snd.x - sndOffsetX, snd.y + trackWidth)
+                it.line(fst.x + fstOffsetX, fst.y - trackWidth, snd.x + sndOffsetX, snd.y - trackWidth)
+                it.line(fst.x - fstOffsetX, fst.y + trackWidth, fst.x + sndOffsetX, fst.y - trackWidth)
             }
         }
     }
 
     private fun renderBike(bike: Bike, batch: SpriteBatch) {
-        val bikeWheelsWidthMeters: Float = bike.frontWheel.body.position.let { front ->
-            val rear = bike.rearWheel.body.position
-            sqrt((front.x - rear.x).pow(2) + (front.y - rear.y).pow(2))
-        }
+        val bikeWheelsWidthMeters: Float = distanceBetweenWheelsMeters()
         val scale = bikeWheelsWidthMeters / bikeWheelWidthPixels
         val width = bikeTexture.width * scale
         val height = bikeTexture.height * scale
         batch.draw(
                 bikeTexture,
-                world.bike.body.position.x - (width / 2) + (width - bikeWheelsWidthMeters) - .1f, world.bike.body.position.y - (height / 2) - .15f,
+                bike.body.position.x - (width / 2) + (width - bikeWheelsWidthMeters) - .1f, bike.body.position.y - (height / 2) - .15f,
                 width / 2, height / 2, width, bikeTexture.height * scale, 1f, 1f,
-                world.bike.body.angle * MathUtils.radiansToDegrees,
+                bike.body.angle * MathUtils.radiansToDegrees,
                 0, 0, bikeTexture.width, bikeTexture.height, false, false
         )
+    }
+
+    private fun distanceBetweenWheelsMeters(): Float {
+        val bike = world.bike
+        return bike.frontWheel.body.position.let { front ->
+            val rear = bike.rearWheel.body.position
+            sqrt((front.x - rear.x).pow(2) + (front.y - rear.y).pow(2))
+        }
     }
 
     private fun renderWheel(wheel: Wheel, batch: SpriteBatch) {
