@@ -23,7 +23,11 @@ import kotlin.math.sqrt
 
 class GameScreen : KtxScreen {
 
-    private val world: GameWorld = GameWorld()
+    private val world: GameWorld = GameWorld().apply {
+        resetListener = {
+            paused = true
+        }
+    }
 
     private val batch = SpriteBatch()
     private val textBatch = SpriteBatch()
@@ -43,6 +47,7 @@ class GameScreen : KtxScreen {
     private var accumulator: Float = 0.0f
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
+    private var paused = false
 
     // TODO: Refactor to another file
     private val bikeWheelWidthPixels = 93f
@@ -75,7 +80,9 @@ class GameScreen : KtxScreen {
         }
 
         textBatch.use { b ->
-            font.draw(b, "Score: ${world.score.roundToInt()}", 20f, Gdx.graphics.height - 20f)
+            val distX = if (paused) Gdx.graphics.width / 2f else 20f
+            val distY = if (paused) Gdx.graphics.height / 2f else Gdx.graphics.height - 20f
+            font.draw(b, "Distance: ${world.distance.roundToInt()} m", distX, distY)
             font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
             deltaTimer += delta
             if (deltaTimer > .1f) {
@@ -85,7 +92,9 @@ class GameScreen : KtxScreen {
         }
 
         checkInput()
-        updatePhysics(delta)
+        if (!paused) {
+            updatePhysics(delta)
+        }
     }
 
     override fun dispose() {
@@ -106,6 +115,11 @@ class GameScreen : KtxScreen {
             world.bike.leanForward()
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             world.bike.leanBack()
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            paused = false
+            world.reset()
         }
     }
 

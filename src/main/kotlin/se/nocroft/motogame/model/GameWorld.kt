@@ -10,7 +10,7 @@ class GameWorld: ContactListener {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    var score: Float = 0.0f
+    var distance: Float = 0.0f
     private set
 
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
@@ -27,9 +27,10 @@ class GameWorld: ContactListener {
 
     var bike: Bike = Bike(initBikePos, physicsWorld)
 
+    var resetListener: (() -> Unit)? = null
+
     private var dy: Float = 0f
     private var ddy: Float = 0f
-    private var reset = false
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
@@ -49,12 +50,7 @@ class GameWorld: ContactListener {
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
         generateTrack()
-        score = max(score, bike.body.position.x)
-
-        if (reset) {
-            reset()
-            reset = false
-        }
+        distance = max(distance, bike.body.position.x)
     }
 
     override fun endContact(contact: Contact?) {
@@ -74,9 +70,15 @@ class GameWorld: ContactListener {
 
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
-                reset = true
+                resetListener?.invoke()
             }
         }
+    }
+
+    fun reset() {
+        distance = 0f
+        bike.destroy(physicsWorld)
+        bike = Bike(initBikePos, physicsWorld)
     }
 
     private fun generateTrack() {
@@ -93,11 +95,5 @@ class GameWorld: ContactListener {
 
             createSegment(from, to, ghostFrom, ghostTo, physicsWorld)
         }
-    }
-
-    private fun reset() {
-        score = 0f
-        bike.destroy(physicsWorld)
-        bike = Bike(initBikePos, physicsWorld)
     }
 }

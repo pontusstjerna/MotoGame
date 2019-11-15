@@ -67,10 +67,10 @@ class Bike (private val position: Vector2, world: World) {
     }
 
     fun leanBack() {
-        body.applyTorque(20f, true)
+        body.applyTorque(30f, true)
     }
 
     fun leanForward() {
-        body.applyTorque(-20f, true)
+        body.applyTorque(-30f, true)
     }
 }
