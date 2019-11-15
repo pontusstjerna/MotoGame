@@ -36,8 +36,8 @@ class GameRenderer(private val world: GameWorld) {
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
     private val bikeWheelWidthPixels = 93f
 
-    private val depthZoom = 0.1f
-    private val trackWidth = .5f
+    private val depthZoom = 0.05f
+    private val trackWidth = .4f
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0

@@ -34,7 +34,7 @@ class GameWorld: ContactListener {
 
     private val VELOCITY_ITERATIONS = 8
     private val POSITION_ITERATIONS = 3
-    private val generationThreshold = 5
+    private val generationThreshold = 15
 
     // GENERATION CONFIG
     private val bigSlopeFactor = 0.03f
