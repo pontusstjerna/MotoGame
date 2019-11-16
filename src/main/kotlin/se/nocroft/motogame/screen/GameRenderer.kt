@@ -2,12 +2,14 @@ package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.graphics.use
 import ktx.math.*
@@ -22,12 +24,16 @@ class GameRenderer(private val world: GameWorld) {
     private val textBatch = SpriteBatch()
     private val font = BitmapFont()
     private val debugRenderer = Box2DDebugRenderer()
-    private val camera = OrthographicCamera().apply {
+    private val camera = PerspectiveCamera().apply {
         // in meters
         val gameWidth = 20f
         val scale = gameWidth / Gdx.graphics.width
 
-        setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
+        //setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
+        viewportWidth = gameWidth
+        viewportHeight = Gdx.graphics.height * scale
+        fieldOfView = 70f
+        //rotate(-10f, 1f, 0f, 0f)
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
@@ -45,8 +51,8 @@ class GameRenderer(private val world: GameWorld) {
 
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
-                world.bike.body.position.y,
-                0f)
+                world.bike.body.position.y + 1,
+                10f)
         camera.update()
 
         renderTerrain(world.vertices)
@@ -89,28 +95,10 @@ class GameRenderer(private val world: GameWorld) {
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
 
-                val lineNorm = (snd - fst).withRotation90(1).withLength(trackWidth)
-                //it.line(vertices[i], vertices[i + 1])
-                //it.line((fst - lineNorm).toMutable(), (fst + lineNorm).toMutable())
-
-                val projectionFst = cameraPos - fst
-                val projectionSnd = cameraPos - snd
-
-                val angleFst = acos(projectionFst.dot(lineNorm) / (projectionFst.len * lineNorm.len))//lineNorm.angleRad(projectionFst)
-                val angleSnd = acos(projectionSnd.dot(lineNorm) / (projectionSnd.len * lineNorm.len))//lineNorm.angleRad(projectionSnd)
-
-                val projScaleFst = projectionFst.withLength(trackWidth / cos(angleFst))
-                val projScaleSnd = projectionSnd.withLength(trackWidth / cos(angleSnd))
-
-                it.line((fst - projScaleFst).toMutable(), (fst + projScaleFst).toMutable())
-                //it.line((fst + projScaleFst).toMutable(), (snd + projScaleSnd).toMutable())
-                //it.line((fst - projScaleFst).toMutable(), (snd - projScaleSnd).toMutable())
-                //it.line((fst).toMutable(), (fst + projection).toMutable())
-                //it.line(vertices[i].sub)
-
-                //it.line(fst.x - fstOffsetX, fst.y + trackWidth, snd.x - sndOffsetX, snd.y + trackWidth)
-                //it.line(fst.x + fstOffsetX, fst.y - trackWidth, snd.x + sndOffsetX, snd.y - trackWidth)
-                //it.line(fst.x - fstOffsetX, fst.y + trackWidth, fst.x + sndOffsetX, fst.y - trackWidth)
+                //it.line(fst.toMutable(), snd.toMutable())
+                it.line(Vector3(fst.toMutable(), -.5f), Vector3(snd.toMutable(), -.5f))
+                it.line(Vector3(fst.toMutable(), .5f), Vector3(snd.toMutable(), .5f))
+                it.line(Vector3(fst.toMutable(), -.5f), Vector3(fst.toMutable(), .5f))
             }
         }
     }
