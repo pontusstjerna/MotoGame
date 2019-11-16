@@ -14,10 +14,7 @@ import ktx.math.*
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.model.Wheel
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.roundToInt
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class GameRenderer(private val world: GameWorld) {
 
@@ -86,14 +83,11 @@ class GameRenderer(private val world: GameWorld) {
     private fun renderTerrain(vertices: List<Vector2>) {
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-            val centerX = camera.position.x
-            val cameraPos = ImmutableVector2(camera.position.x, camera.position.y + 4f)
+            val cameraPos = ImmutableVector2(camera.position.x, camera.position.y + 3f)
             for (i in 0 until vertices.lastIndex) {
                 // TODO: 3d :D
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
-                val fstOffsetX = (fst.x - centerX) * depthZoom
-                val sndOffsetX = (snd.x - centerX) * depthZoom
 
                 val lineNorm = (snd - fst).withRotation90(1).withLength(trackWidth)
                 //it.line(vertices[i], vertices[i + 1])
@@ -102,14 +96,15 @@ class GameRenderer(private val world: GameWorld) {
                 val projectionFst = cameraPos - fst
                 val projectionSnd = cameraPos - snd
 
-                val angleFst = lineNorm.angleRad(projectionFst)
-                val angleSnd = lineNorm.angleRad(projectionSnd)
+                val angleFst = acos(projectionFst.dot(lineNorm) / (projectionFst.len * lineNorm.len))//lineNorm.angleRad(projectionFst)
+                val angleSnd = acos(projectionSnd.dot(lineNorm) / (projectionSnd.len * lineNorm.len))//lineNorm.angleRad(projectionSnd)
+
                 val projScaleFst = projectionFst.withLength(trackWidth / cos(angleFst))
                 val projScaleSnd = projectionSnd.withLength(trackWidth / cos(angleSnd))
 
                 it.line((fst - projScaleFst).toMutable(), (fst + projScaleFst).toMutable())
-                it.line((fst + projScaleFst).toMutable(), (snd + projScaleSnd).toMutable())
-                it.line((fst - projScaleFst).toMutable(), (snd - projScaleSnd).toMutable())
+                //it.line((fst + projScaleFst).toMutable(), (snd + projScaleSnd).toMutable())
+                //it.line((fst - projScaleFst).toMutable(), (snd - projScaleSnd).toMutable())
                 //it.line((fst).toMutable(), (fst + projection).toMutable())
                 //it.line(vertices[i].sub)
 
