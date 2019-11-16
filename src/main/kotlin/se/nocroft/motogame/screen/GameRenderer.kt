@@ -32,8 +32,8 @@ class GameRenderer(private val world: GameWorld) {
         //setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
         viewportWidth = gameWidth
         viewportHeight = Gdx.graphics.height * scale
-        fieldOfView = 70f
-        //rotate(-10f, 1f, 0f, 0f)
+        fieldOfView = 57f
+        rotate(-10f, 1f, 0f, 0f)
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
@@ -41,7 +41,7 @@ class GameRenderer(private val world: GameWorld) {
     private val bikeWheelWidthPixels = 93f
 
     private val depthZoom = 0.05f
-    private val trackWidth = .4f
+    private val trackWidth = 1f
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
@@ -51,8 +51,8 @@ class GameRenderer(private val world: GameWorld) {
 
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
-                world.bike.body.position.y + 1,
-                10f)
+                world.bike.body.position.y + 3,
+                13f)
         camera.update()
 
         renderTerrain(world.vertices)
@@ -91,14 +91,13 @@ class GameRenderer(private val world: GameWorld) {
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
             val cameraPos = ImmutableVector2(camera.position.x, camera.position.y + 3f)
             for (i in 0 until vertices.lastIndex) {
-                // TODO: 3d :D
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
 
                 //it.line(fst.toMutable(), snd.toMutable())
-                it.line(Vector3(fst.toMutable(), -.5f), Vector3(snd.toMutable(), -.5f))
-                it.line(Vector3(fst.toMutable(), .5f), Vector3(snd.toMutable(), .5f))
-                it.line(Vector3(fst.toMutable(), -.5f), Vector3(fst.toMutable(), .5f))
+                it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(snd.toMutable(), -trackWidth))
+                it.line(Vector3(fst.toMutable(), trackWidth), Vector3(snd.toMutable(), trackWidth))
+                it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(fst.toMutable(), trackWidth))
             }
         }
     }
