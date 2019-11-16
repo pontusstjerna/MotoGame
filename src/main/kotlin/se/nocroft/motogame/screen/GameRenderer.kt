@@ -8,12 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.graphics.use
+import ktx.math.*
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.model.Wheel
+import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -86,17 +87,35 @@ class GameRenderer(private val world: GameWorld) {
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
             val centerX = camera.position.x
+            val cameraPos = ImmutableVector2(camera.position.x, camera.position.y + 4f)
             for (i in 0 until vertices.lastIndex) {
                 // TODO: 3d :D
-                val fst = vertices[i]
-                val snd = vertices[i + 1]
+                val fst = vertices[i].toImmutable()
+                val snd = vertices[i + 1].toImmutable()
                 val fstOffsetX = (fst.x - centerX) * depthZoom
                 val sndOffsetX = (snd.x - centerX) * depthZoom
-                //it.line(vertices[i], vertices[i + 1])
 
-                it.line(fst.x - fstOffsetX, fst.y + trackWidth, snd.x - sndOffsetX, snd.y + trackWidth)
-                it.line(fst.x + fstOffsetX, fst.y - trackWidth, snd.x + sndOffsetX, snd.y - trackWidth)
-                it.line(fst.x - fstOffsetX, fst.y + trackWidth, fst.x + sndOffsetX, fst.y - trackWidth)
+                val lineNorm = (snd - fst).withRotation90(1).withLength(trackWidth)
+                //it.line(vertices[i], vertices[i + 1])
+                //it.line((fst - lineNorm).toMutable(), (fst + lineNorm).toMutable())
+
+                val projectionFst = cameraPos - fst
+                val projectionSnd = cameraPos - snd
+
+                val angleFst = lineNorm.angleRad(projectionFst)
+                val angleSnd = lineNorm.angleRad(projectionSnd)
+                val projScaleFst = projectionFst.withLength(trackWidth / cos(angleFst))
+                val projScaleSnd = projectionSnd.withLength(trackWidth / cos(angleSnd))
+
+                it.line((fst - projScaleFst).toMutable(), (fst + projScaleFst).toMutable())
+                it.line((fst + projScaleFst).toMutable(), (snd + projScaleSnd).toMutable())
+                it.line((fst - projScaleFst).toMutable(), (snd - projScaleSnd).toMutable())
+                //it.line((fst).toMutable(), (fst + projection).toMutable())
+                //it.line(vertices[i].sub)
+
+                //it.line(fst.x - fstOffsetX, fst.y + trackWidth, snd.x - sndOffsetX, snd.y + trackWidth)
+                //it.line(fst.x + fstOffsetX, fst.y - trackWidth, snd.x + sndOffsetX, snd.y - trackWidth)
+                //it.line(fst.x - fstOffsetX, fst.y + trackWidth, fst.x + sndOffsetX, fst.y - trackWidth)
             }
         }
     }
