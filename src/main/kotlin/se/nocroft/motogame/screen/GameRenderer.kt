@@ -1,6 +1,8 @@
 package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Graphics
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.Texture
@@ -11,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
+import ktx.app.clearScreen
 import ktx.graphics.use
 import ktx.math.*
 import se.nocroft.motogame.model.Bike
@@ -24,9 +27,9 @@ class GameRenderer(private val world: GameWorld) {
     private val textBatch = SpriteBatch()
     private val font = BitmapFont()
     private val debugRenderer = Box2DDebugRenderer()
+    // in meters
+    val gameWidth = 20f
     private val camera = PerspectiveCamera().apply {
-        // in meters
-        val gameWidth = 20f
         val scale = gameWidth / Gdx.graphics.width
 
         //setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
@@ -35,20 +38,29 @@ class GameRenderer(private val world: GameWorld) {
         fieldOfView = 57f
         rotate(-10f, 1f, 0f, 0f)
     }
-    private val shapeRenderer: ShapeRenderer = ShapeRenderer()
+    private val shapeRenderer: ShapeRenderer = ShapeRenderer().apply {
+        color = Color.FOREST
+    }
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel5.png")) }
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
     private val bikeWheelWidthPixels = 93f
 
-    private val depthZoom = 0.05f
     private val trackWidth = 1f
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
     private var zoom: Float = 10f
 
+    fun resize(width: Int, height: Int) {
+        val scale = gameWidth / width
+        camera.viewportWidth = gameWidth
+        camera.viewportHeight = Gdx.graphics.height * scale
+    }
+
     fun render(delta: Float) {
         //debugRenderer.render(world.physicsWorld, camera.combined)
+
+        clearScreen(0.14f, .14f, .14f)
 
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
@@ -97,12 +109,10 @@ class GameRenderer(private val world: GameWorld) {
     private fun renderTerrain(vertices: List<Vector2>) {
         shapeRenderer.projectionMatrix = camera.combined
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) {
-            val cameraPos = ImmutableVector2(camera.position.x, camera.position.y + 3f)
             for (i in 0 until vertices.lastIndex) {
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
 
-                //it.line(fst.toMutable(), snd.toMutable())
                 it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(snd.toMutable(), -trackWidth))
                 it.line(Vector3(fst.toMutable(), trackWidth), Vector3(snd.toMutable(), trackWidth))
                 it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(fst.toMutable(), trackWidth))

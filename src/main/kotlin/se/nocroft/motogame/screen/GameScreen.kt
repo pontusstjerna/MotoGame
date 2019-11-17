@@ -47,6 +47,11 @@ class GameScreen : KtxScreen {
         super.dispose()
     }
 
+    override fun resize(width: Int, height: Int) {
+        gameRenderer.resize(width, height)
+        super.resize(width, height)
+    }
+
     private fun checkInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             world.bike.brake()
