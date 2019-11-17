@@ -36,7 +36,7 @@ class GameRenderer(private val world: GameWorld) {
         rotate(-10f, 1f, 0f, 0f)
     }
     private val shapeRenderer: ShapeRenderer = ShapeRenderer()
-    private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel4.png")) }
+    private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel5.png")) }
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
     private val bikeWheelWidthPixels = 93f
 
@@ -45,6 +45,7 @@ class GameRenderer(private val world: GameWorld) {
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
+    private var zoom: Float = 10f
 
     fun render(delta: Float) {
         //debugRenderer.render(world.physicsWorld, camera.combined)
@@ -52,7 +53,7 @@ class GameRenderer(private val world: GameWorld) {
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
                 world.bike.body.position.y + 3,
-                13f)
+                getZoom())
         camera.update()
 
         renderTerrain(world.vertices)
@@ -84,6 +85,13 @@ class GameRenderer(private val world: GameWorld) {
                 deltaTimer = 0f
             }
         }
+    }
+
+    private fun getZoom(): Float {
+        val goal = 10f + (world.bike.body.linearVelocity.len() * 0.5f)
+        val zoomSpeed = 0.02f
+        zoom += (goal - zoom) * zoomSpeed
+        return zoom
     }
 
     private fun renderTerrain(vertices: List<Vector2>) {
