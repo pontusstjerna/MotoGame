@@ -30,12 +30,14 @@ class GameScreen : KtxScreen {
     }
 
     private val gameRenderer = GameRenderer(world)
+    private val uiRenderer = UIRenderer()
 
     private var accumulator: Float = 0.0f
     private var paused = false
 
     override fun render(delta: Float) {
         gameRenderer.render(delta)
+        uiRenderer.render(delta)
         checkInput()
         if (!paused) {
             updatePhysics(delta)
@@ -44,11 +46,13 @@ class GameScreen : KtxScreen {
 
     override fun dispose() {
         gameRenderer.dispose()
+        uiRenderer.dispose()
         super.dispose()
     }
 
     override fun resize(width: Int, height: Int) {
         gameRenderer.resize(width, height)
+        uiRenderer.resize(width, height)
         super.resize(width, height)
     }
 
