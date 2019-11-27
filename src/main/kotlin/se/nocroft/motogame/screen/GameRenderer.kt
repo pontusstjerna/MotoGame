@@ -46,9 +46,6 @@ class GameRenderer(private val world: GameWorld) {
     private val bikeWheelWidthPixels = 93f
 
     private val trackWidth = 1f
-
-    private var deltaTimer: Float = 0.0f
-    private var fps: Int = 0
     private var zoom: Float = 10f
 
     fun resize(width: Int, height: Int) {
@@ -76,27 +73,12 @@ class GameRenderer(private val world: GameWorld) {
             renderWheel(world.bike.rearWheel, b)
             renderBike(world.bike, b)
         }
-
-        renderUI(delta)
     }
 
     fun dispose() {
         batch.dispose()
         textBatch.dispose()
         wheelTexture.dispose()
-    }
-
-    // TODO: refactor to Scene2D
-    private fun renderUI(delta: Float) {
-        textBatch.use { b ->
-            font.draw(b, "Distance: ${world.distance.roundToInt()} m", 20f, Gdx.graphics.height - 20f)
-            font.draw(b, "FPS: $fps", 20f, Gdx.graphics.height - 40f)
-            deltaTimer += delta
-            if (deltaTimer > .1f) {
-                fps = (1 / delta).toInt()
-                deltaTimer = 0f
-            }
-        }
     }
 
     private fun getZoom(): Float {

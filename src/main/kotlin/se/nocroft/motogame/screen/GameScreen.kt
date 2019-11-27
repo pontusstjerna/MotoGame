@@ -30,7 +30,7 @@ class GameScreen : KtxScreen {
     }
 
     private val gameRenderer = GameRenderer(world)
-    private val uiRenderer = UIRenderer()
+    private val uiRenderer = UIRenderer(world)
 
     private var accumulator: Float = 0.0f
     private var paused = false
