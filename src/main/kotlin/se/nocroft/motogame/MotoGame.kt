@@ -5,7 +5,7 @@ import se.nocroft.motogame.screen.GameScreen
 
 class MotoGame : KtxGame<KtxScreen>() {
     companion object {
-        val DEBUG = true
+        val DEBUG = false
     }
 
     override fun create() {

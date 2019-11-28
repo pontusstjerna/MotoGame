@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import se.nocroft.motogame.PADDING_MEDIUM
+import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.model.GameWorld
 
 class UIRenderer(private val world: GameWorld) {
@@ -15,27 +18,33 @@ class UIRenderer(private val world: GameWorld) {
         Gdx.input.inputProcessor = this
     }
 
+    private val table = Table().apply {
+        setFillParent(true)
+        debug = MotoGame.DEBUG
+    }
+
     private val labelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
-        fontColor = Color.WHITE
+        fontColor = TEXT_COLOR
     }
 
-    private val distanceLabel = Label("Distance: 0m", labelStyle).apply {
-        setPosition(20f, Gdx.graphics.height - 40f)
-    }
-
-    private val fpsLabel = Label("FPS: 0", labelStyle).apply {
-        setPosition(20f, Gdx.graphics.height - 60f)
-    }
+    private val distanceLabel = Label("Distance: 0m", labelStyle)
+    private val fpsLabel = Label("FPS: 0", labelStyle)
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
 
     init {
-        stage.addActor(distanceLabel)
-        if (MotoGame.DEBUG) {
-            stage.addActor(fpsLabel)
+        table.run {
+            add(distanceLabel)
+            if (MotoGame.DEBUG) {
+                row()
+                add(fpsLabel).left()
+            }
+
+            top().left().pad(PADDING_MEDIUM)
         }
+        stage.addActor(table)
     }
 
     fun resize(width: Int, height: Int) {
