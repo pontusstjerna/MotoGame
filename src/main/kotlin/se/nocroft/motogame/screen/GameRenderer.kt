@@ -16,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.app.clearScreen
 import ktx.graphics.use
 import ktx.math.*
+import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.TRACK_COLOR
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.model.Wheel
@@ -38,9 +40,11 @@ class GameRenderer(private val world: GameWorld) {
         fieldOfView = 57f
         rotate(-10f, 1f, 0f, 0f)
     }
+
     private val shapeRenderer: ShapeRenderer = ShapeRenderer().apply {
-        color = Color.FOREST
+        color = TRACK_COLOR
     }
+
     private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel5.png")) }
     private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
     private val bikeWheelWidthPixels = 93f
@@ -55,7 +59,9 @@ class GameRenderer(private val world: GameWorld) {
     }
 
     fun render(delta: Float) {
-        //debugRenderer.render(world.physicsWorld, camera.combined)
+        if (DEBUG) {
+            debugRenderer.render(world.physicsWorld, camera.combined)
+        }
 
         clearScreen(0.14f, .14f, .14f)
 

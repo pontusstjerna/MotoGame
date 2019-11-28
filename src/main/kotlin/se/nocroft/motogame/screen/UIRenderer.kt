@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.model.GameWorld
@@ -20,7 +21,7 @@ class UIRenderer(private val world: GameWorld) {
 
     private val table = Table().apply {
         setFillParent(true)
-        debug = MotoGame.DEBUG
+        debug = DEBUG
     }
 
     private val labelStyle = Label.LabelStyle().apply {
@@ -37,7 +38,7 @@ class UIRenderer(private val world: GameWorld) {
     init {
         table.run {
             add(distanceLabel)
-            if (MotoGame.DEBUG) {
+            if (DEBUG) {
                 row()
                 add(fpsLabel).left()
             }
@@ -53,7 +54,7 @@ class UIRenderer(private val world: GameWorld) {
 
     fun render(delta: Float) {
         distanceLabel.setText("Distance: ${world.bike.body.position.x.toInt()}m")
-        if (MotoGame.DEBUG) {
+        if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
         }
 

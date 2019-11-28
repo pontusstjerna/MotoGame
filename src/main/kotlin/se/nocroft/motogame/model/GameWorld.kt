@@ -39,7 +39,7 @@ class GameWorld: ContactListener {
     // GENERATION CONFIG
     private val bigSlopeFactor = 0.03f
     private val smallSlopeFactor = 0.03f
-    private val bigRandomFactor = 0.1f
+    private val bigRandomFactor = 0.2f
     private val smallRandomFactor = 0.1f
     private val bumps = 0.2f // smaller value = more bumps!
 
