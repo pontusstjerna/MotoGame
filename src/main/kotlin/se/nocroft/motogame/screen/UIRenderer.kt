@@ -8,22 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import ktx.scene2d.label
+import ktx.scene2d.table
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.model.GameWorld
 
 class UIRenderer(private val world: GameWorld) {
-    private val stage = Stage().apply {
-        viewport = ScreenViewport()
-        Gdx.input.inputProcessor = this
-    }
-
-    private val table = Table().apply {
-        setFillParent(true)
-        debug = DEBUG
-    }
-
     private val labelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_COLOR
@@ -32,20 +24,43 @@ class UIRenderer(private val world: GameWorld) {
     private val distanceLabel = Label("Distance: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
 
+    private val stage = Stage().apply {
+        viewport = ScreenViewport()
+        Gdx.input.inputProcessor = this
+        //addActor(table)
+    }
+
+    private val table = table {
+        /*table {
+            distanceLabel
+            if (DEBUG) {
+                row()
+                add(fpsLabel).left()
+            }
+            //top().left().pad(PADDING_MEDIUM)
+        }*/
+
+        //distanceLabel
+        /*label("shit") {
+            style = labelStyle
+        }*/
+        distanceLabel
+        setFillParent(true)
+        debug = DEBUG
+    }
+
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
 
     init {
-        table.run {
+        /*table.run {
             add(distanceLabel)
             if (DEBUG) {
                 row()
                 add(fpsLabel).left()
             }
-
-            top().left().pad(PADDING_MEDIUM)
-        }
-        stage.addActor(table)
+        }*/
+        //stage.addActor(table)
     }
 
     fun resize(width: Int, height: Int) {
