@@ -13,6 +13,9 @@ class GameWorld: ContactListener {
     var distance: Float = 0.0f
     private set
 
+    var isDead: Boolean = false
+    private set
+
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
         setContactListener(this@GameWorld)
     }
@@ -26,8 +29,6 @@ class GameWorld: ContactListener {
     private val initBikePos = Vector2(0f, 7f)
 
     var bike: Bike = Bike(initBikePos, physicsWorld)
-
-    var resetListener: (() -> Unit)? = null
 
     private var dy: Float = 0f
     private var ddy: Float = 0f
@@ -70,12 +71,13 @@ class GameWorld: ContactListener {
 
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
-                resetListener?.invoke()
+                isDead = true
             }
         }
     }
 
     fun reset() {
+        isDead = false
         distance = 0f
         bike.destroy(physicsWorld)
         bike = Bike(initBikePos, physicsWorld)

@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.label
 import ktx.scene2d.table
 import ktx.actors.stage
+import ktx.app.clearScreen
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
@@ -23,40 +24,35 @@ class UIRenderer(private val world: GameWorld) {
 
     private val distanceLabel = Label("Distance: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
+    private val gameOverLabel = Label("Whoops, you deaded. Press da enter key to retry...", labelStyle)
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
         Gdx.input.inputProcessor = this
-        //addActor(table)
-    }
 
-    private val table = table {
-        table {
+        val topTable = table {
             add(distanceLabel)
             if (DEBUG) {
                 row()
                 add(fpsLabel).left()
             }
+            setFillParent(true)
+            top().left().pad(PADDING_MEDIUM)
+            debug = DEBUG
         }
 
-        setFillParent(true)
-        top().left().pad(PADDING_MEDIUM)
-        debug = DEBUG
+        val centerTable = table {
+            add(gameOverLabel)
+            setFillParent(true)
+            debug = DEBUG
+        }
+
+        addActor(topTable)
+        addActor(centerTable)
     }
 
     private var deltaTimer: Float = 0.0f
     private var fps: Int = 0
-
-    init {
-        /*table.run {
-            add(distanceLabel)
-            if (DEBUG) {
-                row()
-                add(fpsLabel).left()
-            }
-        }*/
-        stage.addActor(table)
-    }
 
     fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
@@ -68,6 +64,10 @@ class UIRenderer(private val world: GameWorld) {
             fpsLabel.setText("FPS: $fps")
         }
 
+        if (world.isDead) {
+            clearScreen(.12f,.12f,.12f, 1f)
+        }
+
         stage.act(delta)
         stage.draw()
 
@@ -76,6 +76,8 @@ class UIRenderer(private val world: GameWorld) {
             fps = (1 / delta).toInt()
             deltaTimer = 0f
         }
+
+        gameOverLabel.isVisible = world.isDead
     }
 
     fun dispose() {
