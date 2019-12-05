@@ -1,16 +1,14 @@
-package se.nocroft.motogame.screen
+package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import ktx.scene2d.label
 import ktx.scene2d.table
 import ktx.actors.stage
 import ktx.app.clearScreen
+import ktx.scene2d.label
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
@@ -24,7 +22,16 @@ class UIRenderer(private val world: GameWorld) {
 
     private val distanceLabel = Label("Distance: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
-    private val gameOverLabel = Label("Whoops, you deaded. Press da enter key to retry...", labelStyle)
+    private val gameOverLabel = Label("Whoops, you deaded. Press enter key to retry...", labelStyle)
+    private val gameOverActor: Actor = table {
+        add(gameOverLabel).colspan(2)
+        row().pad(0f, 0f, 10f, 0f)
+
+        add(Label("Retry", labelStyle))
+        add(Label("Exit", labelStyle))
+        setFillParent(true)
+        debug = DEBUG
+    }
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
@@ -41,14 +48,8 @@ class UIRenderer(private val world: GameWorld) {
             debug = DEBUG
         }
 
-        val centerTable = table {
-            add(gameOverLabel)
-            setFillParent(true)
-            debug = DEBUG
-        }
-
         addActor(topTable)
-        addActor(centerTable)
+        addActor(gameOverActor)
     }
 
     private var deltaTimer: Float = 0.0f
@@ -77,7 +78,7 @@ class UIRenderer(private val world: GameWorld) {
             deltaTimer = 0f
         }
 
-        gameOverLabel.isVisible = world.isDead
+        gameOverActor.isVisible = world.isDead
     }
 
     fun dispose() {

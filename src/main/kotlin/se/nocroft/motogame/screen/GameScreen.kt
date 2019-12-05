@@ -3,7 +3,10 @@ package se.nocroft.motogame.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import ktx.app.KtxScreen
+import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.model.GameWorld
+import se.nocroft.motogame.renderer.GameRenderer
+import se.nocroft.motogame.renderer.ui.UIRenderer
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -52,6 +55,10 @@ class GameScreen : KtxScreen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
             world.reset()
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            DEBUG = !DEBUG
         }
     }
 

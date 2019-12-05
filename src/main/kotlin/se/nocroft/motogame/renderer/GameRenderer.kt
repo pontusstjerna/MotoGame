@@ -1,9 +1,6 @@
-package se.nocroft.motogame.screen
+package se.nocroft.motogame.renderer
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Graphics
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
