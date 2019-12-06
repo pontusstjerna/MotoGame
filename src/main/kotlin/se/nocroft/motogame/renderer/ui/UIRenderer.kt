@@ -11,6 +11,7 @@ import ktx.app.clearScreen
 import ktx.scene2d.label
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
+import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.model.GameWorld
 
@@ -22,13 +23,15 @@ class UIRenderer(private val world: GameWorld) {
 
     private val distanceLabel = Label("Distance: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
-    private val gameOverLabel = Label("Whoops, you deaded. Press enter key to retry...", labelStyle)
+    private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
+    private val scoreLabel = Label("Your score: 0m", labelStyle)
     private val gameOverActor: Actor = table {
         add(gameOverLabel).colspan(2)
-        row().pad(0f, 0f, 10f, 0f)
-
-        add(Label("Retry", labelStyle))
-        add(Label("Exit", labelStyle))
+        row()
+        add(scoreLabel).colspan(2).pad(0f, 0f, 20f, 0f)
+        row()
+        add(Label("[Retry]", buttonLabelStyle))
+        add(Label("[Exit]", buttonLabelStyle))
         setFillParent(true)
         debug = DEBUG
     }
