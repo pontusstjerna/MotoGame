@@ -32,10 +32,8 @@ class GameScreen : KtxScreen, GameService {
 
     private var accumulator: Float = 0.0f
 
-    // This is some crazy kotlin-ass shit magic
-    private var _highscore: Int = 0.apply {
+    private var _highscore: Int =
         Gdx.app.getPreferences("motogame").getInteger("highscore")
-    }
 
     override fun render(delta: Float) {
         gameRenderer.render(delta)
