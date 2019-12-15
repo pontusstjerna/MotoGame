@@ -2,6 +2,7 @@ package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.Preferences
 import ktx.app.KtxScreen
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.model.GameWorld
@@ -10,14 +11,30 @@ import se.nocroft.motogame.renderer.ui.UIRenderer
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
-class GameScreen : KtxScreen {
+class GameScreen : KtxScreen, GameService {
+
+    override val highscore: Int
+        get() {
+            return _highscore
+        }
+
+    override val isDead: Boolean
+        get() = world.isDead
+
+    override val distance: Int
+        get() = world.distance.toInt()
 
     private val world: GameWorld = GameWorld()
 
     private val gameRenderer = GameRenderer(world)
-    private val uiRenderer = UIRenderer(world)
+    private val uiRenderer = UIRenderer(this)
 
     private var accumulator: Float = 0.0f
+
+    // This is some crazy kotlin-ass shit magic
+    private var _highscore: Int = 0.apply {
+        Gdx.app.getPreferences("motogame").getInteger("highscore")
+    }
 
     override fun render(delta: Float) {
         gameRenderer.render(delta)
@@ -40,6 +57,11 @@ class GameScreen : KtxScreen {
         super.resize(width, height)
     }
 
+    override fun reset() {
+        updateHighscore()
+        world.reset()
+    }
+
     private fun checkInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             world.bike.brake()
@@ -54,7 +76,7 @@ class GameScreen : KtxScreen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            world.reset()
+            reset()
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
@@ -62,14 +84,21 @@ class GameScreen : KtxScreen {
         }
     }
 
-
-
     private fun updatePhysics(delta: Float) {
         accumulator += delta
 
         while (accumulator >= world.timeStep) {
             world.update()
             accumulator -= world.timeStep
+        }
+    }
+
+    private fun updateHighscore() {
+        val prefs = Gdx.app.getPreferences("motogame")
+        val score = world.distance.toInt()
+        if (score > prefs.getInteger("highscore")) {
+            prefs.putInteger("highscore", score)
+            _highscore = score
         }
     }
 }

@@ -2,19 +2,16 @@ package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
-import ktx.app.clearScreen
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
-import se.nocroft.motogame.model.GameWorld
-import se.nocroft.motogame.model.WorldService
+import se.nocroft.motogame.screen.GameService
 
-class UIRenderer(private val worldService: WorldService) {
+class UIRenderer(private val gameService: GameService) {
     private val labelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_COLOR
@@ -24,7 +21,7 @@ class UIRenderer(private val worldService: WorldService) {
     private val fpsLabel = Label("FPS: 0", labelStyle)
     private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
     private val scoreLabel = Label("Your score: 0m", labelStyle)
-    private val gameOverActor = GameOverActor(worldService, labelStyle).apply {
+    private val gameOverActor = GameOverActor(gameService, labelStyle).apply {
         isVisible = false
     }
 
@@ -55,14 +52,14 @@ class UIRenderer(private val worldService: WorldService) {
     }
 
     fun render(delta: Float) {
-        distanceLabel.isVisible = !worldService.isDead
-        distanceLabel.setText("Distance: ${worldService.distance.toInt()}m")
+        distanceLabel.isVisible = !gameService.isDead
+        distanceLabel.setText("Distance: ${gameService.distance}m")
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
         }
 
-        if (worldService.isDead) {
-            gameOverActor.show(worldService.distance.toInt())
+        if (gameService.isDead) {
+            gameOverActor.show(gameService.distance)
             //clearScreen(.12f,.12f,.12f, .5f)
         }
 
@@ -75,7 +72,7 @@ class UIRenderer(private val worldService: WorldService) {
             deltaTimer = 0f
         }
 
-        gameOverActor.isVisible = worldService.isDead
+        gameOverActor.isVisible = gameService.isDead
     }
 
     fun dispose() {

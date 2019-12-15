@@ -6,16 +6,14 @@ import ktx.box2d.createWorld
 import java.lang.Float.max
 import kotlin.random.Random
 
-class GameWorld: ContactListener, WorldService {
+class GameWorld: ContactListener {
 
     val timeStep: Float = 1.0f / 60.0f
 
-    override val distance: Float
-        get() {
-            return _distance
-        }
+    var distance: Float = 0f
+    private set
 
-    override var isDead: Boolean = false
+    var isDead: Boolean = false
     private set
 
     val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
@@ -29,7 +27,6 @@ class GameWorld: ContactListener, WorldService {
     )
 
     private val initBikePos = Vector2(0f, 7f)
-    private var _distance: Float = 0.0f
 
     var bike: Bike = Bike(initBikePos, physicsWorld)
 
@@ -54,7 +51,7 @@ class GameWorld: ContactListener, WorldService {
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
         generateTrack()
-        _distance = max(distance, bike.body.position.x)
+        distance = max(distance, bike.body.position.x)
     }
 
     override fun endContact(contact: Contact?) {
@@ -79,9 +76,9 @@ class GameWorld: ContactListener, WorldService {
         }
     }
 
-    override fun reset() {
+    fun reset() {
         isDead = false
-        _distance = 0f
+        distance = 0f
         bike.destroy(physicsWorld)
         bike = Bike(initBikePos, physicsWorld)
     }

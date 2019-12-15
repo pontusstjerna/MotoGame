@@ -1,6 +1,5 @@
 package se.nocroft.motogame.renderer.ui
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
@@ -9,9 +8,9 @@ import ktx.actors.onClick
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_BUTTON_COLOR
-import se.nocroft.motogame.model.WorldService
+import se.nocroft.motogame.screen.GameService
 
-class GameOverActor(worldService: WorldService, labelStyle: Label.LabelStyle): Table() {
+class GameOverActor(gameService: GameService, labelStyle: Label.LabelStyle): Table() {
     private val buttonLabelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_BUTTON_COLOR
@@ -21,7 +20,7 @@ class GameOverActor(worldService: WorldService, labelStyle: Label.LabelStyle): T
     private val scoreLabel = Label("Your score: 0m", labelStyle)
     private val retryButton = Button("Retry", buttonLabelStyle).apply {
         onClick {
-            worldService.reset()
+            gameService.reset()
         }
     }
 
