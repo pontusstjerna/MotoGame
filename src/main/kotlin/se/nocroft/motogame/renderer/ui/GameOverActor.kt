@@ -1,10 +1,13 @@
 package se.nocroft.motogame.renderer.ui
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Value
 import ktx.actors.onClick
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.model.WorldService
 
@@ -27,9 +30,9 @@ class GameOverActor(worldService: WorldService, labelStyle: Label.LabelStyle): T
     init {
         add(gameOverLabel)
         row()
-        add(scoreLabel).pad(0f, 0f, 20f, 0f)
+        add(scoreLabel).pad(0f, 0f, PADDING_MEDIUM, 0f)
         row()
-        add(retryButton).padBottom(150f)
+        add(retryButton).padBottom(Value.percentHeight(12.5f))
         //add(exitButton)
         setFillParent(true)
         debug = DEBUG

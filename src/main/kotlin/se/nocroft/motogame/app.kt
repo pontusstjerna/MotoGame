@@ -27,6 +27,7 @@ fun main() {
         config.title = "MotoGame"
         config.width = 800
         config.height = 600
+        config.samples = 8
     }
     LwjglApplication(MotoGame(), config).logLevel = Application.LOG_DEBUG
 }

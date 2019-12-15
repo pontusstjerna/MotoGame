@@ -2,7 +2,7 @@ package se.nocroft.motogame
 
 import com.badlogic.gdx.graphics.Color
 
-var DEBUG = true
+var DEBUG = false
 
 /* Padding */
 const val PADDING_MEDIUM = 20f
