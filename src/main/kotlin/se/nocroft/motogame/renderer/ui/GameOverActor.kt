@@ -10,7 +10,7 @@ import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.screen.GameService
 
-class GameOverActor(gameService: GameService, labelStyle: Label.LabelStyle): Table() {
+class GameOverActor(private val gameService: GameService, labelStyle: Label.LabelStyle): Table() {
     private val buttonLabelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_BUTTON_COLOR
@@ -38,7 +38,11 @@ class GameOverActor(gameService: GameService, labelStyle: Label.LabelStyle): Tab
     }
 
     fun show(score: Int) {
+        if (score > gameService.highscore) {
+            scoreLabel.setText("New high score! ${score}m")
+        } else {
+            scoreLabel.setText("Your score: ${score}m")
+        }
         isVisible = true
-        scoreLabel.setText("Your score: ${score}m")
     }
 }

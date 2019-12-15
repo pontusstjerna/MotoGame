@@ -18,6 +18,7 @@ class UIRenderer(private val gameService: GameService) {
     }
 
     private val distanceLabel = Label("Distance: 0m", labelStyle)
+    private val bestLabel = Label("Best: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
     private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
     private val scoreLabel = Label("Your score: 0m", labelStyle)
@@ -25,20 +26,22 @@ class UIRenderer(private val gameService: GameService) {
         isVisible = false
     }
 
+    private val topTable = table {
+        add(distanceLabel)
+        row()
+        add(bestLabel).left()
+        if (DEBUG) {
+            row()
+            add(fpsLabel).left()
+        }
+        setFillParent(true)
+        top().left().pad(PADDING_MEDIUM)
+        debug = DEBUG
+    }
+
     private val stage = stage().apply {
         viewport = ScreenViewport()
         Gdx.input.inputProcessor = this
-
-        val topTable = table {
-            add(distanceLabel)
-            if (DEBUG) {
-                row()
-                add(fpsLabel).left()
-            }
-            setFillParent(true)
-            top().left().pad(PADDING_MEDIUM)
-            debug = DEBUG
-        }
 
         addActor(topTable)
         addActor(gameOverActor)
@@ -52,8 +55,9 @@ class UIRenderer(private val gameService: GameService) {
     }
 
     fun render(delta: Float) {
-        distanceLabel.isVisible = !gameService.isDead
         distanceLabel.setText("Distance: ${gameService.distance}m")
+        bestLabel.setText("Best: ${gameService.highscore}m")
+
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
         }
@@ -72,6 +76,7 @@ class UIRenderer(private val gameService: GameService) {
             deltaTimer = 0f
         }
 
+        topTable.isVisible = !gameService.isDead
         gameOverActor.isVisible = gameService.isDead
     }
 

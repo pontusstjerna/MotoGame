@@ -8,6 +8,7 @@ import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
 import se.nocroft.motogame.renderer.ui.UIRenderer
+import kotlin.math.max
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
@@ -15,7 +16,7 @@ class GameScreen : KtxScreen, GameService {
 
     override val highscore: Int
         get() {
-            return _highscore
+            return max(_highscore, distance)
         }
 
     override val isDead: Boolean
@@ -99,6 +100,7 @@ class GameScreen : KtxScreen, GameService {
         if (score > prefs.getInteger("highscore")) {
             prefs.putInteger("highscore", score)
             _highscore = score
+            prefs.flush()
         }
     }
 }
