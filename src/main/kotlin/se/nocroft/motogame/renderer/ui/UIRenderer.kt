@@ -8,14 +8,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
 import ktx.app.clearScreen
-import ktx.scene2d.label
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
-import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.model.GameWorld
+import se.nocroft.motogame.model.WorldService
 
-class UIRenderer(private val world: GameWorld) {
+class UIRenderer(private val worldService: WorldService) {
     private val labelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_COLOR
@@ -25,15 +24,8 @@ class UIRenderer(private val world: GameWorld) {
     private val fpsLabel = Label("FPS: 0", labelStyle)
     private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
     private val scoreLabel = Label("Your score: 0m", labelStyle)
-    private val gameOverActor: Actor = table {
-        add(gameOverLabel).colspan(2)
-        row()
-        add(scoreLabel).colspan(2).pad(0f, 0f, 20f, 0f)
-        row()
-        add(Label("[Retry]", buttonLabelStyle))
-        add(Label("[Exit]", buttonLabelStyle))
-        setFillParent(true)
-        debug = DEBUG
+    private val gameOverActor = GameOverActor(worldService, labelStyle).apply {
+        isVisible = false
     }
 
     private val stage = stage().apply {
@@ -63,13 +55,15 @@ class UIRenderer(private val world: GameWorld) {
     }
 
     fun render(delta: Float) {
-        distanceLabel.setText("Distance: ${world.bike.body.position.x.toInt()}m")
+        distanceLabel.isVisible = !worldService.isDead
+        distanceLabel.setText("Distance: ${worldService.distance.toInt()}m")
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
         }
 
-        if (world.isDead) {
-            clearScreen(.12f,.12f,.12f, 1f)
+        if (worldService.isDead) {
+            gameOverActor.show(worldService.distance.toInt())
+            //clearScreen(.12f,.12f,.12f, .5f)
         }
 
         stage.act(delta)
@@ -81,7 +75,7 @@ class UIRenderer(private val world: GameWorld) {
             deltaTimer = 0f
         }
 
-        gameOverActor.isVisible = world.isDead
+        gameOverActor.isVisible = worldService.isDead
     }
 
     fun dispose() {
