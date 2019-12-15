@@ -10,6 +10,7 @@ import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.screen.GameService
+import kotlin.math.max
 
 class UIRenderer(private val gameService: GameService) {
     private val labelStyle = Label.LabelStyle().apply {
@@ -56,13 +57,13 @@ class UIRenderer(private val gameService: GameService) {
 
     fun render(delta: Float) {
         distanceLabel.setText("Distance: ${gameService.distance}m")
-        bestLabel.setText("Best: ${gameService.highscore}m")
+        bestLabel.setText("Best: ${max(gameService.highscore, gameService.distance)}m")
 
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
         }
 
-        if (gameService.isDead) {
+        if (gameService.isDead && !gameOverActor.isVisible) {
             gameOverActor.show(gameService.distance)
             //clearScreen(.12f,.12f,.12f, .5f)
         }

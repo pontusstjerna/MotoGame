@@ -16,7 +16,7 @@ class GameScreen : KtxScreen, GameService {
 
     override val highscore: Int
         get() {
-            return max(_highscore, distance)
+            return _highscore
         }
 
     override val isDead: Boolean
@@ -97,7 +97,7 @@ class GameScreen : KtxScreen, GameService {
     private fun updateHighscore() {
         val prefs = Gdx.app.getPreferences("motogame")
         val score = world.distance.toInt()
-        if (score > prefs.getInteger("highscore")) {
+        if (score > highscore) {
             prefs.putInteger("highscore", score)
             _highscore = score
             prefs.flush()
