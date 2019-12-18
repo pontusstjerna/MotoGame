@@ -37,12 +37,12 @@ class UIRenderer(private val gameService: GameService) {
         }
         setFillParent(true)
         top().left().pad(PADDING_MEDIUM)
-        debug = DEBUG
     }
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
         Gdx.input.inputProcessor = this
+        isDebugAll = DEBUG
 
         addActor(topTable)
         addActor(gameOverActor)

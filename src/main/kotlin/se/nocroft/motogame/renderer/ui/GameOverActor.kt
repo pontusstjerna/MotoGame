@@ -50,7 +50,6 @@ class GameOverActor(private val gameService: GameService, labelStyle: Label.Labe
         add(retryButton).padBottom(Value.percentHeight(12.5f))
         //add(exitButton)
         setFillParent(true)
-        debug = DEBUG
     }
 
     fun show(score: Int) {

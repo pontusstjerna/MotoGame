@@ -28,6 +28,7 @@ fun main() {
         config.width = 800
         config.height = 600
         config.samples = 8
+        config.fullscreen = FULLSCREEN
     }
     LwjglApplication(MotoGame(), config).logLevel = Application.LOG_DEBUG
 }
