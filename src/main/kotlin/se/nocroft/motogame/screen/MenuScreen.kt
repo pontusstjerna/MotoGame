@@ -2,7 +2,9 @@ package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.actors.onClick
 import ktx.actors.stage
@@ -46,16 +48,19 @@ class MenuScreen(menuService: MenuService) : KtxScreen {
 
         row()
 
-
         setFillParent(true)
     }
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
-        Gdx.input.inputProcessor = this
         isDebugAll = DEBUG
 
         addActor(table)
+    }
+
+    override fun show() {
+        Gdx.input.inputProcessor = stage
+        super.show()
     }
 
     override fun render(delta: Float) {

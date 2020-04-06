@@ -39,7 +39,7 @@ class UIRenderer(private val gameService: GameService) {
         top().left().pad(PADDING_MEDIUM)
     }
 
-    private val stage = stage().apply {
+    val stage = stage().apply {
         viewport = ScreenViewport()
         Gdx.input.inputProcessor = this
         isDebugAll = DEBUG

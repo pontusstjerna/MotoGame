@@ -35,6 +35,11 @@ class GameScreen : KtxScreen, GameService {
     private var _highscore: Int =
         Gdx.app.getPreferences("motogame").getInteger("highscore")
 
+    override fun show() {
+        Gdx.input.inputProcessor = uiRenderer.stage
+        super.show()
+    }
+
     override fun render(delta: Float) {
         gameRenderer.render(delta)
         uiRenderer.render(delta)

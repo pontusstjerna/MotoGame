@@ -8,7 +8,6 @@ import se.nocroft.motogame.screen.MenuService
 class MotoGame : KtxGame<KtxScreen>(), MenuService {
 
     override fun create() {
-
         addScreen(MenuScreen(this))
         addScreen(GameScreen())
         setScreen<MenuScreen>()

@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 
-class Button(text: String, style: Label.LabelStyle?) : Label(" [ $text ] ", style) {
+class Button(text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
 
     init {
         addListener(object : ClickListener() {
