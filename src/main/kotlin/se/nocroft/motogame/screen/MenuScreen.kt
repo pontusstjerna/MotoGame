@@ -1,12 +1,16 @@
 package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.actors.onClick
+import ktx.actors.onKey
+import ktx.actors.onKeyDown
 import ktx.actors.stage
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
@@ -23,27 +27,39 @@ class MenuScreen(menuService: MenuService) : KtxScreen {
         fontColor = TEXT_COLOR
     }
 
+    private val buttons = arrayOf(
+            Button("Play", labelStyle).apply {
+                onPress {
+                    menuService.play()
+                }
+                selected = true
+            },
+            Button("Exit", labelStyle).apply {
+                onPress {
+                    menuService.exit()
+                }
+            }
+    )
+
+    private var selectedButtonIndex = 0
+        set(value) {
+            buttons[field].selected = false
+            buttons[value].selected = true
+            field = value
+        }
+
     private val table = table {
 
         add(Label("Infinite Moto", labelStyle)).expandY()
         row()
 
         table {
-            val playButton = Button("Play", labelStyle).apply {
-                onClick {
-                    menuService.play()
+            for ((index, button) in buttons.withIndex()) {
+                add(button)
+                if (index != buttons.lastIndex) {
+                    row()
                 }
             }
-
-            val exitButton = Button("Exit", labelStyle).apply {
-                onClick {
-                    menuService.exit()
-                }
-            }
-
-            add(playButton)
-            row()
-            add(exitButton)
         }.cell(expandY = true).inCell.top()
 
         row()
@@ -56,6 +72,21 @@ class MenuScreen(menuService: MenuService) : KtxScreen {
         isDebugAll = DEBUG
 
         addActor(table)
+
+        addListener(object : InputListener() {
+            override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
+                when (keycode) {
+                    Input.Keys.ENTER -> buttons[selectedButtonIndex].onPress?.invoke()
+                    Input.Keys.UP -> {
+                        if (selectedButtonIndex < 0) selectedButtonIndex = buttons.lastIndex else selectedButtonIndex--
+                    }
+                    Input.Keys.DOWN -> {
+                        selectedButtonIndex = (selectedButtonIndex + 1) % buttons.size
+                    }
+                }
+                return super.keyDown(event, keycode)
+            }
+        })
     }
 
     override fun show() {

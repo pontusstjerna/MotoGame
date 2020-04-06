@@ -1,20 +1,39 @@
 package se.nocroft.motogame.renderer.ui
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import ktx.actors.onClick
+import ktx.actors.onKeyDown
 
-class Button(text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
+class Button(val text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
+
+    var onPress: (() -> Unit)? = null
+
+    fun onPress(action: () -> Unit) {
+        onClick {
+            action()
+        }
+
+        onPress = action
+    }
+
+    var selected: Boolean = false
+        set(value) {
+            setText(if (value) "[  $text  ]" else " [ $text ] ")
+            field = value
+        }
 
     init {
         addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                setText("[  $text  ]")
+                if (!selected) setText("[  $text  ]")
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                setText(" [ $text ] ")
+                if (!selected) setText(" [ $text ] ")
             }
         })
     }

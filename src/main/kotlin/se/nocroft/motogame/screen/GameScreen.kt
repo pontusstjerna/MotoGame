@@ -14,10 +14,8 @@ import kotlin.math.max
 
 class GameScreen : KtxScreen, GameService {
 
-    override val highscore: Int
-        get() {
-            return _highscore
-        }
+    override var highscore: Int = Gdx.app.getPreferences("motogame").getInteger("highscore")
+        private set
 
     override val isDead: Boolean
         get() = world.isDead
@@ -31,9 +29,6 @@ class GameScreen : KtxScreen, GameService {
     private val uiRenderer = UIRenderer(this)
 
     private var accumulator: Float = 0.0f
-
-    private var _highscore: Int =
-        Gdx.app.getPreferences("motogame").getInteger("highscore")
 
     override fun show() {
         Gdx.input.inputProcessor = uiRenderer.stage
@@ -102,7 +97,7 @@ class GameScreen : KtxScreen, GameService {
         val score = world.distance.toInt()
         if (score > highscore) {
             prefs.putInteger("highscore", score)
-            _highscore = score
+            highscore = score
             prefs.flush()
         }
     }
