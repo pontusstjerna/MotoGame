@@ -14,6 +14,9 @@ import kotlin.math.max
 
 class GameScreen : KtxScreen, GameService {
 
+    override var isPaused: Boolean = false
+        private set
+
     override var highscore: Int = Gdx.app.getPreferences("motogame").getInteger("highscore")
         private set
 
@@ -39,7 +42,7 @@ class GameScreen : KtxScreen, GameService {
         gameRenderer.render(delta)
         uiRenderer.render(delta)
         checkInput()
-        if (!world.isDead) {
+        if (!world.isDead && !isPaused) {
             updatePhysics(delta)
         }
     }
@@ -59,6 +62,18 @@ class GameScreen : KtxScreen, GameService {
     override fun reset() {
         updateHighscore()
         world.reset()
+    }
+
+    override fun pause() {
+        isPaused = true
+    }
+
+    override fun exitToMenu() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun resume() {
+        isPaused = false
     }
 
     private fun checkInput() {

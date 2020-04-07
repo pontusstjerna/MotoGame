@@ -22,18 +22,22 @@ class Button(val text: String, style: LabelStyle?) : Label(" [ $text ] ", style)
 
     var selected: Boolean = false
         set(value) {
-            setText(if (value) "[  $text  ]" else " [ $text ] ")
+            super.setText(if (value) "[  $text  ]" else " [ $text ] ")
             field = value
         }
+
+    override fun setText(newText: CharSequence?) {
+        return super.setText(" [ $newText ] ")
+    }
 
     init {
         addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                if (!selected) setText("[  $text  ]")
+                if (!selected) super@Button.setText("[  $text  ]")
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                if (!selected) setText(" [ $text ] ")
+                if (!selected) super@Button.setText(" [ $text ] ")
             }
         })
     }

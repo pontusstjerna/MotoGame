@@ -26,9 +26,21 @@ class UIRenderer(private val gameService: GameService) {
     private val gameOverActor = GameOverActor(gameService, labelStyle).apply {
         isVisible = false
     }
+    private val menuPauseButton = Button("Pause", labelStyle).apply {
+        onPress {
+            if (!gameService.isPaused) {
+                setText("Resume")
+                gameService.pause()
+            } else {
+                setText("Pause")
+                gameService.resume()
+            }
+        }
+    }
 
     private val topTable = table {
         add(distanceLabel)
+        add(menuPauseButton)
         row()
         add(bestLabel).left()
         if (DEBUG) {
