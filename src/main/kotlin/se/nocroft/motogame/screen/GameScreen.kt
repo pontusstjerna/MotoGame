@@ -28,7 +28,7 @@ class GameScreen : KtxScreen, GameService {
 
     private val world: GameWorld = GameWorld()
 
-    private val gameRenderer = GameRenderer(world)
+    private val gameRenderer = GameRenderer(world, this)
     private val uiRenderer = UIRenderer(this)
 
     private var accumulator: Float = 0.0f

@@ -19,9 +19,10 @@ import se.nocroft.motogame.TRACK_COLOR
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.model.Wheel
+import se.nocroft.motogame.screen.GameService
 import kotlin.math.*
 
-class GameRenderer(private val world: GameWorld) {
+class GameRenderer(private val world: GameWorld, private val gameService: GameService) {
 
     private val batch = SpriteBatch()
     private val textBatch = SpriteBatch()
@@ -87,9 +88,9 @@ class GameRenderer(private val world: GameWorld) {
         wheelTexture.dispose()
     }
 
-    // TODO: Increase when paused!
     private fun getZoom(): Float {
-        val goal = 10f + (world.bike.body.linearVelocity.len() * 0.5f)
+        val goal = 10f + (world.bike.body.linearVelocity.len() * 0.5f) +
+                if (gameService.isPaused || gameService.isDead) -3f else 0f
         val zoomSpeed = 0.02f
         zoom += (goal - zoom) * zoomSpeed
         return zoom
