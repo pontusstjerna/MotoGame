@@ -6,6 +6,8 @@ interface GameService {
     fun pause()
     fun exitToMenu()
     fun resume()
+    fun addResumeListener(action: () -> Unit)
+    fun addPauseListener(action: () -> Unit)
     val isPaused: Boolean
     val isDead: Boolean
     val distance: Int

@@ -33,6 +33,9 @@ class GameScreen : KtxScreen, GameService {
 
     private var accumulator: Float = 0.0f
 
+    private var onPauseListeners: Array<(() -> Unit)> = emptyArray()
+    private var onResumeListeners: Array<(() -> Unit)> = emptyArray()
+
     override fun show() {
         Gdx.input.inputProcessor = uiRenderer.stage
         super.show()
@@ -67,6 +70,7 @@ class GameScreen : KtxScreen, GameService {
 
     override fun pause() {
         isPaused = true
+        onPauseListeners.forEach { it() }
     }
 
     override fun exitToMenu() {
@@ -75,6 +79,15 @@ class GameScreen : KtxScreen, GameService {
 
     override fun resume() {
         isPaused = false
+        onResumeListeners.forEach { it() }
+    }
+
+    override fun addPauseListener(action: () -> Unit) {
+        onPauseListeners += action
+    }
+
+    override fun addResumeListener(action: () -> Unit) {
+        onResumeListeners += action
     }
 
     private fun checkInput() {

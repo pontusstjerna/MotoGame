@@ -25,11 +25,8 @@ class UIRenderer(private val gameService: GameService) {
     private val distanceLabel = Label("Distance: 0m", labelStyle)
     private val bestLabel = Label("Best: 0m", labelStyle)
     private val fpsLabel = Label("FPS: 0", labelStyle)
-    private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
-    private val scoreLabel = Label("Your score: 0m", labelStyle)
-    private val gameOverActor = GameOverActor(gameService, labelStyle).apply {
-        isVisible = false
-    }
+    private val gameOverActor = GameOverActor(gameService, labelStyle).apply { isVisible = false }
+    private val pausedMenuActor = PausedMenuActor(gameService, labelStyle).apply { isVisible = false }
     private val menuPauseButton = Button("Pause", labelStyle).apply {
         onPress { togglePaused() }
     }
@@ -57,6 +54,7 @@ class UIRenderer(private val gameService: GameService) {
 
         addActor(topTable)
         addActor(gameOverActor)
+        addActor(pausedMenuActor)
 
         addListener(object : InputListener() {
             override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
@@ -97,6 +95,7 @@ class UIRenderer(private val gameService: GameService) {
         }
 
         topTable.isVisible = !gameService.isDead
+        pausedMenuActor.isVisible = gameService.isPaused && !gameService.isDead
         gameOverActor.isVisible = gameService.isDead
     }
 
