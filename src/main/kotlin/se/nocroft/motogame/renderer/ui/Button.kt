@@ -1,14 +1,12 @@
 package se.nocroft.motogame.renderer.ui
 
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import ktx.actors.onClick
-import ktx.actors.onKeyDown
 
-class Button(val text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
+class Button(var text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
 
     var onPress: (() -> Unit)? = null
 
@@ -27,6 +25,7 @@ class Button(val text: String, style: LabelStyle?) : Label(" [ $text ] ", style)
         }
 
     override fun setText(newText: CharSequence?) {
+        text = newText.toString()
         return super.setText(" [ $newText ] ")
     }
 

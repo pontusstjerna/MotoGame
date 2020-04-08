@@ -1,7 +1,10 @@
 package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
@@ -13,6 +16,7 @@ import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
 class UIRenderer(private val gameService: GameService) {
+
     private val labelStyle = Label.LabelStyle().apply {
         font = BitmapFont()
         fontColor = TEXT_COLOR
@@ -27,20 +31,12 @@ class UIRenderer(private val gameService: GameService) {
         isVisible = false
     }
     private val menuPauseButton = Button("Pause", labelStyle).apply {
-        onPress {
-            if (!gameService.isPaused) {
-                setText("Resume")
-                gameService.pause()
-            } else {
-                setText("Pause")
-                gameService.resume()
-            }
-        }
+        onPress { togglePaused() }
     }
 
     private val topTable = table {
-        add(distanceLabel)
-        add(menuPauseButton)
+        add(distanceLabel).expandX().left()
+        add(menuPauseButton).right()
         row()
         add(bestLabel).left()
         if (DEBUG) {
@@ -48,8 +44,11 @@ class UIRenderer(private val gameService: GameService) {
             add(fpsLabel).left()
         }
         setFillParent(true)
-        top().left().pad(PADDING_MEDIUM)
+        top().pad(PADDING_MEDIUM)
     }
+
+    private var deltaTimer: Float = 0.0f
+    private var fps: Int = 0
 
     val stage = stage().apply {
         viewport = ScreenViewport()
@@ -58,10 +57,18 @@ class UIRenderer(private val gameService: GameService) {
 
         addActor(topTable)
         addActor(gameOverActor)
-    }
 
-    private var deltaTimer: Float = 0.0f
-    private var fps: Int = 0
+        addListener(object : InputListener() {
+            override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
+                when (keycode) {
+                    Input.Keys.ESCAPE -> togglePaused()
+                    Input.Keys.ENTER -> { gameService.reset() }
+                    Input.Keys.P -> DEBUG = !DEBUG
+                }
+                return super.keyDown(event, keycode)
+            }
+        })
+    }
 
     fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
@@ -95,5 +102,15 @@ class UIRenderer(private val gameService: GameService) {
 
     fun dispose() {
         stage.dispose()
+    }
+
+    private fun togglePaused() {
+        if (!gameService.isPaused) {
+            menuPauseButton.setText("Resume")
+            gameService.pause()
+        } else {
+            menuPauseButton.setText("Pause")
+            gameService.resume()
+        }
     }
 }

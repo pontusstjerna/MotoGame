@@ -41,8 +41,8 @@ class GameScreen : KtxScreen, GameService {
     override fun render(delta: Float) {
         gameRenderer.render(delta)
         uiRenderer.render(delta)
-        checkInput()
         if (!world.isDead && !isPaused) {
+            checkInput()
             updatePhysics(delta)
         }
     }
@@ -62,6 +62,7 @@ class GameScreen : KtxScreen, GameService {
     override fun reset() {
         updateHighscore()
         world.reset()
+        resume()
     }
 
     override fun pause() {
@@ -87,14 +88,6 @@ class GameScreen : KtxScreen, GameService {
             world.bike.leanForward()
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             world.bike.leanBack()
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            reset()
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            DEBUG = !DEBUG
         }
     }
 
