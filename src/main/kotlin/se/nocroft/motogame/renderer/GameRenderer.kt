@@ -89,8 +89,9 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     private fun getZoom(): Float {
-        val goal = 10f + (world.bike.body.linearVelocity.len() * 0.5f) +
-                if (gameService.isPaused || gameService.isDead) -3f else 0f
+        val goal = if (gameService.isPaused || gameService.isDead) 7f
+        else 10f + (world.bike.body.linearVelocity.len() * 0.5f)
+
         val zoomSpeed = 0.02f
         zoom += (goal - zoom) * zoomSpeed
         return zoom
