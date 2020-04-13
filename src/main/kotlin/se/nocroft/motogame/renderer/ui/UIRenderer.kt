@@ -60,7 +60,9 @@ class UIRenderer(private val gameService: GameService) {
             override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
                 when (keycode) {
                     Input.Keys.ESCAPE -> togglePaused()
-                    Input.Keys.ENTER -> { gameService.reset() }
+                    Input.Keys.ENTER -> {
+                        gameService.reset()
+                    }
                     Input.Keys.P -> DEBUG = !DEBUG
                 }
                 return super.keyDown(event, keycode)
@@ -82,7 +84,6 @@ class UIRenderer(private val gameService: GameService) {
 
         if (gameService.isDead && !gameOverActor.isVisible) {
             gameOverActor.show(gameService.distance)
-            //clearScreen(.12f,.12f,.12f, .5f)
         }
 
         stage.act(delta)
@@ -97,6 +98,12 @@ class UIRenderer(private val gameService: GameService) {
         topTable.isVisible = !gameService.isDead
         pausedMenuActor.isVisible = gameService.isPaused && !gameService.isDead
         gameOverActor.isVisible = gameService.isDead
+
+        stage.keyboardFocus = when {
+            gameService.isPaused -> pausedMenuActor
+            gameService.isDead -> gameOverActor
+            else -> stage.root
+        }
     }
 
     fun dispose() {

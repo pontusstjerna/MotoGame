@@ -1,6 +1,10 @@
 package se.nocroft.motogame.renderer.ui
 
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
@@ -37,9 +41,15 @@ class PausedMenuActor(private val gameService: GameService, labelStyle: Label.La
             }
         })
         setFillParent(true)
-    }
+        touchable = Touchable.enabled
 
-    fun show() {
-        isVisible = true
+        addListener(object : InputListener() {
+            override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
+                when (keycode) {
+                    Input.Keys.UP -> println("shit")
+                }
+                return super.keyDown(event, keycode)
+            }
+        })
     }
 }
