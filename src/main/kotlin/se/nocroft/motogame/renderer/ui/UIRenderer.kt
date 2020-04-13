@@ -60,9 +60,6 @@ class UIRenderer(private val gameService: GameService) {
             override fun keyDown(event: InputEvent?, keycode: Int): Boolean {
                 when (keycode) {
                     Input.Keys.ESCAPE -> togglePaused()
-                    Input.Keys.ENTER -> {
-                        gameService.reset()
-                    }
                     Input.Keys.P -> DEBUG = !DEBUG
                 }
                 return super.keyDown(event, keycode)
