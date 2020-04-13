@@ -12,7 +12,7 @@ import kotlin.math.max
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
-class GameScreen : KtxScreen, GameService {
+class GameScreen(private val menuService: MenuService) : KtxScreen, GameService {
 
     override var isPaused: Boolean = false
         private set
@@ -37,6 +37,7 @@ class GameScreen : KtxScreen, GameService {
     private var onResumeListeners: Array<(() -> Unit)> = emptyArray()
 
     override fun show() {
+        reset()
         Gdx.input.inputProcessor = uiRenderer.stage
         super.show()
     }
@@ -74,7 +75,7 @@ class GameScreen : KtxScreen, GameService {
     }
 
     override fun exitToMenu() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        menuService.goToMenu()
     }
 
     override fun resume() {

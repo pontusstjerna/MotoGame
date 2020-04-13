@@ -9,12 +9,16 @@ class MotoGame : KtxGame<KtxScreen>(), MenuService {
 
     override fun create() {
         addScreen(MenuScreen(this))
-        addScreen(GameScreen())
-        setScreen<MenuScreen>()
+        addScreen(GameScreen(this))
+        goToMenu()
 
         println(Gdx.files.localStoragePath)
 
         super.create()
+    }
+
+    override fun goToMenu() {
+        setScreen<MenuScreen>()
     }
 
     override fun exit() {

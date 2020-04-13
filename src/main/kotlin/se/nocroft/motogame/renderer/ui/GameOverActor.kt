@@ -2,11 +2,7 @@ package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
-import com.badlogic.gdx.utils.compression.lzma.Base
-import ktx.actors.onClick
-import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.screen.GameService
