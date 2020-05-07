@@ -1,3 +1,3 @@
 # MotoGame
-Simple bike game with procedural generation. 
-LEGACY MONOGAME BRANCH
+Minimalistic 2D trial-like bike game with procedural generation. 
+
