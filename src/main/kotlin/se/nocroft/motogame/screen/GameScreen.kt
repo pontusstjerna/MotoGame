@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.Preferences
 import ktx.app.KtxScreen
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
 import se.nocroft.motogame.renderer.ui.UIRenderer
@@ -30,6 +31,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
 
     private val gameRenderer = GameRenderer(world, this)
     private val uiRenderer = UIRenderer(this)
+    private val audioPlayer = AudioPlayer(this)
 
     private var accumulator: Float = 0.0f
 
@@ -45,6 +47,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     override fun render(delta: Float) {
         gameRenderer.render(delta)
         uiRenderer.render(delta)
+        audioPlayer.update(world.bike)
         if (!world.isDead && !isPaused) {
             checkInput()
             updatePhysics(delta)
