@@ -6,15 +6,15 @@ import se.nocroft.motogame.screen.GameService
 
 class AudioPlayer(private val gameService: GameService) {
 
-    val BASE_PATH = "assets/sounds/SFX"
+    val BASE_PATH = "assets/sound/SFX"
 
     // Loads the sound into memory first when it is required
     private val engineLoop by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/Engine_Loop_1.wav"))
+        Sound(Gdx.files.local("$BASE_PATH/engine_loop_1.wav"))
     }
 
     private val impactLight by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/Impact_Light_1.wav"))
+        Sound(Gdx.files.local("$BASE_PATH/impact_light_1.wav"))
     }
 
     init {
