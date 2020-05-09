@@ -2,20 +2,27 @@ package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.Preferences
 import ktx.app.KtxScreen
-import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
 import se.nocroft.motogame.renderer.ui.UIRenderer
-import kotlin.math.max
+import kotlin.properties.Delegates
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
 
 class GameScreen(private val menuService: MenuService) : KtxScreen, GameService {
 
-    override var isPaused: Boolean = false
+    private var pauseListeners = mutableListOf<() -> Unit>()
+    private var resumeListeners = mutableListOf<() -> Unit>()
+
+    override var isPaused: Boolean by Delegates.observable(false) { _, _, newValue ->
+        if (newValue) {
+            pauseListeners.forEach { it() }
+        } else {
+            resumeListeners.forEach { it() }
+        }
+    }
         private set
 
     override var highscore: Int = Gdx.app.getPreferences("motogame").getInteger("highscore")
@@ -28,9 +35,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         get() = world.distance.toInt()
 
     private val world: GameWorld = GameWorld()
-
-    private var onPauseListeners = mutableListOf<() -> Unit>()
-    private var onResumeListeners = mutableListOf<() -> Unit>()
 
     private val gameRenderer = GameRenderer(world, this)
     private val uiRenderer = UIRenderer(this)
@@ -74,7 +78,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
 
     override fun pause() {
         isPaused = true
-        onPauseListeners.forEach { it() }
     }
 
     override fun exitToMenu() {
@@ -83,15 +86,14 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
 
     override fun resume() {
         isPaused = false
-        onResumeListeners.forEach { it() }
     }
 
     override fun addPauseListener(action: () -> Unit) {
-        onPauseListeners.add(action)
+        pauseListeners.add(action)
     }
 
     override fun addResumeListener(action: () -> Unit) {
-        onResumeListeners.add(action)
+        resumeListeners.add(action)
     }
 
     private fun checkInput() {

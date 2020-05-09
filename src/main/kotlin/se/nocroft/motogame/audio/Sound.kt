@@ -12,10 +12,12 @@ class Sound(fileHandle: FileHandle) {
     private var id: Long? = null
 
     fun play() {
+        stop()
         id = sound.play()
     }
 
     fun playLoop() {
+        stop()
         play()
         sound.setLooping(id!!, true)
     }
@@ -25,7 +27,10 @@ class Sound(fileHandle: FileHandle) {
     }
 
     fun stop() {
-        id = null
+        id?.let {
+            sound.stop(it)
+            id = null
+        }
     }
 
     fun dispose() {
