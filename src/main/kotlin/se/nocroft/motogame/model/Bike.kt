@@ -32,6 +32,9 @@ class Bike (private val position: Vector2, world: World) {
     val rearWheel: Wheel = Wheel(position = position.cpy().add(rearOffset), world = world)
     val frontWheel: Wheel = Wheel(position = position.cpy().add(frontOffset).add(frontOffset), world = world)
 
+    val wheelThrust: Float
+        get() = - rearWheel.body.angularVelocity
+
     fun destroy(with: World) {
         with.destroyBody(body)
         with.destroyBody(rearWheel.body)

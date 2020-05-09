@@ -18,19 +18,18 @@ class AudioPlayer(private val gameService: GameService) {
     }
 
     init {
-        /*gameService.addPauseListener {
-            engineLoop.stop()
-        }
-
         gameService.addResumeListener {
             engineLoop.playLoop()
-        }*/
+        }
 
-        engineLoop.playLoop()
+        gameService.addPauseListener {
+            engineLoop.stop()
+        }
     }
 
     fun update(bike: Bike) {
-        engineLoop.setPitch(1 + bike.thrust / bike.maxThrust)
+        // TODO: Make it smoother lol
+        engineLoop.setPitch(1 + (bike.wheelThrust / bike.maxThrust) * 0.5f)
     }
 
     // Clears audio files from memory

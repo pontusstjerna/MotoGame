@@ -29,14 +29,14 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
 
     private val world: GameWorld = GameWorld()
 
+    private var onPauseListeners = mutableListOf<() -> Unit>()
+    private var onResumeListeners = mutableListOf<() -> Unit>()
+
     private val gameRenderer = GameRenderer(world, this)
     private val uiRenderer = UIRenderer(this)
     private val audioPlayer = AudioPlayer(this)
 
     private var accumulator: Float = 0.0f
-
-    private var onPauseListeners: Array<(() -> Unit)> = emptyArray()
-    private var onResumeListeners: Array<(() -> Unit)> = emptyArray()
 
     override fun show() {
         reset()
@@ -87,11 +87,11 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun addPauseListener(action: () -> Unit) {
-        onPauseListeners += action
+        onPauseListeners.add(action)
     }
 
     override fun addResumeListener(action: () -> Unit) {
-        onResumeListeners += action
+        onResumeListeners.add(action)
     }
 
     private fun checkInput() {
