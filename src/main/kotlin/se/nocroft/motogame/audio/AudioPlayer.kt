@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import se.nocroft.motogame.GameEvent.*
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.screen.GameService
+import kotlin.math.absoluteValue
 
 class AudioPlayer(private val gameService: GameService) {
 
@@ -20,10 +21,12 @@ class AudioPlayer(private val gameService: GameService) {
 
     private val music by lazy {
         Gdx.audio.newMusic(Gdx.files.local("assets/sound/music.mp3")).apply {
-            // Half of original volume. Maybe we should have a setting for music volume?
-            volume = 0.5f
+            // Maybe we should have a setting for music volume?
+            volume = 0.4f
         }
     }
+
+    private var enginePitch = 1f
 
     init {
         gameService.addGameEventListener {
@@ -53,8 +56,10 @@ class AudioPlayer(private val gameService: GameService) {
     }
 
     fun update(bike: Bike) {
-        // TODO: Make it smoother lol
-        engineLoop.setPitch(1 + (bike.wheelThrust / bike.maxThrust) * 0.5f)
+        val goal = 0.8f + (bike.wheelThrust / bike.maxThrust) * 0.7f
+        val pitchChangeSpeed = 0.1f
+        enginePitch += (goal - enginePitch) * pitchChangeSpeed
+        engineLoop.setPitch(enginePitch.absoluteValue)
     }
 
     // Clears audio files from memory
