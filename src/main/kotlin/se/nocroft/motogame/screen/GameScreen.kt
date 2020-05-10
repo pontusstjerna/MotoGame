@@ -3,6 +3,8 @@ package se.nocroft.motogame.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import ktx.app.KtxScreen
+import se.nocroft.motogame.GameEvent
+import se.nocroft.motogame.GameEvent.*
 import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
@@ -13,14 +15,13 @@ import kotlin.properties.Delegates
 
 class GameScreen(private val menuService: MenuService) : KtxScreen, GameService {
 
-    private var pauseListeners = mutableListOf<() -> Unit>()
-    private var resumeListeners = mutableListOf<() -> Unit>()
+    private var eventListeners = mutableListOf<(GameEvent) -> Unit>()
 
     override var isPaused: Boolean by Delegates.observable(false) { _, _, newValue ->
         if (newValue) {
-            pauseListeners.forEach { it() }
+            eventListeners.forEach { it(PAUSE) }
         } else {
-            resumeListeners.forEach { it() }
+            eventListeners.forEach { it(RESUME) }
         }
     }
         private set
@@ -45,6 +46,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     override fun show() {
         reset()
         Gdx.input.inputProcessor = uiRenderer.stage
+        eventListeners.forEach { it(START) }
         super.show()
     }
 
@@ -59,6 +61,8 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun dispose() {
+        eventListeners.forEach { it(QUIT) }
+        audioPlayer.dispose()
         gameRenderer.dispose()
         uiRenderer.dispose()
         super.dispose()
@@ -88,12 +92,8 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         isPaused = false
     }
 
-    override fun addPauseListener(action: () -> Unit) {
-        pauseListeners.add(action)
-    }
-
-    override fun addResumeListener(action: () -> Unit) {
-        resumeListeners.add(action)
+    override fun addGameEventListener(action: (GameEvent) -> Unit) {
+        eventListeners.add(action)
     }
 
     private fun checkInput() {

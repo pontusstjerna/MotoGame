@@ -1,6 +1,7 @@
 package se.nocroft.motogame.audio
 
 import com.badlogic.gdx.Gdx
+import se.nocroft.motogame.GameEvent.*
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.screen.GameService
 
@@ -18,12 +19,12 @@ class AudioPlayer(private val gameService: GameService) {
     }
 
     init {
-        gameService.addResumeListener {
-            engineLoop.playLoop()
-        }
-
-        gameService.addPauseListener {
-            engineLoop.stop()
+        gameService.addGameEventListener {
+            when (it) {
+                PAUSE -> engineLoop.stop()
+                START, RESUME -> engineLoop.playLoop()
+                else -> {}
+            }
         }
     }
 
