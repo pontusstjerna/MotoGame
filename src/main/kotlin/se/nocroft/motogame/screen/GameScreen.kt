@@ -35,7 +35,9 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     override val distance: Int
         get() = world.distance.toInt()
 
-    private val world: GameWorld = GameWorld()
+    private val world: GameWorld = GameWorld().apply {
+        addDeathListener { eventListeners.forEach { it(DIE) } }
+    }
 
     private val gameRenderer = GameRenderer(world, this)
     private val uiRenderer = UIRenderer(this)
@@ -61,7 +63,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun dispose() {
-        eventListeners.forEach { it(QUIT) }
         audioPlayer.dispose()
         gameRenderer.dispose()
         uiRenderer.dispose()
@@ -86,6 +87,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
 
     override fun exitToMenu() {
         menuService.goToMenu()
+        eventListeners.forEach { it(QUIT) }
     }
 
     override fun resume() {

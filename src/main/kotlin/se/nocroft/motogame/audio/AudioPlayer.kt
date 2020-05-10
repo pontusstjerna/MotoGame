@@ -21,9 +21,9 @@ class AudioPlayer(private val gameService: GameService) {
     init {
         gameService.addGameEventListener {
             when (it) {
-                PAUSE -> engineLoop.stop()
+                PAUSE, DIE -> engineLoop.stop()
                 START, RESUME -> engineLoop.playLoop()
-                DIE, RESET, QUIT -> {}
+                RESET, QUIT -> {}
             }
         }
     }

@@ -28,6 +28,8 @@ class GameWorld: ContactListener {
 
     private val initBikePos = Vector2(0f, 7f)
 
+    private var deathListener: (() -> Unit)? = null
+
     var bike: Bike = Bike(initBikePos, physicsWorld)
 
     private var dy: Float = 0f
@@ -72,6 +74,7 @@ class GameWorld: ContactListener {
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
                 isDead = true
+                deathListener?.invoke()
             }
         }
     }
@@ -81,6 +84,10 @@ class GameWorld: ContactListener {
         distance = 0f
         bike.destroy(physicsWorld)
         bike = Bike(initBikePos, physicsWorld)
+    }
+
+    fun addDeathListener(action: () -> Unit) {
+        deathListener = action
     }
 
     private fun generateTrack() {

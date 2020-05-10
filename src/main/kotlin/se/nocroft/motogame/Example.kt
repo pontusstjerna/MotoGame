@@ -98,11 +98,11 @@ class Example {
     }
 
     fun whatAmI(obj: Any): String {
-        return when(obj) {
-            1 -> "en etta änna"
-            "karin" -> "aha"
-            is String -> "du är ju en sträng!"
-            else -> "vet ju inte"
-        }
+    return when(obj) {
+        1 -> "en etta änna"
+        "karin" -> "aha"
+        is String -> "du är ju en sträng!"
+        else -> "vet ju inte"
     }
+}
 }
