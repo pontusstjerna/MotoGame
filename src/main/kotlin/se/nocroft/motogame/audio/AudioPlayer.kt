@@ -18,12 +18,36 @@ class AudioPlayer(private val gameService: GameService) {
         Sound(Gdx.files.local("$BASE_PATH/impact_light_1.wav"))
     }
 
+    private val music by lazy {
+        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music.mp3")).apply {
+            // Half of original volume. Maybe we should have a setting for music volume?
+            volume = 0.5f
+        }
+    }
+
     init {
         gameService.addGameEventListener {
             when (it) {
-                PAUSE, DIE -> engineLoop.stop()
-                START, RESUME -> engineLoop.playLoop()
-                RESET, QUIT -> {}
+                PAUSE -> {
+                    engineLoop.stop()
+                    music.pause()
+                }
+                RESUME -> {
+                    music.play()
+                    engineLoop.playLoop()
+                }
+                DIE -> {
+                    engineLoop.stop()
+                    music.stop()
+                    impactLight.play()
+                }
+                START -> {
+                    engineLoop.playLoop()
+                    music.play()
+                    music.isLooping = true
+                }
+                QUIT -> music.stop()
+                RESET -> {}
             }
         }
     }
