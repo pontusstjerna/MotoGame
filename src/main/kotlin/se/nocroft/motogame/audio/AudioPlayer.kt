@@ -23,7 +23,7 @@ class AudioPlayer(private val gameService: GameService) {
             when (it) {
                 PAUSE -> engineLoop.stop()
                 START, RESUME -> engineLoop.playLoop()
-                DIE, RESET, QUIT -> {}
+                else -> {}
             }
         }
     }
