@@ -7,6 +7,7 @@ import se.nocroft.motogame.GameEvent.*
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.absoluteValue
+import kotlin.random.Random
 
 class AudioPlayer(private val gameService: GameService) {
 
@@ -17,26 +18,17 @@ class AudioPlayer(private val gameService: GameService) {
         Sound(Gdx.files.local("$BASE_PATH/engine_loop_4.wav"))
     }
 
-    private val impactLight1 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_light_1.wav"))
-    }
-    private val impactLight2 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_light_2.wav"))
-    }
-    private val impactLight3 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_light_3.wav"))
-    }
+    private val impactLight = arrayOf(
+            Sound(Gdx.files.local("$BASE_PATH/impact_light_1.wav")),
+            Sound(Gdx.files.local("$BASE_PATH/impact_light_2.wav")),
+            Sound(Gdx.files.local("$BASE_PATH/impact_light_3.wav"))
+    )
 
-    private val impactMid1 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_mid_1.wav"))
-    }
-    private val impactMid2 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_mid_2.wav"))
-    }
-    private val impactMid3 by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/impact_mid_3.wav"))
-    }
-
+    private val impactMid = arrayOf(
+            Sound(Gdx.files.local("$BASE_PATH/impact_mid_1.wav")),
+            Sound(Gdx.files.local("$BASE_PATH/impact_mid_2.wav")),
+            Sound(Gdx.files.local("$BASE_PATH/impact_mid_3.wav"))
+    )
 
     private val end by lazy {
         Sound(Gdx.files.local("$BASE_PATH/end.wav"))
@@ -87,30 +79,19 @@ class AudioPlayer(private val gameService: GameService) {
 
         // Testing randomizing sounds
         if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            when(val i : Int = (Math.random() * 3 + 1).toInt()){
-                1 -> impactMid1.play()
-                2 -> impactMid2.play()
-                3 -> impactMid3.play()
-            }
+            impactLight[Random.nextInt(0, 2)].play()
         }
+
         if(Gdx.input.isKeyJustPressed(Input.Keys.N)) {
-            when(val i : Int = (Math.random() * 3 + 1).toInt()){
-                1 -> impactLight1.play()
-                2 -> impactLight2.play()
-                3 -> impactLight3.play()
-            }
+            impactMid[Random.nextInt(0, 2)].play()
         }
     }
 
     // Clears audio files from memory
     fun dispose() {
         engineLoop.dispose()
-        impactLight1.dispose()
-        impactLight2.dispose()
-        impactLight3.dispose()
-        impactMid1.dispose()
-        impactMid2.dispose()
-        impactMid3.dispose()
+        impactLight.forEach { it.dispose() }
+        impactMid.forEach { it.dispose() }
         end.dispose()
     }
 }
