@@ -18,17 +18,17 @@ class AudioPlayer(private val gameService: GameService) {
         Sound(Gdx.files.local("$BASE_PATH/engine_loop_4.wav"))
     }
 
-    private val impactLight = arrayOf(
-            Sound(Gdx.files.local("$BASE_PATH/impact_light_1.wav")),
-            Sound(Gdx.files.local("$BASE_PATH/impact_light_2.wav")),
-            Sound(Gdx.files.local("$BASE_PATH/impact_light_3.wav"))
-    )
+    private val impactLight by lazy {
+        (1..3).map {
+            Sound(Gdx.files.local("$BASE_PATH/impact_light_$it.wav"))
+        }.toTypedArray()
+    }
 
-    private val impactMid = arrayOf(
-            Sound(Gdx.files.local("$BASE_PATH/impact_mid_1.wav")),
-            Sound(Gdx.files.local("$BASE_PATH/impact_mid_2.wav")),
-            Sound(Gdx.files.local("$BASE_PATH/impact_mid_3.wav"))
-    )
+    private val impactMid by lazy {
+        (1..3).map {
+            Sound(Gdx.files.local("$BASE_PATH/impact_mid_$it.wav"))
+        }.toTypedArray()
+    }
 
     private val end by lazy {
         Sound(Gdx.files.local("$BASE_PATH/end.wav"))
