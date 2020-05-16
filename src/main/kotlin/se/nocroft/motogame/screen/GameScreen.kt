@@ -55,7 +55,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     override fun render(delta: Float) {
         gameRenderer.render(delta)
         uiRenderer.render(delta)
-        audioPlayer.update(world.bike)
+        audioPlayer.update(world)
         if (!world.isDead && !isPaused) {
             checkInput()
             updatePhysics(delta)

@@ -2,9 +2,8 @@ package se.nocroft.motogame.audio
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import org.lwjgl.input.Keyboard
 import se.nocroft.motogame.GameEvent.*
-import se.nocroft.motogame.model.Bike
+import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.absoluteValue
 import kotlin.random.Random
@@ -71,7 +70,8 @@ class AudioPlayer(private val gameService: GameService) {
         }
     }
 
-    fun update(bike: Bike) {
+    fun update(world: GameWorld) {
+        val bike = world.bike
         val goal = 0.8f + (bike.wheelThrust / bike.maxThrust) * 0.7f
         val pitchChangeSpeed = 0.1f
         enginePitch += (goal - enginePitch) * pitchChangeSpeed
