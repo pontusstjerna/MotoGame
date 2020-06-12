@@ -40,6 +40,32 @@ class AudioPlayer(private val gameService: GameService) {
         }
     }
 
+    private val musicIntro by lazy {
+        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_introloop.wav")).apply{
+            volume = 0.9f
+        }
+    }
+
+    private val musicIntroOneShot by lazy {
+        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_IntroOneShot.wav")).apply{
+            volume = 0.9f
+        }
+    }
+
+    private val musicMain by lazy {
+        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_MainLoop.wav")).apply{
+            volume = 0.9f
+        }
+    }
+
+    /*
+        Beats-per-minute: 108 BPM
+        Beats-per-second: 1.8 Hz
+        Length of 1 beat: 0.5556 second = 556 msec
+        Length of 1 bar (4 beats): 2.2222 second
+     */
+
+
     private var enginePitch = 1f
 
     init {
@@ -47,28 +73,33 @@ class AudioPlayer(private val gameService: GameService) {
             when (it) {
                 PAUSE -> {
                     engineLoop.stop()
-                    music.pause()
+                    musicIntro.pause()
                 }
                 RESUME -> {
-                    music.play()
+                    musicIntroOneShot.play()
                     engineLoop.playLoop()
                 }
                 DIE -> {
                     engineLoop.stop()
-                    music.stop()
+                    musicIntro.stop()
                     end.play()
                 }
                 START -> {
                     engineLoop.playLoop()
-                    music.play()
-                    music.isLooping = true
+                    musicIntroOneShot.play()
+
                 }
                 QUIT -> music.stop()
-                RESET -> {}
+                RESET -> {
+                    // TODO isn't used, music should reset when game resets
+                    /*music.stop()
+                    music.play()*/
+                }
 
             }
         }
     }
+    var introLoopCheck = true;
 
     fun update(world: GameWorld) {
         val bike = world.bike
@@ -76,6 +107,25 @@ class AudioPlayer(private val gameService: GameService) {
         val pitchChangeSpeed = 0.1f
         enginePitch += (goal - enginePitch) * pitchChangeSpeed
         engineLoop.setPitch(enginePitch.absoluteValue)
+
+
+
+        if(world.distance > 3f){
+            introLoopCheck = false
+        }
+        musicIntroOneShot.setOnCompletionListener() {
+            musicIntro.play()
+            musicIntro.isLooping = true
+        }
+        if(!introLoopCheck){
+            musicIntro.isLooping = false
+            musicIntro.setOnCompletionListener {
+                musicIntro.stop()
+                musicMain.play()
+                musicMain.isLooping = true
+            }
+        }
+
 
         // Testing randomizing sounds
         if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
