@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 class AudioPlayer(private val gameService: GameService) {
 
-    val BASE_PATH = "assets/sound/SFX"
+    val BASE_PATH = "assets/sound/sfx"
 
     // Loads the sound into memory first when it is required
     private val engineLoop by lazy {
