@@ -34,7 +34,7 @@ class AudioPlayer(private val gameService: GameService) {
     }
 
     private val music by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_full.wav")).apply {
+        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motogame_music_full.wav")).apply {
             // Maybe we should have a setting for music volume?
             volume = 0.9f
         }
