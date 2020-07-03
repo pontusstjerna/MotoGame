@@ -44,12 +44,21 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         color = TRACK_COLOR
     }
 
-    private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel5.png")) }
-    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
-    private val bikeWheelWidthPixels = 93f
+    private val wheelTexture: Texture by lazy {
+        val texture = Texture(Gdx.files.local("assets/wheel5.png"), true)
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        texture
+    }
+    private val bikeTexture: Texture by lazy {
+        val texture = Texture(Gdx.files.local("assets/bike_line_3.png"), true)
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        texture
+    }
+    private val bikeWheelWidthPixels = 106f
 
     private val trackWidth = 1f
     private var zoom: Float = 10f
+    private val defaultZoom: Float = 8f
 
     fun resize(width: Int, height: Int) {
         val scale = gameWidth / width
@@ -91,7 +100,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private fun getZoom(): Float {
         val goal = when {
             gameService.isPaused || gameService.isDead -> 7f
-            else -> 10f + (world.bike.body.linearVelocity.len() * 0.5f)
+            else -> defaultZoom + (world.bike.body.linearVelocity.len() * 0.5f)
         }
 
         val zoomSpeed = 0.02f
@@ -120,7 +129,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         val height = bikeTexture.height * scale
         batch.draw(
                 bikeTexture,
-                bike.body.position.x - (width / 2) + (width - bikeWheelsWidthMeters) - .1f, bike.body.position.y - (height / 2) - .15f,
+                bike.body.position.x - (width / 2), bike.body.position.y - (height / 2),
                 width / 2, height / 2, width, bikeTexture.height * scale, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
                 0, 0, bikeTexture.width, bikeTexture.height, false, false
