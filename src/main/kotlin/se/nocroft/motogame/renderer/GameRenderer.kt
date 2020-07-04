@@ -45,20 +45,25 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     private val wheelTexture: Texture by lazy {
-        val texture = Texture(Gdx.files.local("assets/wheel5.png"), true)
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        texture
+        Texture(Gdx.files.local("assets/wheel5.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
     }
     private val bikeTexture: Texture by lazy {
-        val texture = Texture(Gdx.files.local("assets/bike_line_3.png"), true)
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        texture
+        Texture(Gdx.files.local("assets/bike_line_3.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+        }
+    }
+    private val riderNeutralTexture: Texture by lazy {
+        Texture(Gdx.files.local("assets/rider_neutral.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+        }
     }
     private val bikeWheelWidthPixels = 106f
 
     private val trackWidth = 1f
     private var zoom: Float = 10f
-    private val defaultZoom: Float = 8f
+    private val defaultZoom: Float = 5f //8f
 
     fun resize(width: Int, height: Int) {
         val scale = gameWidth / width
@@ -85,6 +90,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
 
         batch.projectionMatrix = camera.combined
         batch.use { b ->
+            renderRider(world.bike, b)
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
             renderBike(world.bike, b)
@@ -156,6 +162,35 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
                 wheel.body.angle * MathUtils.radiansToDegrees,
                 0, 0,
                 this.wheelTexture.width, this.wheelTexture.height, false, false
+        )
+    }
+
+    private fun renderRider(bike: Bike, batch: SpriteBatch) {
+        /*batch.draw(
+                this.riderNeutralTexture,
+                bike.body.position.x, bike.body.position.y,
+                0f, 0f,
+                riderNeutralTexture.width.toFloat(),
+                riderNeutralTexture.height.toFloat(),
+                1f,
+                1f,
+                bike.body.angle * MathUtils.radiansToDegrees,
+                0, 0,
+                riderNeutralTexture.width,
+                riderNeutralTexture.height,
+                false,
+                false
+        )*/
+        val bikeWheelsWidthMeters: Float = distanceBetweenWheelsMeters()
+        val scale = bikeWheelsWidthMeters / bikeWheelWidthPixels
+        val width = riderNeutralTexture.width * scale
+        val height = riderNeutralTexture.height * scale
+        batch.draw(
+                riderNeutralTexture,
+                bike.body.position.x - (width / 2), bike.body.position.y - height / 3,
+                width / 2, height / 2, width, height, 1f, 1f,
+                bike.body.angle * MathUtils.radiansToDegrees,
+                0, 0, riderNeutralTexture.width, riderNeutralTexture.height, false, false
         )
     }
 }
