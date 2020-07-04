@@ -26,7 +26,7 @@ class GameWorld: ContactListener {
             Vector2(4f, 2f)
     )
 
-    private val initBikePos = Vector2(0f, 7f)
+    private val initBikePos = Vector2(5f, 7f)
 
     private var deathListener: (() -> Unit)? = null
 
@@ -52,6 +52,7 @@ class GameWorld: ContactListener {
 
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
+        bike.update()
         generateTrack()
         distance = max(distance, bike.body.position.x)
     }

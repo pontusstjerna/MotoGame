@@ -2,7 +2,7 @@ package se.nocroft.motogame
 
 import com.badlogic.gdx.graphics.Color
 
-var DEBUG = false
+var DEBUG = true
 var FULLSCREEN = false
 
 /* Padding */

@@ -13,17 +13,21 @@ class Bike (private val position: Vector2, world: World) {
     val frontDamperLength = .77f
     val rearOffset = Vector2(.26f - (width / 2),  -(height / 2) + (height - .68f) )
     val frontOffset = Vector2(1.32f - (width / 2), -(height / 2) + (height - .67f))
-    val topLeftOffset = Vector2(- (width / 2), .21f - (height / 2))
-    val topRightOffset = Vector2(1.26f - (width / 2), 0.36f)
+    val topLeftOffset = Vector2(.2f - (width / 2), .51f - (height / 2))
+    val topRightOffset = Vector2(1.5f - (width / 2), 0.4f - (height / 2))
     val bottomOffset = Vector2(0f, -(height / 2))
 
     val maxThrust = 40f
     val thrust = 20f
     val brakeThrust = 20f
 
+    val rider = Rider()
+
+    val headOffset = Vector2(0f, rider.height - rider.crotchY)
+
     val body = world.body(type = BodyDef.BodyType.DynamicBody) {
         position.set(this@Bike.position)
-        polygon(topLeftOffset, topRightOffset, bottomOffset) {
+        polygon(topLeftOffset, headOffset, topRightOffset, bottomOffset) {
             density = 10f
         }
     }
@@ -53,6 +57,14 @@ class Bike (private val position: Vector2, world: World) {
         }
     }
 
+    fun update() {
+        if (rider.leaningForward) {
+            body.applyTorque(-30f, true)
+        } else if (rider.leaningBackward) {
+            body.applyTorque(30f, true)
+        }
+    }
+
     fun accelerate() {
         if (rearWheel.body.angularVelocity > -maxThrust) {
             rearWheel.body.applyTorque(-thrust, true)
@@ -66,13 +78,5 @@ class Bike (private val position: Vector2, world: World) {
         } else if (rearWheel.body.angularVelocity > 0) {
             rearWheel.body.applyTorque(-brakeThrust, true)
         }
-    }
-
-    fun leanBack() {
-        body.applyTorque(30f, true)
-    }
-
-    fun leanForward() {
-        body.applyTorque(-30f, true)
     }
 }

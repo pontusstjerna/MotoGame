@@ -106,9 +106,11 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            world.bike.leanForward()
+            world.bike.rider.leanForward()
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            world.bike.leanBack()
+            world.bike.rider.leanBackward()
+        } else {
+            world.bike.rider.stopLeaning()
         }
     }
 

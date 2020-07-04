@@ -2,6 +2,7 @@ package se.nocroft.motogame.renderer
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -32,8 +33,6 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     val gameWidth = 20f
     private val camera = PerspectiveCamera().apply {
         val scale = gameWidth / Gdx.graphics.width
-
-        //setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
         viewportWidth = gameWidth
         viewportHeight = Gdx.graphics.height * scale
         fieldOfView = 57f
@@ -63,7 +62,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
 
     private val trackWidth = 1f
     private var zoom: Float = 10f
-    private val defaultZoom: Float = 5f //8f
+    private val defaultZoom: Float = if (DEBUG) 5f else 8f
 
     fun resize(width: Int, height: Int) {
         val scale = gameWidth / width
@@ -72,9 +71,6 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     fun render(delta: Float) {
-        if (DEBUG) {
-            debugRenderer.render(world.physicsWorld, camera.combined)
-        }
 
         //clearScreen(0.14f, .14f, .14f)
         Gdx.gl.glClearColor(.14f, .14f, .14f, 1f)
@@ -94,6 +90,10 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
             renderBike(world.bike, b)
+        }
+
+        if (DEBUG) {
+            debugRenderer.render(world.physicsWorld, camera.combined)
         }
     }
 
