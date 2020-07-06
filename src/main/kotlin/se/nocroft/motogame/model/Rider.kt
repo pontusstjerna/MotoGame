@@ -1,9 +1,12 @@
 package se.nocroft.motogame.model
 
+import com.badlogic.gdx.math.Vector2
+
 class Rider {
     // height in meters
-    val height = 1.8f
-    val crotchY = 1f
+    val height = 1.25f
+    val crotchY = .7f
+    val bottomBikeOffset = Vector2(.51f, 0.0f)
 
     var leaningForward = false
     private set

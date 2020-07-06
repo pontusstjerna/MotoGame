@@ -166,31 +166,24 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     private fun renderRider(bike: Bike, batch: SpriteBatch) {
-        /*batch.draw(
-                this.riderNeutralTexture,
-                bike.body.position.x, bike.body.position.y,
+        val scale = bike.rider.height / riderNeutralTexture.height
+        val width = riderNeutralTexture.width * scale
+        val height = bike.rider.height
+        val bikeWidth = bikeTexture.width * scale
+        val bikeHeight = bike.height
+        batch.draw(
+                riderNeutralTexture,
+                bike.body.position.x - (bikeWidth / 2) + bike.rider.bottomBikeOffset.x,
+                bike.body.position.y - (bikeHeight / 2) + bike.rider.bottomBikeOffset.y,
                 0f, 0f,
-                riderNeutralTexture.width.toFloat(),
-                riderNeutralTexture.height.toFloat(),
-                1f,
-                1f,
+                width, height, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
                 0, 0,
                 riderNeutralTexture.width,
                 riderNeutralTexture.height,
                 false,
                 false
-        )*/
-        val bikeWheelsWidthMeters: Float = distanceBetweenWheelsMeters()
-        val scale = bikeWheelsWidthMeters / bikeWheelWidthPixels
-        val width = riderNeutralTexture.width * scale
-        val height = riderNeutralTexture.height * scale
-        batch.draw(
-                riderNeutralTexture,
-                bike.body.position.x - (width / 2), bike.body.position.y - height / 3,
-                width / 2, height / 2, width, height, 1f, 1f,
-                bike.body.angle * MathUtils.radiansToDegrees,
-                0, 0, riderNeutralTexture.width, riderNeutralTexture.height, false, false
         )
+
     }
 }
