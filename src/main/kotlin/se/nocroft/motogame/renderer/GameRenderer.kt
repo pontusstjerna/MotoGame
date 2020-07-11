@@ -175,7 +175,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
                 riderNeutralTexture,
                 bike.body.position.x - (bikeWidth / 2) + bike.rider.bottomBikeOffset.x,
                 bike.body.position.y - (bikeHeight / 2) + bike.rider.bottomBikeOffset.y,
-                0f, 0f,
+                width / 2, bikeHeight / 2,
                 width, height, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
                 0, 0,

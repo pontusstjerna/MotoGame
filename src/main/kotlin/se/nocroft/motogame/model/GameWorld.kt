@@ -3,6 +3,7 @@ package se.nocroft.motogame.model
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.createWorld
+import se.nocroft.motogame.GRAVITY
 import java.lang.Float.max
 import kotlin.random.Random
 
@@ -16,7 +17,7 @@ class GameWorld: ContactListener {
     var isDead: Boolean = false
     private set
 
-    val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
+    val physicsWorld: World = createWorld(gravity = Vector2(0f, GRAVITY)).apply {
         setContactListener(this@GameWorld)
     }
 
