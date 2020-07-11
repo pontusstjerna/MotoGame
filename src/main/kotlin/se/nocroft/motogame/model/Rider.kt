@@ -6,7 +6,6 @@ class Rider {
     // height in meters
     val height = 1.25f
     val crotchY = .7f
-    val bottomBikeOffset = Vector2(.51f, 0.0f)
 
     var leaningForward = false
     private set

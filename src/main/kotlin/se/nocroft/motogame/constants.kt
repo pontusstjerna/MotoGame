@@ -6,7 +6,7 @@ var DEBUG = false
 var FULLSCREEN = false
 
 /* GAMEPLAY */
-const val GRAVITY: Float = -2f //-9.81f
+const val GRAVITY: Float = -5f //-9.81f
 
 /* Padding */
 const val PADDING_MEDIUM = 20f

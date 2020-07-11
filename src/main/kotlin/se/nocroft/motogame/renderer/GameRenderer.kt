@@ -2,7 +2,6 @@ package se.nocroft.motogame.renderer
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.PerspectiveCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -12,13 +11,13 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import ktx.app.clearScreen
 import ktx.graphics.use
 import ktx.math.*
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.TRACK_COLOR
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
+import se.nocroft.motogame.model.Rider
 import se.nocroft.motogame.model.Wheel
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.*
@@ -53,8 +52,8 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
             setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         }
     }
-    private val riderNeutralTexture: Texture by lazy {
-        Texture(Gdx.files.local("assets/rider_neutral.png"), true).apply {
+    private val ridersTexture: RiderTexture by lazy {
+        RiderTexture(Gdx.files.local("assets/riders.png"), true).apply {
             setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         }
     }
@@ -166,21 +165,22 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     private fun renderRider(bike: Bike, batch: SpriteBatch) {
-        val scale = bike.rider.height / riderNeutralTexture.height
-        val width = riderNeutralTexture.width * scale
+        val scale = bike.rider.height / ridersTexture.height
+        val width = ridersTexture.frameWidth * scale
         val height = bike.rider.height
         val bikeWidth = bikeTexture.width * scale
         val bikeHeight = bike.height
+
         batch.draw(
-                riderNeutralTexture,
-                bike.body.position.x - (bikeWidth / 2) + bike.rider.bottomBikeOffset.x,
-                bike.body.position.y - (bikeHeight / 2) + bike.rider.bottomBikeOffset.y,
+                ridersTexture,
+                bike.body.position.x - (bikeWidth / 2),
+                bike.body.position.y - (bikeHeight / 2),
                 width / 2, bikeHeight / 2,
                 width, height, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
-                0, 0,
-                riderNeutralTexture.width,
-                riderNeutralTexture.height,
+                ridersTexture.getOffsetXFromModel(bike.rider), 0,
+                ridersTexture.frameWidth,
+                ridersTexture.height,
                 false,
                 false
         )
