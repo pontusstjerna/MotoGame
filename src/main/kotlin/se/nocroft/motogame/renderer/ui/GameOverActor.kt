@@ -3,6 +3,7 @@ package se.nocroft.motogame.renderer.ui
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import se.nocroft.motogame.PADDING_MEDIUM
+import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.screen.GameService
 import kotlin.random.Random
 
@@ -41,17 +42,17 @@ class GameOverActor(private val gameService: GameService) : BaseMenuActor() {
             "Something went terribly wrong."
     )
 
-    private val gameOverLabel = Label("Whoops, you deaded. ")
+    private val gameOverLabel = Title("Whoops, you deaded. ")
     private val scoreLabel = Label("Your score: 0m")
 
     init {
-        add(gameOverLabel)
+        add(gameOverLabel).padBottom(PADDING_SMALL)
         row()
-        add(scoreLabel).pad(0f, 0f, PADDING_MEDIUM, 0f)
+        add(scoreLabel).padBottom(PADDING_MEDIUM)
         row()
         add(buttons[0])
         row()
-        add(buttons[1]).padBottom(Value.percentHeight(12.5f))
+        add(buttons[1])
         setFillParent(true)
     }
 
