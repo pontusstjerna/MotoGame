@@ -1,6 +1,7 @@
 package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.scenes.scene2d.Touchable
+import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.screen.GameService
 
 class PausedMenuActor(private val gameService: GameService): BaseMenuActor() {
@@ -25,7 +26,7 @@ class PausedMenuActor(private val gameService: GameService): BaseMenuActor() {
     )
 
     init {
-        add(Title("PAUSED"))
+        add(Title("PAUSED")).padBottom(PADDING_SMALL)
         buttons.forEach {
             row()
             add(it)

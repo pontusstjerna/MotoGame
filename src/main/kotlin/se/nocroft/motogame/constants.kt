@@ -10,6 +10,7 @@ const val GRAVITY: Float = -5f //-9.81f
 
 /* Padding */
 const val PADDING_MEDIUM = 20f
+const val PADDING_SMALL = 10f
 
 /* Colors */
 val TEXT_COLOR: Color = Color.WHITE

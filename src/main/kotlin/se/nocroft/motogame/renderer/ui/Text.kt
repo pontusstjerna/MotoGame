@@ -14,10 +14,10 @@ private class Regular : Label.LabelStyle() {
     }
 }
 
-private class Bold : Label.LabelStyle() {
+private class Bold(size: Int = 16) : Label.LabelStyle() {
     init {
         fontColor = TEXT_COLOR
-        font = BitmapFont(Gdx.files.local("$BASE_PATH/exo2_bold_16.fnt"))
+        font = BitmapFont(Gdx.files.local("$BASE_PATH/exo2_bold_$size.fnt"))
     }
 }
 
@@ -29,4 +29,4 @@ open class Label(text: CharSequence?) : com.badlogic.gdx.scenes.scene2d.ui.Label
         }
 }
 
-class Title(text: CharSequence?) : com.badlogic.gdx.scenes.scene2d.ui.Label(text, Bold())
+class Title(text: CharSequence?) : com.badlogic.gdx.scenes.scene2d.ui.Label(text, Bold(20))

@@ -7,6 +7,7 @@ import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.scene2d.table
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.renderer.ui.BaseMenuActor
 import se.nocroft.motogame.renderer.ui.Button
 import se.nocroft.motogame.renderer.ui.Label
@@ -34,17 +35,11 @@ class MenuScreen(menuService: MenuService) : KtxScreen {
                     })
 
         }.apply {
-            add(Title("INFINITE MOTO")).expandY()
-            row()
-            add(table {
-                for ((index, button) in buttons.withIndex()) {
-                    add(button)
-                    if (index != buttons.lastIndex) {
-                        row()
-                    }
-                }
-            }).expandY().top()
-            row()
+            add(Title("INFINITE MOTO")).padBottom(PADDING_SMALL)
+            for (button in buttons) {
+                row()
+                add(button)
+            }
             setFillParent(true)
         }
 
