@@ -16,3 +16,10 @@ Minimalistic 2D trial-like bike game with procedural generation.
 - New bike/track color after highscore?
 
 - Some kind of trail from bike
+
+## Useful links
+DAIN APP used for interpolation of sprite animations (because I can't draw):  
+https://www.patreon.com/DAINAPP
+
+For combining images (sprites) created with DAIN_APP:  
+https://www.peko-step.com/en/tool/combine-images.html
