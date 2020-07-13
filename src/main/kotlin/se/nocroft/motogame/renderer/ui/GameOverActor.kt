@@ -1,28 +1,21 @@
 package se.nocroft.motogame.renderer.ui
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import se.nocroft.motogame.PADDING_MEDIUM
-import se.nocroft.motogame.TEXT_BUTTON_COLOR
 import se.nocroft.motogame.screen.GameService
 import kotlin.random.Random
 
-class GameOverActor(private val gameService: GameService, labelStyle: Label.LabelStyle): BaseMenuActor() {
-
-    private val buttonLabelStyle = Label.LabelStyle().apply {
-        font = BitmapFont()
-        fontColor = TEXT_BUTTON_COLOR
-    }
+class GameOverActor(private val gameService: GameService) : BaseMenuActor() {
 
     override val buttons = arrayOf(
-            Button("Retry", buttonLabelStyle).apply {
+            Button("Retry").apply {
                 onPress {
                     gameService.reset()
                 }
                 selected = true
             },
-            Button("Exit", buttonLabelStyle).apply {
+            Button("Exit").apply {
                 onPress {
                     gameService.exitToMenu()
                 }
@@ -48,8 +41,8 @@ class GameOverActor(private val gameService: GameService, labelStyle: Label.Labe
             "Something went terribly wrong."
     )
 
-    private val gameOverLabel = Label("Whoops, you deaded. ", labelStyle)
-    private val scoreLabel = Label("Your score: 0m", labelStyle)
+    private val gameOverLabel = Label("Whoops, you deaded. ")
+    private val scoreLabel = Label("Your score: 0m")
 
     init {
         add(gameOverLabel)

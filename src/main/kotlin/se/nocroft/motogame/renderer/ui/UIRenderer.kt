@@ -17,17 +17,12 @@ import kotlin.math.max
 
 class UIRenderer(private val gameService: GameService) {
 
-    private val labelStyle = Label.LabelStyle().apply {
-        font = BitmapFont()
-        fontColor = TEXT_COLOR
-    }
-
-    private val distanceLabel = Label("Distance: 0m", labelStyle)
-    private val bestLabel = Label("Best: 0m", labelStyle)
-    private val fpsLabel = Label("FPS: 0", labelStyle)
-    private val gameOverActor = GameOverActor(gameService, labelStyle).apply { isVisible = false }
-    private val pausedMenuActor = PausedMenuActor(gameService, labelStyle).apply { isVisible = false }
-    private val menuPauseButton = Button("Pause", labelStyle).apply {
+    private val distanceLabel = Label("Distance: 0m")
+    private val bestLabel = Label("Best: 0m")
+    private val fpsLabel = Label("FPS: 0")
+    private val gameOverActor = GameOverActor(gameService).apply { isVisible = false }
+    private val pausedMenuActor = PausedMenuActor(gameService).apply { isVisible = false }
+    private val menuPauseButton = Button("Pause").apply {
         onPress { togglePaused() }
     }
 

@@ -2,11 +2,10 @@ package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import ktx.actors.onClick
 
-class Button(var text: String, style: LabelStyle?) : Label(" [ $text ] ", style) {
+class Button(var text: String) : Label(" [ $text ] ") {
 
     var onPress: (() -> Unit)? = null
 
