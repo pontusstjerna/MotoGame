@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import ktx.actors.onClick
 
-class Button(var text: String) : Label(" [ $text ] ") {
+class Button(var text: String) : Label(text) {
 
     var onPress: (() -> Unit)? = null
 
@@ -19,23 +19,23 @@ class Button(var text: String) : Label(" [ $text ] ") {
 
     var selected: Boolean = false
         set(value) {
-            super.setText(if (value) "[  $text  ]" else " [ $text ] ")
+            super.bold = value
             field = value
         }
 
     override fun setText(newText: CharSequence?) {
         text = newText.toString()
-        return super.setText(" [ $newText ] ")
+        return super.setText(newText)
     }
 
     init {
         addListener(object : ClickListener() {
             override fun enter(event: InputEvent?, x: Float, y: Float, pointer: Int, fromActor: Actor?) {
-                if (!selected) super@Button.setText("[  $text  ]")
+                selected = true
             }
 
             override fun exit(event: InputEvent?, x: Float, y: Float, pointer: Int, toActor: Actor?) {
-                if (!selected) super@Button.setText(" [ $text ] ")
+                selected = false
             }
         })
     }
