@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.GameEvent
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.screen.GameService
@@ -62,6 +63,28 @@ class UIRenderer(private val gameService: GameService) {
         })
     }
 
+    init {
+        gameService.addGameEventListener { event ->
+            when (event) {
+                GameEvent.PAUSE -> {
+                    pausedMenuActor.isVisible = true
+                    menuPauseButton.setText("Resume")
+                }
+                GameEvent.DIE -> {
+                    gameOverActor.isVisible = true
+                    topTable.isVisible = false
+                }
+                else -> {
+                    pausedMenuActor.isVisible = false
+                    menuPauseButton.setText("Pause")
+                    topTable.isVisible = true
+                    gameOverActor.isVisible = false
+
+                }
+            }
+        }
+    }
+
     fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
     }
@@ -87,10 +110,6 @@ class UIRenderer(private val gameService: GameService) {
             deltaTimer = 0f
         }
 
-        topTable.isVisible = !gameService.isDead
-        pausedMenuActor.isVisible = gameService.isPaused && !gameService.isDead
-        gameOverActor.isVisible = gameService.isDead
-
         stage.keyboardFocus = when {
             gameService.isPaused -> pausedMenuActor
             gameService.isDead -> gameOverActor
@@ -104,10 +123,8 @@ class UIRenderer(private val gameService: GameService) {
 
     private fun togglePaused() {
         if (!gameService.isPaused) {
-            menuPauseButton.setText("Resume")
             gameService.pause()
         } else {
-            menuPauseButton.setText("Pause")
             gameService.resume()
         }
     }

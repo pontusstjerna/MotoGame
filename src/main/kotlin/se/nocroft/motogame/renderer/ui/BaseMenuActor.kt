@@ -16,6 +16,15 @@ abstract class BaseMenuActor : Table() {
             field = value
         }
 
+    @get:JvmName("getIsVisible")
+    @set:JvmName("setIsVisible")
+    var isVisible: Boolean = isVisible()
+        set(value) {
+            if (value) selectedButtonIndex = 0
+            setVisible(value)
+            field = value
+        }
+
     init {
         addListener(object : InputListener() {
             override fun keyDown(event: InputEvent?, keycode: Int): Boolean {

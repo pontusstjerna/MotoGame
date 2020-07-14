@@ -3,11 +3,11 @@ Minimalistic 2D trial-like bike game with procedural generation.
 
 ### TODOs
 
-- New bike graphics [MVP]
+- New bike graphics [MVP] - *Done*
 
-- Player on bike graphics [MVP]
+- Player on bike graphics [MVP] - *Done*
 
-- Improved menu UI [MVP]
+- Improved menu UI [MVP] - *Done*
 
 - New highscore indicator (visual effect such as faded border + vertical marker/line/stuff), possibly some camera shaking [MVP]
 
