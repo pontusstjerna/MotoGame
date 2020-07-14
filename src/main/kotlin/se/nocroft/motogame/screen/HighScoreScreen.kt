@@ -1,11 +1,11 @@
 package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.actors.stage
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
-import ktx.scene2d.table
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.PADDING_SMALL
@@ -16,6 +16,8 @@ import se.nocroft.motogame.renderer.ui.Title
 import se.nocroft.motogame.util.getHighScores
 
 class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
+
+    private val highScoresTable = Table()
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
@@ -31,19 +33,11 @@ class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
                     })
 
         }.apply {
-            add(Title("HIGH SCORES")).padBottom(PADDING_SMALL).colspan(2)
-            val highScores = getHighScores()
-            highScores.withIndex().forEach { (index, highScore) ->
-                row()
-                add(Label("${index + 1}.").apply { bold = true }).left()
-                add(Label("${highScore}m")).right()
-            }
-            if (highScores.isEmpty()) {
-                row()
-                add(Label("No high scores yet!"))
-            }
+            add(Title("HIGH SCORES")).padBottom(PADDING_SMALL)
             row()
-            add(buttons.first()).colspan(2).padTop(PADDING_SMALL)
+            add(highScoresTable)
+            row()
+            add(buttons.first()).padTop(PADDING_SMALL)
             setFillParent(true)
         }
 
@@ -53,6 +47,7 @@ class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
 
     override fun show() {
         Gdx.input.inputProcessor = stage
+        reloadHighScores()
         super.show()
     }
 
@@ -68,5 +63,23 @@ class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
 
     override fun dispose() {
         stage.dispose()
+    }
+
+    private fun reloadHighScores() {
+        highScoresTable.clearChildren()
+        buildHighScoresTable(highScoresTable)
+    }
+
+    private fun buildHighScoresTable(table: Table) {
+        val highScores = getHighScores()
+        highScores.withIndex().forEach { (index, highScore) ->
+            table.row()
+            table.add(Label("${index + 1}. ").apply { bold = true }).right()
+            table.add(Label("${highScore}m")).left()
+        }
+        if (highScores.isEmpty()) {
+            table.row()
+            table.add(Label("No high scores yet!"))
+        }
     }
 }

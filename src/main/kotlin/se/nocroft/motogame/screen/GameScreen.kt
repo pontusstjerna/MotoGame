@@ -38,7 +38,11 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         get() = world.distance.toInt() - 5
 
     private val world: GameWorld = GameWorld().apply {
-        addDeathListener { eventListeners.forEach { it(DIE) } }
+        addDeathListener {
+            eventListeners.forEach { it(DIE) }
+            saveHighScore(distance.toInt() - 5)
+            highscore = getHighScore()
+        }
         addCollisionListener { eventListeners.forEach { it(COLLIDE) } }
     }
 
@@ -79,7 +83,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun reset() {
-        saveHighScore(distance)
         world.reset()
         resume()
     }
