@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
@@ -18,8 +17,10 @@ import kotlin.math.max
 
 class UIRenderer(private val gameService: GameService) {
 
-    private val distanceLabel = Label("Distance: 0m")
-    private val bestLabel = Label("Best: 0m")
+    private val distanceLabel = Label("Distance: ").apply { bold = true }
+    private val distanceValue = Label("0m")
+    private val bestLabel = Label("Best: ").apply { bold = true }
+    private val bestValue = Label("0m")
     private val fpsLabel = Label("FPS: 0")
     private val gameOverActor = GameOverActor(gameService).apply { isVisible = false }
     private val pausedMenuActor = PausedMenuActor(gameService).apply { isVisible = false }
@@ -28,10 +29,12 @@ class UIRenderer(private val gameService: GameService) {
     }
 
     private val topTable = table {
-        add(distanceLabel).expandX().left()
+        add(bestLabel).left()
+        add(bestValue).expandX().left()
         add(menuPauseButton).right()
         row()
-        add(bestLabel).left()
+        add(distanceLabel).left()
+        add(distanceValue).left()
         if (DEBUG) {
             row()
             add(fpsLabel).left()
@@ -90,8 +93,8 @@ class UIRenderer(private val gameService: GameService) {
     }
 
     fun render(delta: Float) {
-        distanceLabel.setText("Distance: ${gameService.distance}m")
-        bestLabel.setText("Best: ${max(gameService.highscore, gameService.distance)}m")
+        distanceValue.setText("${gameService.distance}m")
+        bestValue.setText("${max(gameService.highscore, gameService.distance)}m")
 
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
