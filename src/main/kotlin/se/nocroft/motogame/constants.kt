@@ -7,6 +7,7 @@ var FULLSCREEN = false
 
 /* GAMEPLAY */
 const val GRAVITY: Float = -5f //-9.81f
+const val LEANING_TORQUE = 25f // 30f
 
 /* Padding */
 const val PADDING_MEDIUM = 20f

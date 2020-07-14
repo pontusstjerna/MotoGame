@@ -91,6 +91,8 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
             renderBike(world.bike, b)
         }
 
+        ridersTexture.update(delta = delta, rider = world.bike.rider)
+
         if (DEBUG) {
             debugRenderer.render(world.physicsWorld, camera.combined)
         }
@@ -165,9 +167,9 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     }
 
     private fun renderRider(bike: Bike, batch: SpriteBatch) {
-        val scale = bike.rider.height / ridersTexture.height
+        val scale = bike.rider.height / ridersTexture.frameHeight
         val width = ridersTexture.frameWidth * scale
-        val height = bike.rider.height
+        val height = ridersTexture.frameHeight * scale
         val bikeWidth = bikeTexture.width * scale
         val bikeHeight = bike.height
 
@@ -178,9 +180,9 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
                 width / 2, bikeHeight / 2,
                 width, height, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
-                ridersTexture.getOffsetXFromModel(bike.rider), 0,
+                ridersTexture.getOffsetX(), ridersTexture.getOffsetY(),
                 ridersTexture.frameWidth,
-                ridersTexture.height,
+                ridersTexture.frameHeight,
                 false,
                 false
         )

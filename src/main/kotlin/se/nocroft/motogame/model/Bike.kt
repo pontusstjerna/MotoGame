@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import ktx.box2d.*
+import se.nocroft.motogame.LEANING_TORQUE
 
 class Bike (private val position: Vector2, world: World) {
 
@@ -59,9 +60,9 @@ class Bike (private val position: Vector2, world: World) {
 
     fun update() {
         if (rider.leaningForward) {
-            body.applyTorque(-30f, true)
+            body.applyTorque(-LEANING_TORQUE, true)
         } else if (rider.leaningBackward) {
-            body.applyTorque(30f, true)
+            body.applyTorque(LEANING_TORQUE, true)
         }
     }
 
