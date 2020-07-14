@@ -9,6 +9,8 @@ import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
 import se.nocroft.motogame.renderer.ui.UIRenderer
+import se.nocroft.motogame.util.getHighScore
+import se.nocroft.motogame.util.saveHighScore
 import kotlin.properties.Delegates
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
@@ -26,7 +28,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
         private set
 
-    override var highscore: Int = Gdx.app.getPreferences("motogame").getInteger("highscore")
+    override var highscore: Int = getHighScore()
         private set
 
     override val isDead: Boolean
@@ -77,7 +79,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun reset() {
-        updateHighscore()
+        saveHighScore(distance)
         world.reset()
         resume()
     }
@@ -121,16 +123,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         while (accumulator >= world.timeStep) {
             world.update()
             accumulator -= world.timeStep
-        }
-    }
-
-    private fun updateHighscore() {
-        val prefs = Gdx.app.getPreferences("motogame")
-        val score = world.distance.toInt()
-        if (score > highscore) {
-            prefs.putInteger("highscore", score)
-            highscore = score
-            prefs.flush()
         }
     }
 }
