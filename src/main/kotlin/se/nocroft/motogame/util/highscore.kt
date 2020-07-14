@@ -1,6 +1,7 @@
 package se.nocroft.motogame.util
 
 import com.badlogic.gdx.Gdx
+import kotlin.math.min
 
 fun getHighScores(): List<Int> {
     val prefs = Gdx.app.getPreferences("motogame")
@@ -20,7 +21,7 @@ fun saveHighScore(score: Int) {
     val highScores = getHighScores()
     val newHighScores: String = (highScores + score)
             .sortedDescending()
-            .subList(0, 9)
+            .subList(0, min(highScores.count(), 9))
             .joinToString(",") { it.toString() }
 
     prefs.putString("highscore", newHighScores)

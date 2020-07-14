@@ -7,13 +7,15 @@ import ktx.app.KtxScreen
 import ktx.app.clearScreen
 import ktx.scene2d.table
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.renderer.ui.BaseMenuActor
 import se.nocroft.motogame.renderer.ui.Button
 import se.nocroft.motogame.renderer.ui.Label
 import se.nocroft.motogame.renderer.ui.Title
+import se.nocroft.motogame.util.getHighScores
 
-class MenuScreen(menuService: MenuService) : KtxScreen {
+class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
 
     private val stage = stage().apply {
         viewport = ScreenViewport()
@@ -22,29 +24,26 @@ class MenuScreen(menuService: MenuService) : KtxScreen {
         val table = object : BaseMenuActor() {
 
             override val buttons = arrayOf(
-                    Button("Play").apply {
+                    Button("Back to menu").apply {
                         onPress {
-                            menuService.play()
-                        }
-                        selected = true
-                    },
-                    Button("High scores").apply {
-                        onPress {
-                            menuService.goToHighScores()
-                        }
-                    },
-                    Button("Exit").apply {
-                        onPress {
-                            menuService.exit()
+                            menuService.goToMenu()
                         }
                     })
 
         }.apply {
-            add(Title("INFINITE MOTO")).padBottom(PADDING_SMALL)
-            for (button in buttons) {
+            add(Title("HIGH SCORES")).padBottom(PADDING_SMALL).colspan(2)
+            val highScores = getHighScores()
+            highScores.withIndex().forEach { (index, highScore) ->
                 row()
-                add(button)
+                add(Label("${index + 1}.").apply { bold = true }).left()
+                add(Label("${highScore}m")).right()
             }
+            if (highScores.isEmpty()) {
+                row()
+                add(Label("No high scores yet!"))
+            }
+            row()
+            add(buttons.first()).colspan(2).padTop(PADDING_SMALL)
             setFillParent(true)
         }
 

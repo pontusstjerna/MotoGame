@@ -75,6 +75,7 @@ class UIRenderer(private val gameService: GameService) {
                 }
                 GameEvent.DIE -> {
                     gameOverActor.isVisible = true
+                    gameOverActor.show(gameService.distance)
                     topTable.isVisible = false
                 }
                 else -> {
@@ -98,10 +99,6 @@ class UIRenderer(private val gameService: GameService) {
 
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
-        }
-
-        if (gameService.isDead && !gameOverActor.isVisible) {
-            gameOverActor.show(gameService.distance)
         }
 
         stage.act(delta)
