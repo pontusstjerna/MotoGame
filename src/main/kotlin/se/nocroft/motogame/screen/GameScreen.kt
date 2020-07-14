@@ -33,10 +33,11 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         get() = world.isDead
 
     override val distance: Int
-        get() = world.distance.toInt()
+        get() = world.distance.toInt() - 5
 
     private val world: GameWorld = GameWorld().apply {
         addDeathListener { eventListeners.forEach { it(DIE) } }
+        addCollisionListener { eventListeners.forEach { it(COLLIDE) } }
     }
 
     private val gameRenderer = GameRenderer(world, this)

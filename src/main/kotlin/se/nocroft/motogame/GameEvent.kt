@@ -6,5 +6,6 @@ enum class GameEvent {
     DIE,
     RESET,
     START,
-    QUIT
+    QUIT,
+    COLLIDE
 }

@@ -30,6 +30,7 @@ class GameWorld: ContactListener {
     private val initBikePos = Vector2(5f, 7f)
 
     private var deathListener: (() -> Unit)? = null
+    private var collisionListener: (() -> Unit)? = null
 
     var bike: Bike = Bike(initBikePos, physicsWorld)
 
@@ -73,6 +74,8 @@ class GameWorld: ContactListener {
     override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {
         contact?.let {
 
+            collisionListener?.invoke()
+
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
                 isDead = true
@@ -90,6 +93,10 @@ class GameWorld: ContactListener {
 
     fun addDeathListener(action: () -> Unit) {
         deathListener = action
+    }
+
+    fun addCollisionListener(action: () -> Unit) {
+        collisionListener = action
     }
 
     private fun generateTrack() {
