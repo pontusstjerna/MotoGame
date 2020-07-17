@@ -127,6 +127,11 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
 
+                // EXPERiMENTAL
+                val distToHighScore = (snd.x - world.bike.body.position.x).absoluteValue
+                val alpha = max(1 - distToHighScore / (GAME_WIDTH / 2), 0f)
+                shapeRenderer.color.a = alpha
+
                 it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(snd.toMutable(), -trackWidth))
                 it.line(Vector3(fst.toMutable(), trackWidth), Vector3(snd.toMutable(), trackWidth))
                 it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(fst.toMutable(), trackWidth))

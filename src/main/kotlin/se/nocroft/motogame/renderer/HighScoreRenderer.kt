@@ -1,9 +1,12 @@
 package se.nocroft.motogame.renderer
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Matrix4
 import ktx.graphics.use
 import se.nocroft.motogame.GAME_WIDTH
+import se.nocroft.motogame.HIGHSCORE_BORDER_THRESHOLD
 import se.nocroft.motogame.HIGHSCORE_COLOR
 import se.nocroft.motogame.START_OFFSET
 import se.nocroft.motogame.screen.GameService
@@ -17,6 +20,11 @@ class HighScoreRenderer(private val gameService: GameService) {
         color = HIGHSCORE_COLOR
     }
 
+    private val orthoCamera = OrthographicCamera().apply {
+        viewportWidth = 10f
+        viewportHeight = 10f
+    }
+
     fun render(projectionMatrix: Matrix4) {
 
         shapeRenderer.projectionMatrix = projectionMatrix
@@ -26,8 +34,31 @@ class HighScoreRenderer(private val gameService: GameService) {
         shapeRenderer.color.a = alpha
         if (highScore < MIN_HIGHSCORE_VALUE || distToHighScore <= 0) return
 
+        renderLine(distToHighScore = distToHighScore, highScore = highScore.toFloat())
+        renderBorder(distToHighScore)
+    }
+
+    private fun renderLine(distToHighScore: Float, highScore: Float) {
         shapeRenderer.use(ShapeRenderer.ShapeType.Line) { draw ->
-            draw.line(highScore.toFloat(), -1000f, highScore.toFloat(), 1000f)
+            draw.line(highScore, -1000f, highScore, 1000f)
+        }
+    }
+
+    private fun renderBorder(distToHighScore: Float) {
+        shapeRenderer.projectionMatrix = orthoCamera.combined
+        orthoCamera.zoom = 0f
+        orthoCamera.position.z = 0f
+
+        // Meters before borders show
+        val alpha = max(.5f - distToHighScore / HIGHSCORE_BORDER_THRESHOLD, 0f)
+        val color = HIGHSCORE_COLOR.cpy().apply { a = alpha }
+        val transparent = Color(0f, 0f, 0f, 0f)
+        val borderWidth = .5f
+        shapeRenderer.use(ShapeRenderer.ShapeType.Filled) { draw ->
+            draw.rect(-1f, -1f, 2f, borderWidth, color, color, transparent, transparent)
+            draw.rect(-1f, -1f, borderWidth, 2f, color, transparent, transparent, color)
+            draw.rect(-1f, 1f - borderWidth, 2f, borderWidth, transparent, transparent, color, color)
+            draw.rect(1f - borderWidth, -1f, borderWidth, 2f, transparent, color, color, transparent)
         }
     }
 }

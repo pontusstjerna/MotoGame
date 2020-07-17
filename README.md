@@ -9,9 +9,11 @@ Minimalistic 2D trial-like bike game with procedural generation.
 
 - Improved menu UI [MVP] - *Done*
 
-- Control help overlay depending on device
+- Control help overlay depending on device [MVP]
 
-- New highscore indicator (visual effect such as faded border + vertical marker/line/stuff), possibly some camera shaking [MVP]
+- New highscore indicator (visual effect such as faded border + vertical marker/line/stuff), possibly some camera shaking [MVP] - *Done*
+
+- New high score popup / text [MVP]
 
 - Dynamic color change depending on current distance (background or track) [MVP]
 
