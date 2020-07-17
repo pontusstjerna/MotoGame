@@ -25,7 +25,7 @@ fun saveHighScore(score: Int) {
     val newHighScores: String = (highScores + score)
             .sortedDescending()
             .filter { it > 0 }
-            .take(9)
+            .take(10)
             .joinToString(",") { it.toString() }
 
     prefs.putString("highscore", newHighScores)

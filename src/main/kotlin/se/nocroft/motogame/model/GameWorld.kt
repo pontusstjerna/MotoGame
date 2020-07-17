@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.createWorld
 import se.nocroft.motogame.GRAVITY
+import se.nocroft.motogame.START_OFFSET
 import java.lang.Float.max
 import kotlin.random.Random
 
@@ -27,7 +28,7 @@ class GameWorld: ContactListener {
             Vector2(4f, 2f)
     )
 
-    private val initBikePos = Vector2(5f, 7f)
+    private val initBikePos = Vector2(START_OFFSET, 7f)
 
     private var deathListener: (() -> Unit)? = null
     private var collisionListener: (() -> Unit)? = null

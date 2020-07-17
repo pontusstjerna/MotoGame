@@ -2,7 +2,6 @@ package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
@@ -11,7 +10,6 @@ import ktx.actors.stage
 import se.nocroft.motogame.DEBUG
 import se.nocroft.motogame.GameEvent
 import se.nocroft.motogame.PADDING_MEDIUM
-import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
@@ -75,7 +73,7 @@ class UIRenderer(private val gameService: GameService) {
                 }
                 GameEvent.DIE -> {
                     gameOverActor.isVisible = true
-                    gameOverActor.show(gameService.distance)
+                    gameOverActor.show(gameService.distance.toInt())
                     topTable.isVisible = false
                 }
                 else -> {
@@ -94,8 +92,8 @@ class UIRenderer(private val gameService: GameService) {
     }
 
     fun render(delta: Float) {
-        distanceValue.setText("${gameService.distance}m")
-        bestValue.setText("${max(gameService.highscore, gameService.distance)}m")
+        distanceValue.setText("${gameService.distance.toInt()}m")
+        bestValue.setText("${max(gameService.highScore, gameService.distance.toInt())}m")
 
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")

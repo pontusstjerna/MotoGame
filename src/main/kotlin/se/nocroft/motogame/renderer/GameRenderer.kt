@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import ktx.graphics.use
 import ktx.math.*
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.GAME_WIDTH
+import se.nocroft.motogame.START_OFFSET
 import se.nocroft.motogame.TRACK_COLOR
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
@@ -28,11 +30,10 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private val textBatch = SpriteBatch()
     private val font = BitmapFont()
     private val debugRenderer = Box2DDebugRenderer()
-    // in meters
-    val gameWidth = 20f
+
     private val camera = PerspectiveCamera().apply {
-        val scale = gameWidth / Gdx.graphics.width
-        viewportWidth = gameWidth
+        val scale = GAME_WIDTH / Gdx.graphics.width
+        viewportWidth = GAME_WIDTH
         viewportHeight = Gdx.graphics.height * scale
         fieldOfView = 57f
         rotate(-10f, 1f, 0f, 0f)
@@ -41,6 +42,8 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private val shapeRenderer: ShapeRenderer = ShapeRenderer().apply {
         color = TRACK_COLOR
     }
+
+    private val highScoreRenderer = HighScoreRenderer(gameService)
 
     private val wheelTexture: Texture by lazy {
         Texture(Gdx.files.local("assets/wheel5.png"), true).apply {
@@ -64,16 +67,16 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private val defaultZoom: Float = if (DEBUG) 5f else 8f
 
     fun resize(width: Int, height: Int) {
-        val scale = gameWidth / width
-        camera.viewportWidth = gameWidth
+        val scale = GAME_WIDTH / width
+        camera.viewportWidth = GAME_WIDTH
         camera.viewportHeight = Gdx.graphics.height * scale
     }
 
     fun render(delta: Float) {
 
-        //clearScreen(0.14f, .14f, .14f)
         Gdx.gl.glClearColor(.14f, .14f, .14f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or (if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0))
+        Gdx.gl.glEnable(GL20.GL_BLEND)
 
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
@@ -82,7 +85,9 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         camera.update()
 
         renderTerrain(world.vertices)
+        highScoreRenderer.render(camera.combined)
 
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.projectionMatrix = camera.combined
         batch.use { b ->
             renderRider(world.bike, b)

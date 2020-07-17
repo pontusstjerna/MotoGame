@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input
 import ktx.app.KtxScreen
 import se.nocroft.motogame.GameEvent
 import se.nocroft.motogame.GameEvent.*
+import se.nocroft.motogame.START_OFFSET
 import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
@@ -28,20 +29,20 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
         private set
 
-    override var highscore: Int = getHighScore()
+    override var highScore: Int = getHighScore()
         private set
 
     override val isDead: Boolean
         get() = world.isDead
 
-    override val distance: Int
-        get() = world.distance.toInt() - 5
+    override val distance: Float
+        get() = world.distance - START_OFFSET
 
     private val world: GameWorld = GameWorld().apply {
         addDeathListener {
             eventListeners.forEach { it(DIE) }
-            saveHighScore(distance.toInt() - 5)
-            highscore = getHighScore()
+            saveHighScore(distance.toInt())
+            highScore = getHighScore()
         }
         addCollisionListener { eventListeners.forEach { it(COLLIDE) } }
     }

@@ -1,7 +1,5 @@
 package se.nocroft.motogame.renderer.ui
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.Value
 import se.nocroft.motogame.PADDING_MEDIUM
 import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.screen.GameService
@@ -57,7 +55,7 @@ class GameOverActor(private val gameService: GameService) : BaseMenuActor() {
     }
 
     fun show(score: Int) {
-        if (score > gameService.highscore) {
+        if (score > gameService.highScore) {
             gameOverLabel.setText("New high score!")
         } else {
             gameOverLabel.setText(gameOverTexts[Random.nextInt(gameOverTexts.size - 1)])
