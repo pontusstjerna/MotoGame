@@ -11,13 +11,15 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
-import ktx.app.clearScreen
 import ktx.graphics.use
 import ktx.math.*
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.GAME_WIDTH
+import se.nocroft.motogame.START_OFFSET
 import se.nocroft.motogame.TRACK_COLOR
 import se.nocroft.motogame.model.Bike
 import se.nocroft.motogame.model.GameWorld
+import se.nocroft.motogame.model.Rider
 import se.nocroft.motogame.model.Wheel
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.*
@@ -28,13 +30,10 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private val textBatch = SpriteBatch()
     private val font = BitmapFont()
     private val debugRenderer = Box2DDebugRenderer()
-    // in meters
-    val gameWidth = 20f
-    private val camera = PerspectiveCamera().apply {
-        val scale = gameWidth / Gdx.graphics.width
 
-        //setToOrtho(false, gameWidth, Gdx.graphics.height * scale)
-        viewportWidth = gameWidth
+    private val camera = PerspectiveCamera().apply {
+        val scale = GAME_WIDTH / Gdx.graphics.width
+        viewportWidth = GAME_WIDTH
         viewportHeight = Gdx.graphics.height * scale
         fieldOfView = 57f
         rotate(-10f, 1f, 0f, 0f)
@@ -44,27 +43,40 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         color = TRACK_COLOR
     }
 
-    private val wheelTexture: Texture by lazy { Texture(Gdx.files.local("assets/wheel5.png")) }
-    private val bikeTexture: Texture by lazy { Texture(Gdx.files.local("assets/bike_line1.png")) }
-    private val bikeWheelWidthPixels = 93f
+    private val highScoreRenderer = HighScoreRenderer(gameService)
+
+    private val wheelTexture: Texture by lazy {
+        Texture(Gdx.files.local("assets/wheel5.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        }
+    }
+    private val bikeTexture: Texture by lazy {
+        Texture(Gdx.files.local("assets/bike_line_3.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+        }
+    }
+    private val ridersTexture: RiderTexture by lazy {
+        RiderTexture(Gdx.files.local("assets/riders.png"), true).apply {
+            setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
+        }
+    }
+    private val bikeWheelWidthPixels = 106f
 
     private val trackWidth = 1f
     private var zoom: Float = 10f
+    private val defaultZoom: Float = if (DEBUG) 5f else 8f
 
     fun resize(width: Int, height: Int) {
-        val scale = gameWidth / width
-        camera.viewportWidth = gameWidth
+        val scale = GAME_WIDTH / width
+        camera.viewportWidth = GAME_WIDTH
         camera.viewportHeight = Gdx.graphics.height * scale
     }
 
     fun render(delta: Float) {
-        if (DEBUG) {
-            debugRenderer.render(world.physicsWorld, camera.combined)
-        }
 
-        //clearScreen(0.14f, .14f, .14f)
         Gdx.gl.glClearColor(.14f, .14f, .14f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT or (if (Gdx.graphics.bufferFormat.coverageSampling) GL20.GL_COVERAGE_BUFFER_BIT_NV else 0))
+        Gdx.gl.glEnable(GL20.GL_BLEND)
 
         camera.position.set(
                 world.bike.body.position.x + (distanceBetweenWheelsMeters() / 2f),
@@ -73,12 +85,21 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         camera.update()
 
         renderTerrain(world.vertices)
+        highScoreRenderer.render(camera.combined)
 
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.projectionMatrix = camera.combined
         batch.use { b ->
+            renderRider(world.bike, b)
             renderWheel(world.bike.frontWheel, b)
             renderWheel(world.bike.rearWheel, b)
             renderBike(world.bike, b)
+        }
+
+        ridersTexture.update(delta = delta, rider = world.bike.rider)
+
+        if (DEBUG) {
+            debugRenderer.render(world.physicsWorld, camera.combined)
         }
     }
 
@@ -91,7 +112,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
     private fun getZoom(): Float {
         val goal = when {
             gameService.isPaused || gameService.isDead -> 7f
-            else -> 10f + (world.bike.body.linearVelocity.len() * 0.5f)
+            else -> defaultZoom + (world.bike.body.linearVelocity.len() * 0.5f)
         }
 
         val zoomSpeed = 0.02f
@@ -105,6 +126,11 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
             for (i in 0 until vertices.lastIndex) {
                 val fst = vertices[i].toImmutable()
                 val snd = vertices[i + 1].toImmutable()
+
+                // EXPERiMENTAL
+                val distToHighScore = (snd.x - world.bike.body.position.x).absoluteValue
+                val alpha = max(1 - distToHighScore / (GAME_WIDTH / 2), 0f)
+                shapeRenderer.color.a = alpha
 
                 it.line(Vector3(fst.toMutable(), -trackWidth), Vector3(snd.toMutable(), -trackWidth))
                 it.line(Vector3(fst.toMutable(), trackWidth), Vector3(snd.toMutable(), trackWidth))
@@ -120,7 +146,7 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
         val height = bikeTexture.height * scale
         batch.draw(
                 bikeTexture,
-                bike.body.position.x - (width / 2) + (width - bikeWheelsWidthMeters) - .1f, bike.body.position.y - (height / 2) - .15f,
+                bike.body.position.x - (width / 2), bike.body.position.y - (height / 2),
                 width / 2, height / 2, width, bikeTexture.height * scale, 1f, 1f,
                 bike.body.angle * MathUtils.radiansToDegrees,
                 0, 0, bikeTexture.width, bikeTexture.height, false, false
@@ -148,5 +174,28 @@ class GameRenderer(private val world: GameWorld, private val gameService: GameSe
                 0, 0,
                 this.wheelTexture.width, this.wheelTexture.height, false, false
         )
+    }
+
+    private fun renderRider(bike: Bike, batch: SpriteBatch) {
+        val scale = bike.rider.height / ridersTexture.frameHeight
+        val width = ridersTexture.frameWidth * scale
+        val height = ridersTexture.frameHeight * scale
+        val bikeWidth = bikeTexture.width * scale
+        val bikeHeight = bike.height
+
+        batch.draw(
+                ridersTexture,
+                bike.body.position.x - (bikeWidth / 2),
+                bike.body.position.y - (bikeHeight / 2),
+                width / 2, bikeHeight / 2,
+                width, height, 1f, 1f,
+                bike.body.angle * MathUtils.radiansToDegrees,
+                ridersTexture.getOffsetX(), ridersTexture.getOffsetY(),
+                ridersTexture.frameWidth,
+                ridersTexture.frameHeight,
+                false,
+                false
+        )
+
     }
 }

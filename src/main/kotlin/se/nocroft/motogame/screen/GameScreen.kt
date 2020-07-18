@@ -5,10 +5,13 @@ import com.badlogic.gdx.Input
 import ktx.app.KtxScreen
 import se.nocroft.motogame.GameEvent
 import se.nocroft.motogame.GameEvent.*
+import se.nocroft.motogame.START_OFFSET
 import se.nocroft.motogame.audio.AudioPlayer
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.renderer.GameRenderer
 import se.nocroft.motogame.renderer.ui.UIRenderer
+import se.nocroft.motogame.util.getHighScore
+import se.nocroft.motogame.util.saveHighScore
 import kotlin.properties.Delegates
 
 // https://github.com/Quillraven/SimpleKtxGame/blob/01-app/core/src/com/libktx/game/screen/GameScreen.kt
@@ -26,17 +29,22 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
         private set
 
-    override var highscore: Int = Gdx.app.getPreferences("motogame").getInteger("highscore")
+    override var highScore: Int = getHighScore()
         private set
 
     override val isDead: Boolean
         get() = world.isDead
 
-    override val distance: Int
-        get() = world.distance.toInt()
+    override val distance: Float
+        get() = world.distance - START_OFFSET
 
     private val world: GameWorld = GameWorld().apply {
-        addDeathListener { eventListeners.forEach { it(DIE) } }
+        addDeathListener {
+            eventListeners.forEach { it(DIE) }
+            saveHighScore(distance.toInt())
+            highScore = getHighScore()
+        }
+        addCollisionListener { eventListeners.forEach { it(COLLIDE) } }
     }
 
     private val gameRenderer = GameRenderer(world, this)
@@ -76,7 +84,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     }
 
     override fun reset() {
-        updateHighscore()
         world.reset()
         resume()
     }
@@ -106,9 +113,11 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            world.bike.leanForward()
+            world.bike.rider.leanForward()
         } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            world.bike.leanBack()
+            world.bike.rider.leanBackward()
+        } else {
+            world.bike.rider.stopLeaning()
         }
     }
 
@@ -118,16 +127,6 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
         while (accumulator >= world.timeStep) {
             world.update()
             accumulator -= world.timeStep
-        }
-    }
-
-    private fun updateHighscore() {
-        val prefs = Gdx.app.getPreferences("motogame")
-        val score = world.distance.toInt()
-        if (score > highscore) {
-            prefs.putInteger("highscore", score)
-            highscore = score
-            prefs.flush()
         }
     }
 }

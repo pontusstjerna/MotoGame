@@ -3,7 +3,7 @@ package se.nocroft.motogame.screen
 import se.nocroft.motogame.GameEvent
 
 interface GameService {
-    val highscore: Int
+    val highScore: Int
     fun reset()
     fun pause()
     fun exitToMenu()
@@ -11,5 +11,5 @@ interface GameService {
     fun addGameEventListener(action: (GameEvent) -> Unit)
     val isPaused: Boolean
     val isDead: Boolean
-    val distance: Int
+    val distance: Float
 }

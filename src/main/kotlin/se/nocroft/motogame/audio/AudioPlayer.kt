@@ -10,7 +10,7 @@ import kotlin.random.Random
 
 class AudioPlayer(private val gameService: GameService) {
 
-    val BASE_PATH_SFX = "assets/sound/SFX"
+    val BASE_PATH_SFX = "assets/sound/sfx"
     val BASE_PATH_MUSIC = "assets/sound/music"
 
 
@@ -36,7 +36,7 @@ class AudioPlayer(private val gameService: GameService) {
     }
 
     private val music by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motoGame_music_full.wav")).apply {
+        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motogame_music_full.wav")).apply {
             // Maybe we should have a setting for music volume?
             volume = 0.9f
         }

@@ -3,6 +3,8 @@ package se.nocroft.motogame.model
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import ktx.box2d.createWorld
+import se.nocroft.motogame.GRAVITY
+import se.nocroft.motogame.START_OFFSET
 import java.lang.Float.max
 import kotlin.random.Random
 
@@ -16,7 +18,7 @@ class GameWorld: ContactListener {
     var isDead: Boolean = false
     private set
 
-    val physicsWorld: World = createWorld(gravity = Vector2(0f, -9.81f)).apply {
+    val physicsWorld: World = createWorld(gravity = Vector2(0f, GRAVITY)).apply {
         setContactListener(this@GameWorld)
     }
 
@@ -26,9 +28,10 @@ class GameWorld: ContactListener {
             Vector2(4f, 2f)
     )
 
-    private val initBikePos = Vector2(0f, 7f)
+    private val initBikePos = Vector2(START_OFFSET, 7f)
 
     private var deathListener: (() -> Unit)? = null
+    private var collisionListener: (() -> Unit)? = null
 
     var bike: Bike = Bike(initBikePos, physicsWorld)
 
@@ -52,6 +55,7 @@ class GameWorld: ContactListener {
 
     fun update() {
         physicsWorld.step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS)
+        bike.update()
         generateTrack()
         distance = max(distance, bike.body.position.x)
     }
@@ -71,6 +75,8 @@ class GameWorld: ContactListener {
     override fun postSolve(contact: Contact?, impulse: ContactImpulse?) {
         contact?.let {
 
+            collisionListener?.invoke()
+
             // Why the hell do a comparison like this? BECAUSE I CAN, THAT'S WHY
             if (bike.body.run { equals(it.fixtureA.body) || equals(it.fixtureB.body) }) {
                 isDead = true
@@ -88,6 +94,10 @@ class GameWorld: ContactListener {
 
     fun addDeathListener(action: () -> Unit) {
         deathListener = action
+    }
+
+    fun addCollisionListener(action: () -> Unit) {
+        collisionListener = action
     }
 
     private fun generateTrack() {

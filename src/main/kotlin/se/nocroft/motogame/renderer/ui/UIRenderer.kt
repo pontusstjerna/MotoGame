@@ -2,40 +2,37 @@ package se.nocroft.motogame.renderer.ui
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
 import se.nocroft.motogame.DEBUG
+import se.nocroft.motogame.GameEvent
 import se.nocroft.motogame.PADDING_MEDIUM
-import se.nocroft.motogame.TEXT_COLOR
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
 class UIRenderer(private val gameService: GameService) {
 
-    private val labelStyle = Label.LabelStyle().apply {
-        font = BitmapFont()
-        fontColor = TEXT_COLOR
-    }
-
-    private val distanceLabel = Label("Distance: 0m", labelStyle)
-    private val bestLabel = Label("Best: 0m", labelStyle)
-    private val fpsLabel = Label("FPS: 0", labelStyle)
-    private val gameOverActor = GameOverActor(gameService, labelStyle).apply { isVisible = false }
-    private val pausedMenuActor = PausedMenuActor(gameService, labelStyle).apply { isVisible = false }
-    private val menuPauseButton = Button("Pause", labelStyle).apply {
+    private val distanceLabel = Label("Distance: ").apply { bold = true }
+    private val distanceValue = Label("0m")
+    private val bestLabel = Label("Best: ").apply { bold = true }
+    private val bestValue = Label("0m")
+    private val fpsLabel = Label("FPS: 0")
+    private val gameOverActor = GameOverActor(gameService).apply { isVisible = false }
+    private val pausedMenuActor = PausedMenuActor(gameService).apply { isVisible = false }
+    private val menuPauseButton = Button("Pause").apply {
         onPress { togglePaused() }
     }
 
     private val topTable = table {
-        add(distanceLabel).expandX().left()
+        add(bestLabel).left()
+        add(bestValue).expandX().left()
         add(menuPauseButton).right()
         row()
-        add(bestLabel).left()
+        add(distanceLabel).left()
+        add(distanceValue).left()
         if (DEBUG) {
             row()
             add(fpsLabel).left()
@@ -67,20 +64,39 @@ class UIRenderer(private val gameService: GameService) {
         })
     }
 
+    init {
+        gameService.addGameEventListener { event ->
+            when (event) {
+                GameEvent.PAUSE -> {
+                    pausedMenuActor.isVisible = true
+                    menuPauseButton.setText("Resume")
+                }
+                GameEvent.DIE -> {
+                    gameOverActor.isVisible = true
+                    gameOverActor.show(gameService.distance.toInt())
+                    topTable.isVisible = false
+                }
+                else -> {
+                    pausedMenuActor.isVisible = false
+                    menuPauseButton.setText("Pause")
+                    topTable.isVisible = true
+                    gameOverActor.isVisible = false
+
+                }
+            }
+        }
+    }
+
     fun resize(width: Int, height: Int) {
         stage.viewport.update(width, height, true)
     }
 
     fun render(delta: Float) {
-        distanceLabel.setText("Distance: ${gameService.distance}m")
-        bestLabel.setText("Best: ${max(gameService.highscore, gameService.distance)}m")
+        distanceValue.setText("${gameService.distance.toInt()}m")
+        bestValue.setText("${max(gameService.highScore, gameService.distance.toInt())}m")
 
         if (DEBUG) {
             fpsLabel.setText("FPS: $fps")
-        }
-
-        if (gameService.isDead && !gameOverActor.isVisible) {
-            gameOverActor.show(gameService.distance)
         }
 
         stage.act(delta)
@@ -91,10 +107,6 @@ class UIRenderer(private val gameService: GameService) {
             fps = (1 / delta).toInt()
             deltaTimer = 0f
         }
-
-        topTable.isVisible = !gameService.isDead
-        pausedMenuActor.isVisible = gameService.isPaused && !gameService.isDead
-        gameOverActor.isVisible = gameService.isDead
 
         stage.keyboardFocus = when {
             gameService.isPaused -> pausedMenuActor
@@ -109,10 +121,8 @@ class UIRenderer(private val gameService: GameService) {
 
     private fun togglePaused() {
         if (!gameService.isPaused) {
-            menuPauseButton.setText("Resume")
             gameService.pause()
         } else {
-            menuPauseButton.setText("Pause")
             gameService.resume()
         }
     }

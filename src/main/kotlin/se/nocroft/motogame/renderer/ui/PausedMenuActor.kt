@@ -1,31 +1,24 @@
 package se.nocroft.motogame.renderer.ui
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Touchable
-import com.badlogic.gdx.scenes.scene2d.ui.Label
-import se.nocroft.motogame.TEXT_BUTTON_COLOR
+import se.nocroft.motogame.PADDING_SMALL
 import se.nocroft.motogame.screen.GameService
 
-class PausedMenuActor(private val gameService: GameService, labelStyle: Label.LabelStyle): BaseMenuActor() {
-
-    private val buttonLabelStyle = Label.LabelStyle().apply {
-        font = BitmapFont()
-        fontColor = TEXT_BUTTON_COLOR
-    }
+class PausedMenuActor(private val gameService: GameService): BaseMenuActor() {
 
     override val buttons = arrayOf(
-            Button("Resume", buttonLabelStyle).apply {
+            Button("Resume").apply {
                 onPress {
                     gameService.resume()
                 }
                 selected = true
             },
-            Button("Reset", buttonLabelStyle).apply {
+            Button("Reset").apply {
                 onPress {
                     gameService.reset()
                 }
             },
-            Button("Exit to menu", buttonLabelStyle).apply {
+            Button("Exit to menu").apply {
                 onPress {
                     gameService.exitToMenu()
                 }
@@ -33,7 +26,7 @@ class PausedMenuActor(private val gameService: GameService, labelStyle: Label.La
     )
 
     init {
-        add(Label("Paused", labelStyle))
+        add(Title("PAUSED")).padBottom(PADDING_SMALL)
         buttons.forEach {
             row()
             add(it)
