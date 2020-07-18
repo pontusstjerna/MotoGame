@@ -3,6 +3,7 @@ package se.nocroft.motogame.audio
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import se.nocroft.motogame.GameEvent.*
+import se.nocroft.motogame.MUSIC_INTRO_LOOP_THRESHOLD
 import se.nocroft.motogame.model.GameWorld
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.absoluteValue
@@ -118,7 +119,7 @@ class AudioPlayer(private val gameService: GameService) {
         enginePitch += (goal - enginePitch) * pitchChangeSpeed
         engineLoop.setPitch(enginePitch.absoluteValue)
 
-        musicIntroLoop.isLooping = gameService.distance < 3f
+        musicIntroLoop.isLooping = gameService.distance < MUSIC_INTRO_LOOP_THRESHOLD
 
         // Testing randomizing sounds
         if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
