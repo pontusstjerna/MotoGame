@@ -10,53 +10,64 @@ import kotlin.random.Random
 
 class AudioPlayer(private val gameService: GameService) {
 
-    val BASE_PATH = "assets/sound/SFX"
+    val BASE_PATH_SFX = "assets/sound/SFX"
+    val BASE_PATH_MUSIC = "assets/sound/music"
+
 
     // Loads the sound into memory first when it is required
     private val engineLoop by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/engine_loop_4.wav"))
+        Sound(Gdx.files.local("$BASE_PATH_SFX/engine_loop_4.wav"))
     }
 
     private val impactLight by lazy {
         (1..3).map {
-            Sound(Gdx.files.local("$BASE_PATH/impact_light_$it.wav"))
+            Sound(Gdx.files.local("$BASE_PATH_SFX/impact_light_$it.wav"))
         }.toTypedArray()
     }
 
     private val impactMid by lazy {
         (1..3).map {
-            Sound(Gdx.files.local("$BASE_PATH/impact_mid_$it.wav"))
+            Sound(Gdx.files.local("$BASE_PATH_SFX/impact_mid_$it.wav"))
         }.toTypedArray()
     }
 
     private val end by lazy {
-        Sound(Gdx.files.local("$BASE_PATH/end.wav"))
+        Sound(Gdx.files.local("$BASE_PATH_SFX/end.wav"))
     }
 
     private val music by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_full.wav")).apply {
+        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motoGame_music_full.wav")).apply {
             // Maybe we should have a setting for music volume?
             volume = 0.9f
         }
     }
 
-    private val musicIntro by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_introloop.wav")).apply{
+    private val musicIntroLoop =
+        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motoGame_music_introloop.wav")).apply{
+           setOnCompletionListener { musicIntroLoop ->
+                musicIntroLoop.stop()
+                musicMain.play()
+                musicMain.isLooping = true
+            }
             volume = 0.9f
         }
-    }
 
-    private val musicIntroOneShot by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_IntroOneShot.wav")).apply{
-            volume = 0.9f
-        }
-    }
 
-    private val musicMain by lazy {
-        Gdx.audio.newMusic(Gdx.files.local("assets/sound/music/motoGame_music_MainLoop.wav")).apply{
+    private val musicIntro =
+        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motoGame_music_IntroOneShot.wav")).apply {
+           setOnCompletionListener {
+                musicIntroLoop.play()
+                musicIntroLoop.isLooping = true
+            }
             volume = 0.9f
         }
-    }
+
+
+    private val musicMain =
+        Gdx.audio.newMusic(Gdx.files.local("$BASE_PATH_MUSIC/motoGame_music_MainLoop.wav")).apply{
+            volume = 0.9f
+        }
+
 
     /*
         Beats-per-minute: 108 BPM
@@ -73,20 +84,20 @@ class AudioPlayer(private val gameService: GameService) {
             when (it) {
                 PAUSE -> {
                     engineLoop.stop()
-                    musicIntro.pause()
+                    musicIntroLoop.pause()
                 }
                 RESUME -> {
-                    musicIntroOneShot.play()
+                    musicIntro.play()
                     engineLoop.playLoop()
                 }
                 DIE -> {
                     engineLoop.stop()
-                    musicIntro.stop()
+                    musicIntroLoop.stop()
                     end.play()
                 }
                 START -> {
                     engineLoop.playLoop()
-                    musicIntroOneShot.play()
+                    musicIntro.play()
 
                 }
                 QUIT -> music.stop()
@@ -99,7 +110,6 @@ class AudioPlayer(private val gameService: GameService) {
             }
         }
     }
-    var introLoopCheck = true;
 
     fun update(world: GameWorld) {
         val bike = world.bike
@@ -108,24 +118,7 @@ class AudioPlayer(private val gameService: GameService) {
         enginePitch += (goal - enginePitch) * pitchChangeSpeed
         engineLoop.setPitch(enginePitch.absoluteValue)
 
-
-
-        if(world.distance > 3f){
-            introLoopCheck = false
-        }
-        musicIntroOneShot.setOnCompletionListener() {
-            musicIntro.play()
-            musicIntro.isLooping = true
-        }
-        if(!introLoopCheck){
-            musicIntro.isLooping = false
-            musicIntro.setOnCompletionListener {
-                musicIntro.stop()
-                musicMain.play()
-                musicMain.isLooping = true
-            }
-        }
-
+        musicIntroLoop.isLooping = gameService.distance < 3f
 
         // Testing randomizing sounds
         if(Gdx.input.isKeyJustPressed(Input.Keys.M)) {
