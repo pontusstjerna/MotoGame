@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Matrix4
 import ktx.graphics.use
-import se.nocroft.motogame.GAME_WIDTH
-import se.nocroft.motogame.HIGHSCORE_BORDER_THRESHOLD
-import se.nocroft.motogame.HIGHSCORE_COLOR
-import se.nocroft.motogame.START_OFFSET
+import se.nocroft.motogame.*
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
@@ -53,7 +50,7 @@ class HighScoreRenderer(private val gameService: GameService) {
         val alpha = max(.5f - distToHighScore / HIGHSCORE_BORDER_THRESHOLD, 0f)
         val color = HIGHSCORE_COLOR.cpy().apply { a = alpha }
         val transparent = Color(0f, 0f, 0f, 0f)
-        val borderWidth = .5f
+        val borderWidth = HIGHSCORE_BORDER_WIDTH
         shapeRenderer.use(ShapeRenderer.ShapeType.Filled) { draw ->
             draw.rect(-1f, -1f, 2f, borderWidth, color, color, transparent, transparent)
             draw.rect(-1f, -1f, borderWidth, 2f, color, transparent, transparent, color)

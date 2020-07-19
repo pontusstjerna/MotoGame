@@ -26,3 +26,4 @@ val HIGHSCORE_COLOR: Color = Color.WHITE
 
 /* MISC */
 const val HIGHSCORE_BORDER_THRESHOLD = 100f // Show border XX meters before new high score
+const val HIGHSCORE_BORDER_WIDTH = 0.5f
