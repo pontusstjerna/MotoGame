@@ -5,16 +5,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.math.Matrix4
 import ktx.graphics.use
-import se.nocroft.motogame.GAME_WIDTH
-import se.nocroft.motogame.HIGHSCORE_BORDER_THRESHOLD
-import se.nocroft.motogame.HIGHSCORE_COLOR
-import se.nocroft.motogame.START_OFFSET
+import se.nocroft.motogame.*
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
 class HighScoreRenderer(private val gameService: GameService) {
 
-    private val MIN_HIGHSCORE_VALUE = 30
 
     private val shapeRenderer: ShapeRenderer = ShapeRenderer().apply {
         color = HIGHSCORE_COLOR

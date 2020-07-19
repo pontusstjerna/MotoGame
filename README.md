@@ -15,7 +15,7 @@ Minimalistic 2D trial-like bike game with procedural generation.
 
 - New high score popup / text [MVP]
 
-- Dynamic color change depending on current distance (background or track) [MVP]
+- Dynamic color change depending on current distance (background or track)
 
 - New bike/track color after highscore?
 
