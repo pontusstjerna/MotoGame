@@ -11,7 +11,6 @@ import kotlin.math.max
 
 class HighScoreRenderer(private val gameService: GameService) {
 
-    private val MIN_HIGHSCORE_VALUE = 30
 
     private val shapeRenderer: ShapeRenderer = ShapeRenderer().apply {
         color = HIGHSCORE_COLOR
