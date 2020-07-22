@@ -7,5 +7,6 @@ enum class GameEvent {
     RESET,
     START,
     QUIT,
-    COLLIDE
+    COLLIDE,
+    NEW_HIGH_SCORE
 }

@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.scene2d.table
 import ktx.actors.stage
-import se.nocroft.motogame.DEBUG
-import se.nocroft.motogame.GameEvent
-import se.nocroft.motogame.PADDING_MEDIUM
+import se.nocroft.motogame.*
 import se.nocroft.motogame.screen.GameService
 import kotlin.math.max
 
@@ -45,7 +44,7 @@ class UIRenderer(private val gameService: GameService) {
     private var fps: Int = 0
 
     val stage = stage().apply {
-        viewport = ScreenViewport()
+        viewport = FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
         Gdx.input.inputProcessor = this
         isDebugAll = DEBUG
 

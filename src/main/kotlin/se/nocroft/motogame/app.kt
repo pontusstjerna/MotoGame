@@ -25,8 +25,8 @@ fun main() {
     // could be done with "apply" to avoid config-variable here!
     val config = LwjglApplicationConfiguration().also { config ->
         config.title = "MotoGame"
-        config.width = 800
-        config.height = 600
+        config.width = WINDOW_WIDTH.toInt()
+        config.height = WINDOW_HEIGHT.toInt()
         config.samples = 8
         config.fullscreen = FULLSCREEN
     }

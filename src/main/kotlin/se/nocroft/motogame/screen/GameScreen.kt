@@ -52,6 +52,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
     private val audioPlayer = AudioPlayer(this)
 
     private var accumulator: Float = 0.0f
+    private var isNewHighScore = false
 
     override fun show() {
         reset()
@@ -68,6 +69,7 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
             checkInput()
             updatePhysics(delta)
         }
+        checkHighScore()
     }
 
     override fun dispose() {
@@ -118,6 +120,13 @@ class GameScreen(private val menuService: MenuService) : KtxScreen, GameService 
             world.bike.rider.leanBackward()
         } else {
             world.bike.rider.stopLeaning()
+        }
+    }
+
+    private fun checkHighScore() {
+        if (distance > highScore && !isNewHighScore) {
+            eventListeners.forEach { it(NEW_HIGH_SCORE) }
+            isNewHighScore = true
         }
     }
 

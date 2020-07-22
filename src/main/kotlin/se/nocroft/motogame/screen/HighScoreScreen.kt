@@ -2,13 +2,12 @@ package se.nocroft.motogame.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.viewport.FitViewport
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import ktx.actors.stage
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
-import se.nocroft.motogame.DEBUG
-import se.nocroft.motogame.PADDING_MEDIUM
-import se.nocroft.motogame.PADDING_SMALL
+import se.nocroft.motogame.*
 import se.nocroft.motogame.renderer.ui.BaseMenuActor
 import se.nocroft.motogame.renderer.ui.Button
 import se.nocroft.motogame.renderer.ui.Label
@@ -20,7 +19,7 @@ class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
     private val highScoresTable = Table()
 
     private val stage = stage().apply {
-        viewport = ScreenViewport()
+        viewport = FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
         isDebugAll = DEBUG
 
         val table = object : BaseMenuActor() {

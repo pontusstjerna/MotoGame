@@ -3,8 +3,11 @@ package se.nocroft.motogame
 import com.badlogic.gdx.graphics.Color
 import ktx.graphics.copy
 
+/* GENERAL SETTINGS */
 var DEBUG = false
 var FULLSCREEN = false
+const val WINDOW_WIDTH = 1920f
+const val WINDOW_HEIGHT = 1080f
 
 /* GAMEPLAY */
 const val GRAVITY: Float = -5f //-9.81f
