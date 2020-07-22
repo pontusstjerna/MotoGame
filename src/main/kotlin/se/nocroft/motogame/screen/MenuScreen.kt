@@ -19,7 +19,7 @@ import se.nocroft.motogame.renderer.ui.Title
 class MenuScreen(menuService: MenuService) : KtxScreen {
 
     private val stage = stage().apply {
-        viewport = FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
+        viewport = ScreenViewport()//FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
         isDebugAll = DEBUG
 
         val table = object : BaseMenuActor() {

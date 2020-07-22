@@ -44,7 +44,7 @@ class UIRenderer(private val gameService: GameService) {
     private var fps: Int = 0
 
     val stage = stage().apply {
-        viewport = FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
+        viewport = ScreenViewport() //FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
         Gdx.input.inputProcessor = this
         isDebugAll = DEBUG
 

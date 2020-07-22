@@ -19,7 +19,7 @@ class HighScoreScreen(private val menuService: MenuService) : KtxScreen {
     private val highScoresTable = Table()
 
     private val stage = stage().apply {
-        viewport = FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
+        viewport = ScreenViewport() //FitViewport(WINDOW_WIDTH, WINDOW_HEIGHT)
         isDebugAll = DEBUG
 
         val table = object : BaseMenuActor() {

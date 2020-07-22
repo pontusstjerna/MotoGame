@@ -6,8 +6,8 @@ import ktx.graphics.copy
 /* GENERAL SETTINGS */
 var DEBUG = false
 var FULLSCREEN = false
-const val WINDOW_WIDTH = 1920f
-const val WINDOW_HEIGHT = 1080f
+const val WINDOW_WIDTH: Float = 800f
+const val WINDOW_HEIGHT: Float = 600f
 
 /* GAMEPLAY */
 const val GRAVITY: Float = -5f //-9.81f
