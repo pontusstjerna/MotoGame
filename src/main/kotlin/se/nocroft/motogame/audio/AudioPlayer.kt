@@ -80,30 +80,59 @@ class AudioPlayer(private val gameService: GameService) {
 
     private var enginePitch = 1f
 
+    // TODO RESUME and START are called at the same time when starting game, RESUME is called after DIE, maybe it should be START instead?
+    // TODO seems like DIE is different amount of times in one frame every death
+    // TODO RESET is never called, when using reset option in menu RESUME is called instead
+    // TODO end maybe should be played one instance at a time?
+
     init {
         gameService.addGameEventListener {
             when (it) {
                 PAUSE -> {
                     engineLoop.stop()
+                    musicIntro.pause()
+
                     musicIntroLoop.pause()
+                    musicMain.pause()
                 }
                 RESUME -> {
-                    musicIntro.play()
+                    if (musicMain.isLooping)  musicMain.play() else musicIntroLoop.play()
                     engineLoop.playLoop()
                 }
                 DIE -> {
                     engineLoop.stop()
+                    musicIntro.stop()
+
                     musicIntroLoop.stop()
+                    musicIntroLoop.isLooping = false;
+
+                    musicMain.stop()
+                    musicMain.isLooping = false;
                     end.play()
-                }
-                START -> {
-                    engineLoop.playLoop()
-                    musicIntro.play()
 
                 }
-                QUIT -> music.stop()
+                START -> {
+                    // TODO if START is fixed, play these at start, otherwise doubles are played on top of each other
+                    //engineLoop.playLoop()
+                    //musicIntro.play()
+                }
+                QUIT -> {
+                    println("quit")
+                    musicIntro.stop()
+                    musicIntroLoop.stop()
+                    musicMain.stop()
+                }
                 RESET -> {
-                    // TODO isn't used, music should reset when game resets
+                    println("reset")
+                    if (musicMain.isLooping)  {
+                        musicMain.stop()
+                        musicMain.isLooping = false
+                    } else if (musicIntroLoop.isLooping) {
+                        musicIntroLoop.stop()
+                        musicIntroLoop.isLooping = false
+                    } else {
+                        musicIntro.stop()
+                    }
                     /*music.stop()
                     music.play()*/
                 }
@@ -129,6 +158,7 @@ class AudioPlayer(private val gameService: GameService) {
         if(Gdx.input.isKeyJustPressed(Input.Keys.N)) {
             impactMid[Random.nextInt(0, 2)].play()
         }
+
     }
 
     // Clears audio files from memory
@@ -137,5 +167,8 @@ class AudioPlayer(private val gameService: GameService) {
         impactLight.forEach { it.dispose() }
         impactMid.forEach { it.dispose() }
         end.dispose()
+        musicIntro.dispose()
+        musicIntroLoop.dispose()
+        musicMain.dispose()
     }
 }
