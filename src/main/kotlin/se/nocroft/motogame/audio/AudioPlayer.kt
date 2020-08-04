@@ -117,13 +117,11 @@ class AudioPlayer(private val gameService: GameService) {
                     //musicIntro.play()
                 }
                 QUIT -> {
-                    println("quit")
                     musicIntro.stop()
                     musicIntroLoop.stop()
                     musicMain.stop()
                 }
                 RESET -> {
-                    println("reset")
                     if (musicMain.isLooping)  {
                         musicMain.stop()
                         musicMain.isLooping = false
